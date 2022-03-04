@@ -3,17 +3,11 @@
 // TODO: Add clear screen function
 // TODO: Implement different modes
 
-void checkNumberFeatures() {
+void checkNumberFeatures() {}
 
-}
+void plotNumbers() {}
 
-void plotNumbers() {
-
-}
-
-void checkOverallStats() {
-
-}
+void checkOverallStats() {}
 
 int main() {
     std::string choice;
