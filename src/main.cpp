@@ -25,7 +25,7 @@ int main() {
                      "Choice: ";
 
         // Accept letter as input and reject if more than one letter
-        std::cin >> choice;
+        std::getline(std::cin, choice);
         if (choice.length() > 1) {
             continue;
         }
