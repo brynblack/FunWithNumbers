@@ -16,7 +16,7 @@ void checkOverallStats() {
 }
 
 int main() {
-    char choice;
+    std::string choice;
     bool quit = false;
 
     do {
@@ -30,8 +30,11 @@ int main() {
                      "Choice: ";
 
         std::cin >> choice;
+        if (choice.length() > 1) {
+            continue;
+        }
 
-        switch (tolower(choice)) {
+        switch (tolower(choice[0])) {
             case 'a':
                 checkNumberFeatures();
                 break;
