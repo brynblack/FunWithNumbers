@@ -20,6 +20,7 @@ int main() {
     bool quit = false;
 
     do {
+        // Print menu message
         std::cout << "Welcome to Fun With Numbers\n"
                      "Choose from the menu below:\n"
                      " (A) Check number features\n"
@@ -29,11 +30,13 @@ int main() {
                      " (X) Save and exit\n"
                      "Choice: ";
 
+        // Accept letter as input and reject if more than one letter
         std::cin >> choice;
         if (choice.length() > 1) {
             continue;
         }
 
+        // Check what mode the choice is referring to and reject if no appropriate mode can be found
         switch (tolower(choice[0])) {
             case 'a':
                 checkNumberFeatures();
