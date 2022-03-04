@@ -1,2 +1,2 @@
 # FunWithNumbers
-A c++ recreation of the program Fun With Numbers.
+A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment.
