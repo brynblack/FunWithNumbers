@@ -7,7 +7,7 @@ void clearScreen() {
 	std::cout << std::string(100, '\n');
 }
 
-// Make this better
+// Make this better and move it into a class
 bool isPrime(long long n)
 {
     if (n <= 1) {
@@ -28,7 +28,7 @@ void checkNumberFeatures() {
 
 	// Variables
     std::string input;
-	int number;
+	long long number;
 
 	// Get input and store into string
     std::cout << "Please enter a whole number that will be checked over: ";
@@ -37,7 +37,7 @@ void checkNumberFeatures() {
 	// TODO: Fix problem with stol input being too long
 	// Also change data type to something other than long long maybe
 	// Convert string to number
-    number = std::stoi(input);
+    number = std::stoll(input);
 
 	// Get input
     std::cout << "\n"
@@ -72,9 +72,9 @@ void checkNumberFeatures() {
 	// Get the factors of the number
     std::cout << "  Factors are  ";
 	// Change data type from long long to something else
-    for (int i = 1; i <= number; i++) {
+    for (long long i = 1; i <= number; i++) {
         if (number % i == 0) {
-            std::cout << i << " ";
+            std::cout << i << " " << std::flush;
         }
     }
     std::cout << "\n";
