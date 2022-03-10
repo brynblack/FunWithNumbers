@@ -3,6 +3,7 @@
 // TODO: Add clear screen function
 // TODO: Implement different modes (number features, plotting, statistics)
 
+// Make this better
 bool isPrime(long long n)
 {
     if (n <= 1) {
@@ -19,20 +20,22 @@ bool isPrime(long long n)
 void checkNumberFeatures() {
 	// Variables
     std::string input;
+	int number;
 
 	// Get input and store into string
     std::cout << "Please enter a whole number that will be checked over: ";
     std::getline(std::cin, input);
 
-	// Fix problem with stol input being too long
+	// TODO: Fix problem with stol input being too long
+	// Also change data type to something other than long long maybe
 	// Convert string to number
-    long long number = std::stol(input);
+    number = std::stoi(input);
 
 	// Get input
     std::cout << "\n"
                  "The features of " << number << " are...\n";
 
-    // REPLACE EVERY COMPONENT WITH A FUNCTION
+    // TODO: REPLACE EVERY COMPONENT WITH A FUNCTION
     // MAYBE ALSO USE CLASSES BECAUSE OBJECT ORIENTED PROGRAMMING
     // Separate functions into separate source files
     // e.g. isPositive(), isEven(), getFactors(), isPrime()
@@ -60,7 +63,8 @@ void checkNumberFeatures() {
     }
 	// Get the factors of the number
     std::cout << "  Factors are  ";
-    for (long long i = 1; i <= number; i++) {
+	// Change data type from long long to something else
+    for (int i = 1; i <= number; i++) {
         if (number % i == 0) {
             std::cout << i << " ";
         }
