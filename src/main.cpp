@@ -1,97 +1,126 @@
 #include <iostream>
+#include <vector>
+#include <sstream>
+#include <iterator>
 
-// TODO: Implement different modes (number features, plotting, statistics)
+// TODO: Implement plotting and statistics modes
+// TODO: Use classes to organise code
 
 // TODO: Add proper clear screen function
+// This function prints a bunch of newlines on the screen
+// This gives the illusion that the screen was cleared
 void clearScreen() {
 	std::cout << std::string(100, '\n');
 }
 
-// Make this better and move it into a class
+// Function to determine if number is prime
 bool isPrime(long long n)
 {
+    // If the number is less than or equal to 1, it is not prime
     if (n <= 1) {
         return false;
 	}
-    for (int i = 2; i < n; i++) {
+
+    // Iterate through all possible numbers to determine if it is not prime
+    for (long long i = 2; i < n; i++) {
         if (n % i == 0) {
             return false;
 		}
 	}
+
+    // If previous checks failed it is prime, therefore return true
     return true;
+}
+
+// Function to calculate all possible factors of given number
+std::vector<long long> getFactors(long long number) {
+    // Variables
+    std::vector<long long> factors;
+
+    // Iterate through all possible factors and append any to the vector
+    for (long long i = 1; i <= number; i++) {
+        if (number % i == 0) {
+            factors.push_back(i);
+        }
+    }
+
+    // Return the factors as a vector
+    return factors;
 }
 
 // Function for checking the features of a number
 void checkNumberFeatures() {
+    // Variables
+    // "long long" is a data type for a signed 64-bit integer
+    // Signed variables have negative and positive values, while unsigned variables only have positive
+    // Unsigned variables can store a lot more than signed variables
+    // "vector" is a sequence container representing arrays that can change in size
+    // They are useful in for loops for appending values
+    // "ostringstream" is a string stream
+    // String streams are a class that uses a string buffer that contains a sequence of characters
+    // These streams can have various functions applied to them
+    std::string input, sign, even_odd, prime;
+    std::vector<long long> factors_vector;
+    std::ostringstream factors;
+    long long number;
+
+
 	// Clear the screen
 	clearScreen();
 
-	// Variables
-    std::string input;
-	long long number;
-
-	// Get input and store into string
+	// Ask for input, then store input into a string
     std::cout << "Please enter a whole number that will be checked over: ";
     std::getline(std::cin, input);
 
-	// TODO: Fix problem with stol input being too long
-	// Also change data type to something other than long long maybe
-	// Convert string to number
+    // Convert input string to integer
+    // TODO: Fix a bug where it crashes when a string is entered
     number = std::stoll(input);
 
-	// Get input
-    std::cout << "\n"
-                 "The features of " << number << " are...\n";
-
-    // TODO: REPLACE EVERY COMPONENT WITH A FUNCTION
-    // MAYBE ALSO USE CLASSES BECAUSE OBJECT ORIENTED PROGRAMMING
-    // Separate functions into separate source files
-    // e.g. isPositive(), isEven(), getFactors(), isPrime()
-    /* isPrime(2) ? cout << " true\n" : cout << " false\n";
-     * isPrime(156) ? cout << " true\n" : cout << " false\n";
-     */
-	// Try and calculate all values at once instead of sequentually calculating; calculate answers before cout
-
-	// Check if number is positive, negative or zero
+    // TODO: Move if statements and so on into separate functions
+    // Check if number is positive, negative or zero
     if (number > 0) {
-        std::cout << "  Positive\n";
+        sign = "Positive";
     }
     else if (number < 0) {
-        std::cout << "  Negative\n";
+        sign = "Negative";
     }
     else {
-        std::cout << "  Zero\n";
+        sign = "Zero";
     }
-	// Check if number is even or odd
+
+    // Check if number is even or odd
     if (number % 2 == 0) {
-        std::cout << "  Even\n";
+        even_odd = "Even";
     }
     else {
-        std::cout << "  Odd\n";
+        even_odd = "Odd";
     }
-	// Get the factors of the number
-    std::cout << "  Factors are  ";
-	// Change data type from long long to something else
-    for (long long i = 1; i <= number; i++) {
-        if (number % i == 0) {
-            std::cout << i << " " << std::flush;
-        }
+
+    // Calculate the factors of the number, then convert the vector to a string stream
+    // It converts all but the last element to avoid a trailing " "
+    // Finally add the last element back with no delimiter
+    factors_vector = getFactors(number);
+    std::copy(factors_vector.begin(), factors_vector.end()-1,std::ostream_iterator<int>(factors, " "));
+    factors << factors_vector.back();
+
+    // Check if number is prime or not
+    if (isPrime(number)) {
+        prime = "Is a prime number";
     }
-    std::cout << "\n";
-	
-	// Check if number is prime or not
-	if (isPrime(number)) {
-		std::cout << "  Is a prime number\n";
-	}
-	else {
-		std::cout << "  Is not a prime number\n";
-	}
+    else {
+        prime = "Is not a prime number";
+    }
 
-	// Wait for user pressing enter
-	std::cin.ignore();
+	// Print features of number
+    std::cout << "\n"
+                 "The features of " << number << " are...\n"
+                 "  " << sign << "\n"
+                 "  " << even_odd << "\n"
+                 "  Factors are  " << factors.str() << "\n"
+                 "  " << prime << "\n";
 
-    // BUG: It crashes when the number is too large, or if a string is entered
-    // BUG: Factor determination crashes when number is too long or specific?
+    // Wait for user input
+    std::cin.ignore();
 }
 
 // Function for plotting numbers on a graph
@@ -105,10 +134,15 @@ int main() {
     std::string choice;
     bool quit = false;
 
+    // Main loop
+    // Do the following code first, and then check if quit is true
+    // If quit is not true, repeat the loop until it is true
     do {
-		// Clear the screen
-		clearScreen();
+        // Clear the screen
+        clearScreen();
+
         // Print menu message
+        // "... << std::endl" is not used as this would slow down execution time due to it flushing the stream buffer
         std::cout << "Welcome to Fun With Numbers\n"
                      "Choose from the menu below:\n"
                      " (A) Check number features\n"
@@ -117,14 +151,17 @@ int main() {
                      "\n"
                      " (X) Save and exit\n"
                      "Choice: ";
-		
-        // Accept string as input and continue if more than one letter
+
+        // Accept string as input and repeat loop if more than one letter
+        // "std::getline" is better in this case compared to "std::cin" as it can receive enter key presses
         std::getline(std::cin, choice);
         if (choice.length() > 1) {
             continue;
         }
 
-        // Check what mode the choice is referring to and reject if no appropriate mode can be found
+        // Convert the string to lowercase, then check what mode the choice is referring to
+        // If a suitable mode is found, execute the appropriate function
+        // Otherwise if no suitable mode can be found, repeat the loop
         switch (tolower(choice[0])) {
             case 'a':
                 checkNumberFeatures();
@@ -141,7 +178,10 @@ int main() {
             default:
                 break;
         }
+
     } while (!quit);
 
+    // Return an exit code of 0, meaning that the program ran successfully
+    // Other return codes such as -1 typically mean something went wrong
     return 0;
 }
