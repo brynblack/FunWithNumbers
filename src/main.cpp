@@ -15,8 +15,7 @@ void clearScreen() {
 }
 
 // Function to determine if number is prime
-bool isPrime(long long n)
-{
+bool isPrime(long long n) {
     // If the number is less than or equal to 1, it is not prime
     if (n <= 1) {
         return false;
@@ -101,11 +100,14 @@ void checkNumberFeatures() {
 	// This can drastically improve the speed of the program
 	// By the way, it took me absolutely forever to figure out why it wasn't working
 	// And it was due to compiler flags of all things, at this point I want to pull my hair out
+	// Thank you to the StackOverflow page that saved me from this issue  
     // Calculate the factors of the number, then convert the vector to a string stream
     // If no factors are present i.e. number is less than or equal to 0, it will ignore
     // It converts all but the last element to avoid a trailing " "
     // Finally add the last element back with no delimiter
 	std::future<std::vector<long long>> thread_1 = std::async(std::launch::async, getFactors, number);
+	std::future<bool> thread_2 = std::async(std::launch::async, isPrime, number);
+
 	factors_vector = thread_1.get();
     if (!factors_vector.empty()) {
         std::copy(factors_vector.begin(), factors_vector.end()-1, std::ostream_iterator<long long>(factors, " "));
@@ -113,7 +115,6 @@ void checkNumberFeatures() {
     }
 	
     // Check if number is prime or not
-	std::future<bool> thread_2 = std::async(std::launch::async, isPrime, number);
     if (thread_2.get()) {
         prime = "Is a prime number";
     }
