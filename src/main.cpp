@@ -97,11 +97,14 @@ void checkNumberFeatures() {
     }
 
     // Calculate the factors of the number, then convert the vector to a string stream
+    // If no factors are present i.e. number is less than or equal to 0, it will ignore
     // It converts all but the last element to avoid a trailing " "
     // Finally add the last element back with no delimiter
     factors_vector = getFactors(number);
-    std::copy(factors_vector.begin(), factors_vector.end()-1,std::ostream_iterator<int>(factors, " "));
-    factors << factors_vector.back();
+    if (!factors_vector.empty()) {
+        std::copy(factors_vector.begin(), factors_vector.end()-1, std::ostream_iterator<long long>(factors, " "));
+        factors << factors_vector.back();
+    }
 
     // Check if number is prime or not
     if (isPrime(number)) {
