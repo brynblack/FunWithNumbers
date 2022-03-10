@@ -1,7 +1,11 @@
 #include <iostream>
 
-// TODO: Add clear screen function
 // TODO: Implement different modes (number features, plotting, statistics)
+
+// TODO: Add proper clear screen function
+void clearScreen() {
+	std::cout << std::string(100, '\n');
+}
 
 // Make this better
 bool isPrime(long long n)
@@ -17,7 +21,11 @@ bool isPrime(long long n)
     return true;
 }
 
+// Function for checking the features of a number
 void checkNumberFeatures() {
+	// Clear the screen
+	clearScreen();
+
 	// Variables
     std::string input;
 	int number;
@@ -86,8 +94,10 @@ void checkNumberFeatures() {
     // BUG: Factor determination crashes when number is too long or specific?
 }
 
+// Function for plotting numbers on a graph
 void plotNumbers() {}
 
+// Function for checking overall stats from previous interactions
 void checkOverallStats() {}
 
 int main() {
@@ -96,6 +106,8 @@ int main() {
     bool quit = false;
 
     do {
+		// Clear the screen
+		clearScreen();
         // Print menu message
         std::cout << "Welcome to Fun With Numbers\n"
                      "Choose from the menu below:\n"
