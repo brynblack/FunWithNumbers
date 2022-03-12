@@ -78,9 +78,10 @@ std::string isPrime(long long n) {
 }
 
 // Calculates all possible factors of given number
-std::string getFactors(long long number, int threadN) {
-    // This function is completely multithreaded
-    // It was so hard to implement, thank you stackoverflow
+std::string getFactors(long long number, int N_Threads) {
+    // This function is completely multithreaded; the tasks are split up over different threads
+    // "async" is used here to achieve this, and can drastically improve the speed of the program
+    // This was so hard to implement, thank you StackOverflow for providing me with ideas on how to solve this
     // https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
 
     // Variables
@@ -89,14 +90,14 @@ std::string getFactors(long long number, int threadN) {
     int start = 1;
 
     // Create N threads
-    std::vector<std::future<std::string>> threads(threadN);
+    std::vector<std::future<std::string>> threads(N_Threads);
 
+    // For each thread, run the lambda function
     for (auto& thread : threads) {
-        // For each thread, run the lambda function
-        thread = std::async(std::launch::async, [number, start, threadN] {
+        thread = std::async(std::launch::async, [number, start, N_Threads] {
             std::ostringstream factors;
             // Calculate factors with given number, and increment the comparison number by the number of threads
-            for (long long i = start; i <= number; i += threadN) {
+            for (long long i = start; i <= number; i += N_Threads) {
                 if (number % i == 0) {
                     factors << i << ' ';
                 }
@@ -110,7 +111,7 @@ std::string getFactors(long long number, int threadN) {
         start++;
     }
 
-    // Retrieve the values and append to string
+    // Retrieve the values from the threads and append to string
     for (auto& thread : threads) {
         factors.append(thread.get());
     }
@@ -144,21 +145,11 @@ void checkNumberFeatures() {
     // Convert input string to integer
     number = std::stoll(input);
 
-    // "async" is used here for multithreading; the workloads are split up over different threads
-    // This can drastically improve the speed of the program
-    // By the way, it took me absolutely forever to figure out why it wasn't working
-    // And it was due to compiler flags of all things, at this point I want to pull my hair out
-    // Thank you to the StackOverflow page that saved me from this issue
-    std::future<std::string> thread_1 = std::async(std::launch::async, getSign, number);
-    std::future<std::string> thread_2 = std::async(std::launch::async, isEvenOdd, number);
-    std::future<std::string> thread_3 = std::async(std::launch::async, getFactors, number, 12);
-    std::future<std::string> thread_4 = std::async(std::launch::async, isPrime, number);
-
     // Retrieve values from threads
-    sign = thread_1.get();
-    even_odd = thread_2.get();
-    factors = thread_3.get();
-    prime = thread_4.get();
+    sign = getSign(number);
+    even_odd = isEvenOdd(number);
+    factors = getFactors(number, 12);
+    prime = isPrime(number);
 
 	// Print features of number
     std::cout << "\n"
