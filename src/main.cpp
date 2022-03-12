@@ -71,16 +71,20 @@ std::string getFactors(long long number, int N_Threads) {
     // Variables
     std::vector<long long> factors_vec;
     std::ostringstream factors;
-    // Where to start the algorithm
+
+    // Where to start the algorithm from
     int start = 1;
 
     // Create N threads
     std::vector<std::future<std::vector<long long>>> threads(N_Threads);
 
-    // For each thread, run the lambda function
+    // For each thread...
     for (auto& thread : threads) {
+        // Create a thread and assign it a lambda function
         thread = std::async(std::launch::async, [number, start, N_Threads] {
+            // Temporary vector for storing results
             std::vector<long long> factors;
+
             // Calculate factors with given number, and increment the comparison number by the number of threads
             for (long long i = start; i <= number; i += N_Threads) {
                 if (number % i == 0) {
@@ -96,14 +100,17 @@ std::string getFactors(long long number, int N_Threads) {
         start++;
     }
 
-    // Retrieve the values from the threads and append to string
+    // For each thread...
     for (auto& thread : threads) {
+        // Retrieve its values
         std::vector<long long> thread_vec = thread.get();
+
+        // Append values to vector
         factors_vec.insert(factors_vec.end(), thread_vec.begin(), thread_vec.end());
     }
 
-    if (!factors_vec.empty())
-    {
+    // If the vector is empty, ignore sorting and converting it
+    if (!factors_vec.empty()) {
         // Sort numbers
         std::sort(factors_vec.begin(), factors_vec.end());
 
@@ -161,7 +168,7 @@ void checkNumberFeatures() {
     // Convert input string to integer
     number = std::stoll(input);
 
-    // Retrieve values from threads
+    // Run functions on number and store into associated variables
     sign = getSign(number);
     even_odd = isEvenOdd(number);
     factors = getFactors(number, 12);
