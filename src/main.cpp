@@ -1,7 +1,5 @@
 #include <iostream>
-#include <vector>
 #include <sstream>
-#include <iterator>
 #include <future>
 
 // TODO: Implement plotting and statistics modes
