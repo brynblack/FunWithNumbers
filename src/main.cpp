@@ -60,23 +60,6 @@ std::string isEvenOdd(long long number) {
     return "Odd";
 }
 
-// Determines whether number is prime or not
-std::string isPrime(long long n) {
-    // If the number is less than or equal to 1, it is not prime
-    if (n <= 1) {
-        return "Is not a prime number";
-	}
-    // If the number is divisible by any numbers from 2 to n, it is not prime
-    for (long long i = 2; i < n; i++) {
-        if (n % i == 0) {
-            return "Is not a prime number";
-		}
-	}
-
-    // If previous checks are false, it is prime
-    return "Is a prime number";
-}
-
 // Calculates all possible factors of given number
 std::string getFactors(long long number, int N_Threads) {
     // This function is completely multithreaded; the tasks are split up over different threads
@@ -118,6 +101,23 @@ std::string getFactors(long long number, int N_Threads) {
 
     // Return the factors as a string
     return factors;
+}
+
+// Determines whether number is prime or not
+std::string isPrime(long long n) {
+    // If the number is less than or equal to 1, it is not prime
+    if (n <= 1) {
+        return "Is not a prime number";
+    }
+    // If the number is divisible by any numbers from 2 to n, it is not prime
+    for (long long i = 2; i < n; i++) {
+        if (n % i == 0) {
+            return "Is not a prime number";
+        }
+    }
+
+    // If previous checks are false, it is prime
+    return "Is a prime number";
 }
 
 // Checks the features of a number
