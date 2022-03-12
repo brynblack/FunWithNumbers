@@ -24,6 +24,7 @@
 #include <sstream>
 #include <future>
 #include <vector>
+#include <iterator>
 
 // TODO: Implement plotting and statistics modes
 // TODO: Use classes to organise code
@@ -68,26 +69,27 @@ std::string getFactors(long long number, int N_Threads) {
     // https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
 
     // Variables
-    std::string factors;
+    std::vector<long long> factors_vec;
+    std::ostringstream factors;
     // Where to start the algorithm
     int start = 1;
 
     // Create N threads
-    std::vector<std::future<std::string>> threads(N_Threads);
+    std::vector<std::future<std::vector<long long>>> threads(N_Threads);
 
     // For each thread, run the lambda function
     for (auto& thread : threads) {
         thread = std::async(std::launch::async, [number, start, N_Threads] {
-            std::ostringstream factors;
+            std::vector<long long> factors;
             // Calculate factors with given number, and increment the comparison number by the number of threads
             for (long long i = start; i <= number; i += N_Threads) {
                 if (number % i == 0) {
-                    factors << i << ' ';
+                    factors.push_back(i);
                 }
             }
 
             // Return the string stream as a string
-            return factors.str();
+            return factors;
         });
 
         // Increment start by 1, so the next thread will start not on the same number
@@ -96,11 +98,25 @@ std::string getFactors(long long number, int N_Threads) {
 
     // Retrieve the values from the threads and append to string
     for (auto& thread : threads) {
-        factors.append(thread.get());
+        std::vector<long long> thread_vec = thread.get();
+        factors_vec.insert(factors_vec.end(), thread_vec.begin(), thread_vec.end());
+    }
+
+    if (!factors_vec.empty())
+    {
+        // Sort numbers
+        std::sort(factors_vec.begin(), factors_vec.end());
+
+        // Copy everything to a string stream
+        // Convert all but the last number to prevent a trailing " "
+        std::copy(factors_vec.begin(), factors_vec.end()-1,std::ostream_iterator<long long>(factors, " "));
+
+        // Add the last element without a delimiter
+        factors << factors_vec.back();
     }
 
     // Return the factors as a string
-    return factors;
+    return factors.str();
 }
 
 // Determines whether number is prime or not
