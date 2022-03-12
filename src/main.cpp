@@ -76,7 +76,7 @@ std::string getFactors(long long number, int threadN) {
             // Calculate factors with given number, and increment the comparison number by the number of threads
             for (long long i = start; i <= number; i += threadN) {
                 if (number % i == 0) {
-                    factors << ' ' << i;
+                    factors << i << ' ';
                 }
             }
 
@@ -129,7 +129,7 @@ void checkNumberFeatures() {
     // Thank you to the StackOverflow page that saved me from this issue
     std::future<std::string> thread_1 = std::async(std::launch::async, getSign, number);
     std::future<std::string> thread_2 = std::async(std::launch::async, isEvenOdd, number);
-    std::future<std::string> thread_3 = std::async(std::launch::async, getFactors, number, 3);
+    std::future<std::string> thread_3 = std::async(std::launch::async, getFactors, number, 12);
     std::future<std::string> thread_4 = std::async(std::launch::async, isPrime, number);
 
     // Retrieve values from threads
