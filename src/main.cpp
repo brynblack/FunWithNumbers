@@ -14,38 +14,65 @@ void clearScreen() {
 	std::cout << std::string(100, '\n');
 }
 
+// Function to check if number is positive, negative or zero
+std::string getSign(long long number) {
+    if (number > 0) {
+        return "Positive";
+    }
+    else if (number < 0) {
+        return "Negative";
+    }
+
+    // We do not need an else statement in this configuration
+    // This is because the previous exceptions have already been handled
+    return "Zero";
+}
+
+// Function to check if number is even or odd
+std::string isEvenOdd(long long number) {
+    // Modulo allows us to figure out the remainder when a number divided by another number
+    // In this case, we can modulo the number by 2 to find out if the number is even or odd
+    if (number % 2 == 0) {
+        return "Even";
+    }
+
+    return "Odd";
+}
+
 // Function to determine if number is prime
-bool isPrime(long long n) {
+std::string isPrime(long long n) {
     // If the number is less than or equal to 1, it is not prime
     if (n <= 1) {
-        return false;
+        return "Is not a prime number";
 	}
-
-    // Iterate through all possible numbers to determine if it is not prime
+    // If the number is divisible by any numbers from 2 to n, it is not prime
     for (long long i = 2; i < n; i++) {
         if (n % i == 0) {
-            return false;
+            return "Is not a prime number";
 		}
 	}
 
-    // If previous checks failed it is prime, therefore return true
-    return true;
+    // If previous checks are false, it is prime
+    return "Is a prime number";
 }
 
 // Function to calculate all possible factors of given number
-std::vector<long long> getFactors(long long number) {
+std::string getFactors(long long number) {
     // Variables
-    std::vector<long long> factors;
+    // "ostringstream" is a string stream
+    // String streams are a class that uses a string buffer that contains a sequence of characters
+    // These streams can be manipulated in various ways
+    std::ostringstream factors;
 
-    // Iterate through all possible factors and append any to the vector
+    // Iterate through all possible factors and append any to the stream
     for (long long i = 1; i <= number; i++) {
         if (number % i == 0) {
-            factors.push_back(i);
+            factors << ' ' << i;
         }
     }
 
-    // Return the factors as a vector
-    return factors;
+    // Return the factors as a string stream
+    return factors.str();
 }
 
 // Function for checking the features of a number
@@ -54,16 +81,8 @@ void checkNumberFeatures() {
     // "long long" is a data type for a signed 64-bit integer
     // Signed variables have negative and positive values, while unsigned variables only have positive
     // Unsigned variables can store a lot more than signed variables
-    // "vector" is a sequence container representing arrays that can change in size
-    // They are useful in for loops for appending values
-    // "ostringstream" is a string stream
-    // String streams are a class that uses a string buffer that contains a sequence of characters
-    // These streams can have various functions applied to them
-    std::string input, sign, even_odd, prime;
-    std::vector<long long> factors_vector;
-    std::ostringstream factors;
+    std::string input, sign, even_odd, factors, prime;
     long long number;
-
 
 	// Clear the screen
 	clearScreen();
@@ -72,62 +91,37 @@ void checkNumberFeatures() {
     std::cout << "Please enter a whole number that will be checked over: ";
     std::getline(std::cin, input);
 
+    // Return if input contains something other than digits or signs
+    // TODO: Make a simpler solution for checking this
+    if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
+        return;
+    }
+
     // Convert input string to integer
-    // TODO: Fix a bug where it crashes when a string is entered
     number = std::stoll(input);
 
-    // TODO: Move if statements and so on into separate functions
-    // Check if number is positive, negative or zero
-    if (number > 0) {
-        sign = "Positive";
-    }
-    else if (number < 0) {
-        sign = "Negative";
-    }
-    else {
-        sign = "Zero";
-    }
+    // "async" is used here for multithreading; the workloads are split up over different threads
+    // This can drastically improve the speed of the program
+    // By the way, it took me absolutely forever to figure out why it wasn't working
+    // And it was due to compiler flags of all things, at this point I want to pull my hair out
+    // Thank you to the StackOverflow page that saved me from this issue
+    std::future<std::string> thread_1 = std::async(std::launch::async, getSign, number);
+    std::future<std::string> thread_2 = std::async(std::launch::async, isEvenOdd, number);
+    std::future<std::string> thread_3 = std::async(std::launch::async, getFactors, number);
+    std::future<std::string> thread_4 = std::async(std::launch::async, isPrime, number);
 
-    // Check if number is even or odd
-    if (number % 2 == 0) {
-        even_odd = "Even";
-    }
-    else {
-        even_odd = "Odd";
-    }
-
-	// "async" is used here for multithreading; the workloads are split up over different threads
-	// This can drastically improve the speed of the program
-	// By the way, it took me absolutely forever to figure out why it wasn't working
-	// And it was due to compiler flags of all things, at this point I want to pull my hair out
-	// Thank you to the StackOverflow page that saved me from this issue  
-    // Calculate the factors of the number, then convert the vector to a string stream
-    // If no factors are present i.e. number is less than or equal to 0, it will ignore
-    // It converts all but the last element to avoid a trailing " "
-    // Finally add the last element back with no delimiter
-	std::future<std::vector<long long>> thread_1 = std::async(std::launch::async, getFactors, number);
-	std::future<bool> thread_2 = std::async(std::launch::async, isPrime, number);
-
-	factors_vector = thread_1.get();
-    if (!factors_vector.empty()) {
-        std::copy(factors_vector.begin(), factors_vector.end()-1, std::ostream_iterator<long long>(factors, " "));
-        factors << factors_vector.back();
-    }
-	
-    // Check if number is prime or not
-    if (thread_2.get()) {
-        prime = "Is a prime number";
-    }
-    else {
-        prime = "Is not a prime number";
-    }
+    // Retrieve values from threads
+    sign = thread_1.get();
+    even_odd = thread_2.get();
+    factors = thread_3.get();
+    prime = thread_4.get();
 
 	// Print features of number
     std::cout << "\n"
                  "The features of " << number << " are...\n"
                  "  " << sign << "\n"
                  "  " << even_odd << "\n"
-                 "  Factors are  " << factors.str() << "\n"
+                 "  Factors are  " << factors << "\n"
                  "  " << prime << "\n";
 
     // Wait for user input
