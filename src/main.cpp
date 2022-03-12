@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <future>
+#include <vector>
 
 // TODO: Implement plotting and statistics modes
 // TODO: Use classes to organise code
@@ -55,22 +56,45 @@ std::string isPrime(long long n) {
 }
 
 // Calculates all possible factors of given number
-std::string getFactors(long long number) {
-    // Variables
-    // "ostringstream" is a string stream
-    // String streams are a class that uses a string buffer that contains a sequence of characters
-    // These streams can be manipulated in various ways
-    std::ostringstream factors;
+std::string getFactors(long long number, int threadN) {
+    // This function is completely multithreaded
+    // It was so hard to implement, thank you stackoverflow
+    // https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
 
-    // Iterate through all possible factors and append any to the stream
-    for (long long i = 1; i <= number; i++) {
-        if (number % i == 0) {
-            factors << ' ' << i;
-        }
+    // Variables
+    std::string factors;
+    // Where to start the algorithm
+    int start = 1;
+
+    // Create N threads
+    std::vector<std::future<std::string>> threads(threadN);
+
+    for (auto& thread : threads) {
+        // For each thread, run the lambda function
+        thread = std::async(std::launch::async, [number, start, threadN] {
+            std::ostringstream factors;
+            // Calculate factors with given number, and increment the comparison number by the number of threads
+            for (long long i = start; i <= number; i += threadN) {
+                if (number % i == 0) {
+                    factors << ' ' << i;
+                }
+            }
+
+            // Return the string stream as a string
+            return factors.str();
+        });
+
+        // Increment start by 1, so the next thread will start not on the same number
+        start++;
     }
 
-    // Return the factors as a string stream
-    return factors.str();
+    // Retrieve the values and append to string
+    for (auto& thread : threads) {
+        factors.append(thread.get());
+    }
+
+    // Return the factors as a string
+    return factors;
 }
 
 // Checks the features of a number
@@ -105,7 +129,7 @@ void checkNumberFeatures() {
     // Thank you to the StackOverflow page that saved me from this issue
     std::future<std::string> thread_1 = std::async(std::launch::async, getSign, number);
     std::future<std::string> thread_2 = std::async(std::launch::async, isEvenOdd, number);
-    std::future<std::string> thread_3 = std::async(std::launch::async, getFactors, number);
+    std::future<std::string> thread_3 = std::async(std::launch::async, getFactors, number, 3);
     std::future<std::string> thread_4 = std::async(std::launch::async, isPrime, number);
 
     // Retrieve values from threads
