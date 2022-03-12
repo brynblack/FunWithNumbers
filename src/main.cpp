@@ -227,7 +227,6 @@ int main() {
             default:
                 break;
         }
-
     } while (!quit);
 
     // Return an exit code of 0, meaning that the program ran successfully
