@@ -12,7 +12,7 @@ void clearScreen() {
 	std::cout << std::string(100, '\n');
 }
 
-// Function to check if number is positive, negative or zero
+// Checks if number is positive, negative or zero
 std::string getSign(long long number) {
     if (number > 0) {
         return "Positive";
@@ -26,7 +26,7 @@ std::string getSign(long long number) {
     return "Zero";
 }
 
-// Function to check if number is even or odd
+// Checks if number is even or odd
 std::string isEvenOdd(long long number) {
     // Modulo allows us to figure out the remainder when a number divided by another number
     // In this case, we can modulo the number by 2 to find out if the number is even or odd
@@ -37,7 +37,7 @@ std::string isEvenOdd(long long number) {
     return "Odd";
 }
 
-// Function to determine if number is prime
+// Determines whether number is prime or not
 std::string isPrime(long long n) {
     // If the number is less than or equal to 1, it is not prime
     if (n <= 1) {
@@ -54,7 +54,7 @@ std::string isPrime(long long n) {
     return "Is a prime number";
 }
 
-// Function to calculate all possible factors of given number
+// Calculates all possible factors of given number
 std::string getFactors(long long number) {
     // Variables
     // "ostringstream" is a string stream
@@ -73,7 +73,7 @@ std::string getFactors(long long number) {
     return factors.str();
 }
 
-// Function for checking the features of a number
+// Checks the features of a number
 void checkNumberFeatures() {
     // Variables
     // "long long" is a data type for a signed 64-bit integer
@@ -126,10 +126,10 @@ void checkNumberFeatures() {
     std::cin.ignore();
 }
 
-// Function for plotting numbers on a graph
+// Plots given numbers on a graph
 void plotNumbers() {}
 
-// Function for checking overall stats from previous interactions
+// Checks overall stats from previous interactions
 void checkOverallStats() {}
 
 int main() {
