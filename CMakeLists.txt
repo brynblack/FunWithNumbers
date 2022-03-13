@@ -5,7 +5,7 @@ project(FunWithNumbers
         HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED False)
 
 add_executable(FunWithNumbers)
 
