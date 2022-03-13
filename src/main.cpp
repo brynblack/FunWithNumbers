@@ -25,6 +25,7 @@
 #include <future>
 #include <vector>
 #include <iterator>
+#include <algorithm>
 
 // TODO: Implement plotting and statistics modes
 // TODO: Use classes to organise code
