@@ -1,15 +1,41 @@
-cmake_minimum_required(VERSION 3.22.2)
-project(FunWithNumbers
-        VERSION 4.3.6.4
-        DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
-        HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
-        LANGUAGES CXX
-)
+cmake_minimum_required(VERSION 3.13...3.22.3)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED False)
+project(
+    FunWithNumbers
+    VERSION 4.4.6.4
+    DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
+    HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
+    LANGUAGES CXX)
+
+# Set default build type if not already set
+set(default_build_type "Release")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Build type" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
 
 add_executable(FunWithNumbers)
 
-add_subdirectory(src)
+target_compile_features(FunWithNumbers
+    PUBLIC
+        cxx_std_23)
 
+set_target_properties(FunWithNumbers
+    PROPERTIES
+        CXX_EXTENSIONS OFF
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/build/debug"
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/build/release")
+
+target_compile_options(FunWithNumbers
+    PRIVATE
+        "$<$<CONFIG:Debug>:-static;-Og;-g;-Wl,-u,pthread_join>"
+        "$<$<CONFIG:Release>:-static;-Ofast;-Wl,-u,pthread_join>")
+
+# Check if compiler supports Interprocedural Optimization, and enable if it is supported
+include(CheckIPOSupported)
+check_ipo_supported(RESULT result)
+if(result)
+    set_target_properties(FunWithNumbers PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
+add_subdirectory(src)
