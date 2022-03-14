@@ -6,7 +6,6 @@ target_sources(FunWithNumbers
 
 target_link_libraries(FunWithNumbers
 	PRIVATE
-	    "$<$<CONFIG:Debug>:-static;-Og;-g;-Wl,-u,pthread_join>"
-	    "$<$<CONFIG:Release>:-static;-Ofast;-Wl,-u,pthread_join>"
+		project_options
 	PUBLIC
 		Threads::Threads)
