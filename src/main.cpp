@@ -25,6 +25,7 @@
 #include <future>
 #include <vector>
 #include <iterator>
+// TODO: Figure out why CCLS thinks this is needed for std::sort()
 #include <algorithm>
 
 // TODO: Implement plotting and statistics modes
@@ -35,6 +36,21 @@
 // This gives the illusion that the screen was cleared
 void clearScreen() {
 	std::cout << std::string(100, '\n');
+}
+
+bool isNumber(std::string input) {
+	if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
+		return false;
+	}
+	return true;
+}
+
+bool withinRange(int *range, int coord) {
+	if (!(coord >= range[0] && coord <= range[1])) {
+		return false;
+	}
+
+	return true;
 }
 
 // Checks if number is positive, negative or zero
@@ -64,6 +80,7 @@ std::string isEvenOdd(long long number) {
 
 // Calculates all possible factors of given number
 std::string getFactors(long long number, int N_Threads) {
+	// TODO: Make async function and use instead
     // This function is completely multithreaded; the tasks are split up over different threads
     // "async" is used here to achieve this, and can drastically improve the speed of the program
     // This was so hard to implement, thank you StackOverflow for providing me with ideas on how to solve this
@@ -188,7 +205,74 @@ void checkNumberFeatures() {
 }
 
 // Plots given numbers on a graph
-void plotNumbers() {}
+void plotNumbers() {
+	// Variables
+	std::string input;
+	int number_1, number_2;
+	bool quit = false;
+	int x_axis[2] = {1, 38};
+	int y_axis[2] = {1, 12};
+
+	do {
+		clearScreen();
+
+		// TODO: Replace with function to draw graph dynamically
+		std::cout <<
+			"                                                       x axis\n"
+			"      1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38\n"
+			"   --------------------------------------------------------------------------------------------------------------------\n"
+			"  1|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			"  2|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			"  3|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			"  4|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			"y 5|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			"a 6|                                                                                                                  |\n"
+			"x  |                                                                                                                  |\n"
+			"i 7|                                                                                                                  |\n"
+			"s  |                                                                                                                  |\n"
+			"  8|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			"  9|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			" 10|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			" 11|                                                                                                                  |\n"
+			"   |                                                                                                                  |\n"
+			" 12|                                                                                                                  |\n"
+			"   --------------------------------------------------------------------------------------------------------------------\n"
+			"Enter a coordinate below to be added to the plot:\n"
+			"x axis: ";
+		std::getline(std::cin, input);
+		
+		if (!isNumber(input)) {
+			return;
+		}
+
+		number_1 = std::stoi(input);
+
+		if (!withinRange(x_axis, number_1)) {
+			return;
+		}
+
+		std::cout << "y axis: ";
+		std::getline(std::cin, input);
+		
+		if (!isNumber(input)) {
+			return;
+		}
+
+		number_2 = std::stoi(input);
+
+		if (!withinRange(y_axis, number_2)) {
+			return;
+		}
+	} while (!quit);
+}
 
 // Checks overall stats from previous interactions
 void checkOverallStats() {}
