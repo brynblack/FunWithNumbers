@@ -38,6 +38,7 @@ void clearScreen() {
 	std::cout << std::string(100, '\n');
 }
 
+// Evaluate whether string is number
 bool isNumber(std::string input) {
 	if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
 		return false;
@@ -53,75 +54,92 @@ bool withinRange(int *range, int coord) {
 	return true;
 }
 
-// Checks if number is positive, negative or zero
-std::string getSign(long long number) {
+void drawGraph(int x, int y, int *x_range, int *y_range) {
+	for (int i = x_range[0]; i <= x_range[1]; i++) {
+		int spaces = 1;
+		if (i < 9) {
+			spaces = 2;
+		}
+		std::cout << i << std::string(spaces, ' ');
+	}
+	
+	std::cout <<
+		"\n"
+		<< std::string(x_range[1], '-');
+}
+
+// Evaluates whether number is positive, negative or zero
+template <typename T>
+std::string getSign(T number) {
+	// If the number is positive, the sign is positive
     if (number > 0) {
         return "Positive";
     }
+
+	// If the number is negative, the sign is negative 
     else if (number < 0) {
         return "Negative";
     }
 
-    // We do not need an else statement in this configuration
-    // This is because the previous exceptions have already been handled
+	// If the number is neither positive nor negative, it must be zero
     return "Zero";
 }
 
-// Checks if number is even or odd
-std::string isEvenOdd(long long number) {
-    // Modulo allows us to figure out the remainder when a number divided by another number
-    // In this case, we can modulo the number by 2 to find out if the number is even or odd
+// Evaluates whether number is even or odd
+template <typename T>
+std::string isEvenOdd(T number) {
+	// If the number does not have a remainder, it is even
     if (number % 2 == 0) {
         return "Even";
     }
 
+	// If the number has a remainder, it is odd
     return "Odd";
 }
 
-// Calculates all possible factors of given number
-std::string getFactors(long long number, int N_Threads) {
-	// TODO: Make async function and use instead
+// Evaluates all possible factors of given number
+template <typename T>
+std::string getFactors(T number, int N_Threads) {
     // This function is completely multithreaded; the tasks are split up over different threads
     // "async" is used here to achieve this, and can drastically improve the speed of the program
     // This was so hard to implement, thank you StackOverflow for providing me with ideas on how to solve this
     // https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
 
     // Variables
-    std::vector<long long> factors_vec;
+    std::vector<T> factors_vec;
     std::ostringstream factors;
 
     // Where to start the algorithm from
     int start = 1;
 
     // Create N threads
-    std::vector<std::future<std::vector<long long>>> threads(N_Threads);
+    std::vector<std::future<std::vector<T>>> threads(N_Threads);
 
     // For each thread...
     for (auto& thread : threads) {
-        // Create a thread and assign it a lambda function
+        // Assign it a lambda function
         thread = std::async(std::launch::async, [number, start, N_Threads] {
-            // Temporary vector for storing results
-            std::vector<long long> factors;
+            std::vector<T> factors;
 
-            // Calculate factors with given number, and increment the comparison number by the number of threads
-            for (long long i = start; i <= number; i += N_Threads) {
+            // Append any numbers from start to number which are divisible by the number
+            for (int i = start; i <= number; i += N_Threads) {
                 if (number % i == 0) {
                     factors.push_back(i);
                 }
             }
 
-            // Return the string stream as a string
+            // Return factors as a vector
             return factors;
         });
 
-        // Increment start by 1, so the next thread will start not on the same number
+        // Increment start by 1, so the next thread will not start on the same number
         start++;
     }
 
     // For each thread...
     for (auto& thread : threads) {
         // Retrieve its values
-        std::vector<long long> thread_vec = thread.get();
+        std::vector<T> thread_vec = thread.get();
 
         // Append values to vector
         factors_vec.insert(factors_vec.end(), thread_vec.begin(), thread_vec.end());
@@ -129,29 +147,30 @@ std::string getFactors(long long number, int N_Threads) {
 
     // If the vector is empty, ignore sorting and converting it
     if (!factors_vec.empty()) {
-        // Sort numbers
+        // Sort values in vector from smallest to largest
         std::sort(factors_vec.begin(), factors_vec.end());
 
         // Copy everything to a string stream
-        // Convert all but the last number to prevent a trailing " "
-        std::copy(factors_vec.begin(), factors_vec.end()-1,std::ostream_iterator<long long>(factors, " "));
+        std::copy(factors_vec.begin(), factors_vec.end()-1,std::ostream_iterator<T>(factors, " "));
 
-        // Add the last element without a delimiter
+        // Add the last value without a delimiter
         factors << factors_vec.back();
     }
 
-    // Return the factors as a string
+    // Return factors as a string
     return factors.str();
 }
 
-// Determines whether number is prime or not
-std::string isPrime(long long n) {
+// Evaluates whether number is prime or not
+template <typename T>
+std::string isPrime(T n) {
     // If the number is less than or equal to 1, it is not prime
     if (n <= 1) {
         return "Is not a prime number";
     }
+
     // If the number is divisible by any numbers from 2 to n, it is not prime
-    for (long long i = 2; i < n; i++) {
+    for (T i = 2; i < n; i++) {
         if (n % i == 0) {
             return "Is not a prime number";
         }
@@ -161,14 +180,10 @@ std::string isPrime(long long n) {
     return "Is a prime number";
 }
 
-// Checks the features of a number
+// Outputs the features of a number
 void checkNumberFeatures() {
-    // Variables
-    // "long long" is a data type for a signed 64-bit integer
-    // Signed variables have negative and positive values, while unsigned variables only have positive
-    // Unsigned variables can store a lot more than signed variables
+	// Variables
     std::string input, sign, even_odd, factors, prime;
-    long long number;
 
 	// Clear the screen
 	clearScreen();
@@ -178,21 +193,20 @@ void checkNumberFeatures() {
     std::getline(std::cin, input);
 
     // Return if input contains something other than digits or signs
-    // TODO: Make a simpler solution for checking this
-    if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
-        return;
-    }
+	if (!isNumber(input)) {
+		return;
+	}
 
-    // Convert input string to integer
-    number = std::stoll(input);
+    // Convert input string to number
+    long long number = std::stoll(input);
 
-    // Run functions on number and store into associated variables
+    // Execute functions on number and store into associated variables
     sign = getSign(number);
     even_odd = isEvenOdd(number);
     factors = getFactors(number, 12);
     prime = isPrime(number);
 
-	// Print features of number
+	// Output features of number
     std::cout << "\n"
                  "The features of " << number << " are...\n"
                  "  " << sign << "\n"
@@ -271,6 +285,7 @@ void plotNumbers() {
 		if (!withinRange(y_axis, number_2)) {
 			return;
 		}
+		drawGraph(number_1, number_2, x_axis, y_axis);
 	} while (!quit);
 }
 
