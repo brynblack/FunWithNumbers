@@ -25,15 +25,13 @@
 #include <future>
 #include <vector>
 #include <iterator>
-// TODO: Figure out why CCLS thinks this is needed for std::sort()
 #include <algorithm>
 
 // TODO: Implement plotting and statistics modes
-// TODO: Use classes to organise code
-
 // TODO: Add proper clear screen function
-// This function prints a bunch of newlines on the screen
-// This gives the illusion that the screen was cleared
+// TODO: Figure out why CCLS thinks <algorithm> is needed for std::sort()
+
+// Clears the screen
 void clearScreen() {
 	std::cout << std::string(100, '\n');
 }
