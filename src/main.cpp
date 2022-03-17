@@ -28,12 +28,11 @@
 #include <algorithm>
 
 // TODO: Implement plotting and statistics modes
-// TODO: Add proper clear screen function
 // TODO: Figure out why CCLS thinks <algorithm> is needed for std::sort()
 
 // Clears the screen
 void clearScreen() {
-	std::cout << std::string(100, '\n');
+	std::cout << "\033[2J\033[1;1H";
 }
 
 // Evaluate whether string is number
