@@ -118,12 +118,11 @@ std::string getFactors(T number, int N_Threads) {
             std::vector<T> factors;
 
             // Append any numbers from start to number which are divisible by the number
-            for (T i = start; i <= number; i += N_Threads) {
+            for (T i = start; i <= (number / 2); i += N_Threads) {
                 if (number % i == 0) {
                     factors.push_back(i);
                 }
             }
-
             // Return factors as a vector
             return factors;
         });
@@ -131,6 +130,9 @@ std::string getFactors(T number, int N_Threads) {
         // Increment start by 1, so the next thread will not start on the same number
         start++;
     }
+
+	// Append number to factors
+	factors_vec.push_back(number);
 
     // For each thread...
     for (auto& thread : threads) {
