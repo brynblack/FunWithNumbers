@@ -98,13 +98,12 @@ std::string isEvenOdd(T number) {
 }
 
 // Evaluates all possible factors of given number
+// This function is completely multithreaded; the tasks are split up over different threads
+// "async" is used here to achieve this, and can drastically improve the speed of the program
+// This was so hard to implement, thank you StackOverflow for providing me with ideas on how to solve this
+// https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
 template <typename T>
 std::string getFactors(T number, int N_Threads) {
-    // This function is completely multithreaded; the tasks are split up over different threads
-    // "async" is used here to achieve this, and can drastically improve the speed of the program
-    // This was so hard to implement, thank you StackOverflow for providing me with ideas on how to solve this
-    // https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
-
     // Variables
     std::vector<T> factors_vec;
     std::ostringstream factors;
@@ -122,7 +121,7 @@ std::string getFactors(T number, int N_Threads) {
             std::vector<T> factors;
 
             // Append any numbers from start to number which are divisible by the number
-            for (int i = start; i <= number; i += N_Threads) {
+            for (T i = start; i <= number; i += N_Threads) {
                 if (number % i == 0) {
                     factors.push_back(i);
                 }
@@ -145,7 +144,7 @@ std::string getFactors(T number, int N_Threads) {
         factors_vec.insert(factors_vec.end(), thread_vec.begin(), thread_vec.end());
     }
 
-    // If the vector is empty, ignore sorting and converting it
+    // If vector is empty, ignore sorting and converting it
     if (!factors_vec.empty()) {
         // Sort values in vector from smallest to largest
         std::sort(factors_vec.begin(), factors_vec.end());
@@ -289,8 +288,26 @@ void plotNumbers() {
 	} while (!quit);
 }
 
-// Checks overall stats from previous interactions
-void checkOverallStats() {}
+// Displays overall stats from previous interactions
+void checkOverallStats() {
+	// Variables
+	long long numbersEntered, numbersTotal, numbersAverage, smallestNumber, largestNumber, coordinatesPlotted;
+
+	// Clear the screen
+	clearScreen();
+
+	// Display the overall stats
+	std::cout << "Here are your statistics of overall use:\n"
+				 " Numbers entered: " << numbersEntered << "\n"
+				 " Total of numbers: " << numbersTotal << "\n"
+				 " Average of numbers: " << numbersAverage << "\n"
+				 " Smallest number entered: " << smallestNumber << "\n"
+				 " Largest number entered: " << largestNumber << "\n"
+				 " Coordinates plotted: " << coordinatesPlotted << "\n";
+
+	// Wait for user input
+	std::cin.ignore();
+}
 
 int main() {
 	// Variables
