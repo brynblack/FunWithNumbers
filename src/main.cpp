@@ -29,6 +29,9 @@
 #include <iterator>
 #include <fstream>
 
+// TODO: Fix right side of graph border
+// TODO: Add stat tracking functionality
+
 // Clears the screen
 void clearScreen() {
 	std::cout << "\033[2J\033[1;1H";
@@ -318,7 +321,6 @@ void plotNumbers() {
 		}
 
         bool cont = false;
-        // If the entered coordinates are equal to previous coordinates, return??? TODO: FIX THIS
         for (auto pair : values) {
             if (pair.first == number_1 && pair.second == number_2) {
                 cont = true;
