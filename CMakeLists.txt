@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.22.3)
 
 project(
     FunWithNumbers
-    VERSION 7.5.9.5
+    VERSION 7.6.9.5
     DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
     HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
     LANGUAGES CXX)
@@ -17,6 +17,7 @@ endif()
 add_executable(FunWithNumbers)
 add_library(project_options INTERFACE)
 
+# Export compile_commands.json so CCLS can correctly function
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE CACHE STRING "Whether to export compile_commands.json" FORCE)
 
 set_target_properties(FunWithNumbers
