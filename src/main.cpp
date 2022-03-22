@@ -27,6 +27,7 @@
 #include <future>
 #include <vector>
 #include <iterator>
+#include <fstream>
 
 // Clears the screen
 void clearScreen() {
@@ -87,7 +88,7 @@ void drawGraph(T1 values, T2 *x_range, T3 *y_range) {
         int offset1 = 0;
         auto offset2 = max_digits_x - 1;
         std::sort(values.begin(), values.end());
-        for (auto coords : values) {
+        for (auto& coords : values) {
             auto x = coords.first;
             auto y = coords.second;
             if (i == y) {
@@ -95,7 +96,6 @@ void drawGraph(T1 values, T2 *x_range, T3 *y_range) {
                 offset1 = x - x_range[0];
                 offset2 = max_digits_x - (max_digits_x + 1);
             }
-
         }
         std::cout << "\n";
 
@@ -238,14 +238,12 @@ void checkNumberFeatures() {
 	// Clear the screen
 	clearScreen();
 
-	// Ask for input, then store input into a string
+	// Ask user to input whole number, and store number into a string
     std::cout << "Please enter a whole number that will be checked over: ";
     std::getline(std::cin, input);
 
     // Return if input contains something other than digits or signs
-	if (!isNumber(input)) {
-		return;
-	}
+	if (!isNumber(input)) return;
 
     // Convert input string to number
     long long number = std::stoll(input);
@@ -335,6 +333,10 @@ void plotNumbers() {
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
         if (input == "n") {
             quit = true;
+            clearScreen();
+            drawGraph(values, x_axis, y_axis);
+            std::cout << "Press enter to return to the main menu...";
+            std::cin.ignore();
         }
 	} while (!quit);
 }
@@ -343,9 +345,33 @@ void plotNumbers() {
 void checkOverallStats() {
 	// Variables
 	long long numbersEntered, numbersTotal, numbersAverage, smallestNumber, largestNumber, coordinatesPlotted;
+    std::ifstream statsFile;
+    std::string line;
+    std::vector<long long> lines;
+
+    // Open the stats file
+    statsFile.open("stats.txt");
+
+    // Return if the stats file could not be opened
+    if (!statsFile.is_open()) return;
 
 	// Clear the screen
 	clearScreen();
+
+    // Read each line in the stats file and append to vector
+    // If a line is not a number, move to next line
+    while (std::getline(statsFile, line)) {
+        if (!isNumber(line)) continue;
+        lines.push_back(std::stoll(line));
+    }
+
+    // Store expected values into variables
+    numbersEntered = lines[0];
+    numbersTotal = lines[1];
+    numbersAverage = lines[2];
+    smallestNumber = lines[3];
+    largestNumber = lines[4];
+    coordinatesPlotted = lines[5];
 
 	// Display the overall stats
 	std::cout << "Here are your statistics of overall use:\n"
@@ -391,9 +417,7 @@ int main() {
         // Accept string as input and repeat loop if more than one letter
         // "std::getline" is better in this case compared to "std::cin" as it can receive enter key presses
         std::getline(std::cin, choice);
-        if (choice.length() > 1) {
-            continue;
-        }
+        if (choice.length() > 1) continue;
 
         // Execute the selected choice
         menu.execute(choice);
