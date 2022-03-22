@@ -20,15 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "menu.hpp"
+
 #include <iostream>
 #include <sstream>
 #include <future>
 #include <vector>
 #include <iterator>
-#include <algorithm>
-
-// TODO: Implement plotting and statistics modes
-// TODO: Figure out why CCLS thinks <algorithm> is needed for std::sort()
 
 // Clears the screen
 void clearScreen() {
@@ -36,14 +34,14 @@ void clearScreen() {
 }
 
 // Evaluate whether string is number
-bool isNumber(std::string input) {
+bool isNumber(const std::string& input) {
 	if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
 		return false;
 	}
 	return true;
 }
 
-bool withinRange(int *range, int coord) {
+bool withinRange(const int *range, int coord) {
 	if (!(coord >= range[0] && coord <= range[1])) {
 		return false;
 	}
@@ -51,18 +49,61 @@ bool withinRange(int *range, int coord) {
 	return true;
 }
 
-void drawGraph(int x, int y, int *x_range, int *y_range) {
-	for (int i = x_range[0]; i <= x_range[1]; i++) {
-		int spaces = 1;
-		if (i < 9) {
-			spaces = 2;
-		}
-		std::cout << i << std::string(spaces, ' ');
+template <typename T>
+T findLargestDigit(T a, T b) {
+    if (a < 0 || b < 0) {
+        if (a > b) {
+            return b;
+        }
+        return a;
+    }
+    if (a > b) {
+        return a;
+    }
+    return b;
+}
+
+template <typename T>
+size_t countChars(T s) {
+    std::string str = std::to_string(s);
+    return str.size();
+}
+
+template <typename T1, typename T2, typename T3>
+void drawGraph(T1 values, T2 *x_range, T3 *y_range) {
+    size_t max_digits_x = countChars(findLargestDigit(x_range[0], x_range[1]));
+    size_t max_digits_y = countChars(findLargestDigit(y_range[0], y_range[1]));
+    std::cout << std::string(55, ' ') << "x axis\n";
+    std::cout << std::string(max_digits_y + 4, ' ');
+    for (int i = x_range[0]; i <= x_range[1]; i++) {
+		size_t spaces = max_digits_x - countChars(i + 1);
+		std::cout << i << std::string(spaces + 1, ' ');
 	}
-	
 	std::cout <<
-		"\n"
-		<< std::string(x_range[1], '-');
+        "\n" <<
+		std::string(max_digits_y + 1, ' ') << std::string(3 + ((x_range[1] - x_range[0]) + 1) * (max_digits_x + 1), '-') << "\n";
+    for (int i = y_range[0]; i <= y_range[1]; i++) {
+        std::cout << std::string((max_digits_y + 1) - countChars(i), ' ') << i << "|" << " ";
+        int offset1 = 0;
+        auto offset2 = max_digits_x - 1;
+        std::sort(values.begin(), values.end());
+        for (auto coords : values) {
+            auto x = coords.first;
+            auto y = coords.second;
+            if (i == y) {
+                std::cout << std::string(((x - x_range[0]) - offset1) * (max_digits_x + 1) + offset2, ' ') << "x";
+                offset1 = x - x_range[0];
+                offset2 = max_digits_x - (max_digits_x + 1);
+            }
+
+        }
+        std::cout << "\n";
+
+        if (i != y_range[1]) {
+            std::cout << std::string(max_digits_y + 1, ' ') << "|" << std::string(((x_range[1] - x_range[0]) + 1) * (max_digits_x + 1) + 1, ' ') << "|\n";
+        }
+    }
+    std::cout << std::string(max_digits_y + 1, ' ') << std::string(3 + ((x_range[1] - x_range[0]) + 1) * (max_digits_x + 1), '-') << "\n";
 }
 
 // Evaluates whether number is positive, negative or zero
@@ -117,6 +158,16 @@ std::string getFactors(T number, int N_Threads) {
         thread = std::async(std::launch::async, [number, start, N_Threads] {
             std::vector<T> factors;
 
+            if (number < 0) {
+                // Append any numbers from start to number which are divisible by the number
+                for (T i = start * -1; i >= (number / 2); i -= N_Threads) {
+                    if (number % i == 0) {
+                        factors.push_back(i);
+                    }
+                }
+                // Return factors as a vector
+                return factors;
+            }
             // Append any numbers from start to number which are divisible by the number
             for (T i = start; i <= (number / 2); i += N_Threads) {
                 if (number % i == 0) {
@@ -125,6 +176,7 @@ std::string getFactors(T number, int N_Threads) {
             }
             // Return factors as a vector
             return factors;
+
         });
 
         // Increment start by 1, so the next thread will not start on the same number
@@ -220,70 +272,70 @@ void checkNumberFeatures() {
 void plotNumbers() {
 	// Variables
 	std::string input;
-	int number_1, number_2;
+    std::vector<std::pair<int, int>> values;
 	bool quit = false;
 	int x_axis[2] = {1, 38};
 	int y_axis[2] = {1, 12};
 
 	do {
+        // Clear the screen
 		clearScreen();
 
-		// TODO: Replace with function to draw graph dynamically
-		std::cout <<
-			"                                                       x axis\n"
-			"      1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38\n"
-			"   --------------------------------------------------------------------------------------------------------------------\n"
-			"  1|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			"  2|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			"  3|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			"  4|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			"y 5|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			"a 6|                                                                                                                  |\n"
-			"x  |                                                                                                                  |\n"
-			"i 7|                                                                                                                  |\n"
-			"s  |                                                                                                                  |\n"
-			"  8|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			"  9|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			" 10|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			" 11|                                                                                                                  |\n"
-			"   |                                                                                                                  |\n"
-			" 12|                                                                                                                  |\n"
-			"   --------------------------------------------------------------------------------------------------------------------\n"
-			"Enter a coordinate below to be added to the plot:\n"
-			"x axis: ";
+		// Draw the graph without any values
+        drawGraph(values, x_axis, y_axis);
+
+        // Get x-coordinate of point
+        std::cout << "Enter a coordinate below to be added to the plot:\n"
+                     "x axis: ";
 		std::getline(std::cin, input);
-		
+
+        // If the coordinate is not a number, return
 		if (!isNumber(input)) {
-			return;
+            continue;
 		}
 
-		number_1 = std::stoi(input);
+        // Convert the string to a number
+		int number_1 = std::stoi(input);
 
+        // If the number is not within the range of the axis, return
 		if (!withinRange(x_axis, number_1)) {
-			return;
+            continue;
 		}
 
+        // Get y-coordinate of point
 		std::cout << "y axis: ";
 		std::getline(std::cin, input);
-		
-		if (!isNumber(input)) {
-			return;
+
+        // If the coordinate is not a number, return
+        if (!isNumber(input)) {
+            continue;
 		}
 
-		number_2 = std::stoi(input);
+        // Convert the string to a number
+		int number_2 = std::stoi(input);
 
+        // If the number is not within the range of the axis, return
 		if (!withinRange(y_axis, number_2)) {
-			return;
+            continue;
 		}
-		drawGraph(number_1, number_2, x_axis, y_axis);
+
+        bool cont = false;
+        // If the entered coordinates are equal to previous coordinates, return??? TODO: FIX THIS
+        for (auto pair : values) {
+            if (pair.first == number_1 && pair.second == number_2) {
+                cont = true;
+            }
+        }
+        if (cont) continue;
+        values.emplace_back(number_1, number_2);
+        clearScreen();
+		drawGraph(values, x_axis, y_axis);
+        std::cout << "Do you wish to add another coordinate (y/n)? ";
+        std::getline(std::cin, input);
+        std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+        if (input == "n") {
+            quit = true;
+        }
 	} while (!quit);
 }
 
@@ -313,6 +365,19 @@ int main() {
     std::string choice;
     bool quit = false;
 
+    // Instantiate main menu object
+    fwn::Menu menu;
+
+    // Configure the menu
+    menu.addLine("Welcome to Fun With Numbers\n");
+    menu.addLine("Choose from the menu below:\n");
+    menu.addOption("A", checkNumberFeatures, " (A) Check number features");
+    menu.addOption("B", plotNumbers, " (B) Plot numbers");
+    menu.addOption("C", checkOverallStats, " (C) Check overall stats");
+    menu.addLine("\n");
+    menu.addOption("X", [&quit]() { quit = true; }, " (X) Save and exit");
+    menu.addLine("Choice: ");
+
     // Main loop
     // Do the following code first, and then check if quit is true
     // If quit is not true, repeat the loop until it is true
@@ -320,16 +385,8 @@ int main() {
         // Clear the screen
         clearScreen();
 
-        // Print menu message
-        // "... << std::endl" is not used as this would slow down execution time due to it flushing the stream buffer
-        std::cout << "Welcome to Fun With Numbers\n"
-                     "Choose from the menu below:\n"
-                     " (A) Check number features\n"
-                     " (B) Plot numbers\n"
-                     " (C) Check overall stats\n"
-                     "\n"
-                     " (X) Save and exit\n"
-                     "Choice: ";
+        // Render the menu
+        menu.render();
 
         // Accept string as input and repeat loop if more than one letter
         // "std::getline" is better in this case compared to "std::cin" as it can receive enter key presses
@@ -338,25 +395,9 @@ int main() {
             continue;
         }
 
-        // Convert the string to lowercase, then check what mode the choice is referring to
-        // If a suitable mode is found, execute the appropriate function
-        // Otherwise if no suitable mode can be found, repeat the loop
-        switch (tolower(choice[0])) {
-            case 'a':
-                checkNumberFeatures();
-                break;
-            case 'b':
-                plotNumbers();
-                break;
-            case 'c':
-                checkOverallStats();
-                break;
-            case 'x':
-                quit = true;
-                break;
-            default:
-                break;
-        }
+        // Execute the selected choice
+        menu.execute(choice);
+
     } while (!quit);
 
     // Return an exit code of 0, meaning that the program ran successfully
