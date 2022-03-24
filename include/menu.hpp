@@ -12,8 +12,8 @@ namespace fwn {
     private:
         class Option;
     public:
-        void addOption(std::string key, std::function<void()> function, const std::string &description);
-        void addLine(const std::string &line);
+        void addOption(std::string key, std::function<void()> function, std::string description);
+        void addLine(const std::string &line = "");
         void render();
         void execute(std::string option);
     private:
