@@ -20,10 +20,6 @@ endif()
 add_executable(FunWithNumbers)
 add_library(project_options INTERFACE)
 
-# Automatically run after building
-add_custom_command(TARGET FunWithNumbers POST_BUILD
-	COMMAND FunWithNumbers)
-
 set_target_properties(FunWithNumbers
     PROPERTIES
         CXX_EXTENSIONS OFF
