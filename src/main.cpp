@@ -151,7 +151,6 @@ std::string getFactors(T num) {
 				factors.push_back(i); 
 				if (num / i * -1 != i) factors.push_back(num / i * -1);
 			}
-
 		}
 	}
 	else if (num > 0) {
@@ -160,7 +159,6 @@ std::string getFactors(T num) {
 				factors.push_back(i); 
 				if (num / i != i) factors.push_back(num / i);
 			}
-
 		}
 	}
 	else factors.push_back(num);
@@ -385,7 +383,6 @@ int main() {
 
         // Execute the selected choice
         menu.execute(choice);
-
     } while (!quit);
 
     // Return an exit code of 0, meaning that the program ran successfully
