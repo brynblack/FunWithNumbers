@@ -1,5 +1,3 @@
-find_package(Threads REQUIRED)
-
 target_sources(FunWithNumbers
 	PRIVATE
 		menu.cpp
@@ -11,6 +9,4 @@ target_include_directories(FunWithNumbers
 
 target_link_libraries(FunWithNumbers
 	PRIVATE
-		project_options
-	PUBLIC
-		Threads::Threads)
+		project_options)

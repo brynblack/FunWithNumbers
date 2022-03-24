@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.22.3)
 
 project(
     FunWithNumbers
-    VERSION 7.6.9.8
+    VERSION 7.7.9.8
     DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
     HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
     LANGUAGES CXX)
@@ -32,8 +32,8 @@ target_compile_features(project_options
 
 target_link_options(project_options
     INTERFACE
-        "$<$<CONFIG:Debug>:-static;-Og;-g;-Wl,-u,pthread_join>"
-        "$<$<CONFIG:Release>:-static;-Ofast;-Wl,-u,pthread_join>")
+        "$<$<CONFIG:Debug>:-static;-Og;-g>"
+        "$<$<CONFIG:Release>:-static;-Ofast>")
 
 # Check if compiler supports Interprocedural Optimization, and enable if it is supported
 include(CheckIPOSupported)
