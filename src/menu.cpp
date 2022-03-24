@@ -3,7 +3,7 @@
 #include <iostream>
 
 namespace fwn {
-    void Menu::addOption(std::string key, std::function<void()> function, const std::string& description) {
+    void Menu::addOption(std::string key, std::function<void()> function, const std::string &description) {
         std::transform(key.begin(), key.end(), key.begin(), ::toupper);
         Option option { std::move(function), description };
         this->choices[key] = option;

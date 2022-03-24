@@ -24,7 +24,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <future>
 #include <vector>
 #include <iterator>
 #include <fstream>
@@ -38,7 +37,7 @@ void clearScreen() {
 }
 
 // Evaluate whether string is number
-bool isNumber(const std::string& input) {
+bool isNumber(const std::string &input) {
 	if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
 		return false;
 	}
@@ -91,7 +90,7 @@ void drawGraph(T1 values, T2 *x_range, T3 *y_range) {
         int offset1 = 0;
         auto offset2 = max_digits_x - 1;
         std::sort(values.begin(), values.end());
-        for (auto& coords : values) {
+        for (auto &coords : values) {
             auto x = coords.first;
             auto y = coords.second;
             if (i == y) {
@@ -139,79 +138,42 @@ std::string isEvenOdd(T number) {
 }
 
 // Evaluates all possible factors of given number
-// This function is completely multithreaded; the tasks are split up over different threads
-// "async" is used here to achieve this, and can drastically improve the speed of the program
-// This was so hard to implement, thank you StackOverflow for providing me with ideas on how to solve this
-// https://stackoverflow.com/questions/64125897/how-to-use-async-in-c-properly
 template <typename T>
-std::string getFactors(T number, int N_Threads) {
-    // Variables
-    std::vector<T> factors_vec;
-    std::ostringstream factors;
+std::string getFactors(T num) {
+	// Vectors
+    std::vector<T> factors;
+	std::ostringstream oss;
 
-    // Where to start the algorithm from
-    int start = 1;
+	// Caclulate factors and push to back of vector
+	if (num < 0) {
+		for (T i = -1; i * i * -1 >= num; i--) {
+			if (num % i == 0) {
+				factors.push_back(i); 
+				if (num / i * -1 != i) factors.push_back(num / i * -1);
+			}
 
-    // Create N threads
-    std::vector<std::future<std::vector<T>>> threads(N_Threads);
+		}
+	}
+	else if (num > 0) {
+		for (T i = 1; i * i <= num; i++) {
+			if (num % i == 0) {
+				factors.push_back(i); 
+				if (num / i != i) factors.push_back(num / i);
+			}
 
-    // For each thread...
-    for (auto& thread : threads) {
-        // Assign it a lambda function
-        thread = std::async(std::launch::async, [number, start, N_Threads] {
-            std::vector<T> factors;
+		}
+	}
+	else factors.push_back(num);
 
-            if (number < 0) {
-                // Append any numbers from start to number which are divisible by the number
-                for (T i = start * -1; i >= (number / 2); i -= N_Threads) {
-                    if (number % i == 0) {
-                        factors.push_back(i);
-                    }
-                }
-                // Return factors as a vector
-                return factors;
-            }
-            // Append any numbers from start to number which are divisible by the number
-            for (T i = start; i <= (number / 2); i += N_Threads) {
-                if (number % i == 0) {
-                    factors.push_back(i);
-                }
-            }
-            // Return factors as a vector
-            return factors;
-
-        });
-
-        // Increment start by 1, so the next thread will not start on the same number
-        start++;
+	// If the vector is not empty, sort it and convert it to a string stream
+    if (!factors.empty()) {
+		std::sort(factors.begin(), factors.end());
+        std::copy(factors.begin(), factors.end()-1,std::ostream_iterator<T>(oss, " "));
+        oss << factors.back();
     }
 
-	// Append number to factors
-	factors_vec.push_back(number);
-
-    // For each thread...
-    for (auto& thread : threads) {
-        // Retrieve its values
-        std::vector<T> thread_vec = thread.get();
-
-        // Append values to vector
-        factors_vec.insert(factors_vec.end(), thread_vec.begin(), thread_vec.end());
-    }
-
-    // If vector is empty, ignore sorting and converting it
-    if (!factors_vec.empty()) {
-        // Sort values in vector from smallest to largest
-        std::sort(factors_vec.begin(), factors_vec.end());
-
-        // Copy everything to a string stream
-        std::copy(factors_vec.begin(), factors_vec.end()-1,std::ostream_iterator<T>(factors, " "));
-
-        // Add the last value without a delimiter
-        factors << factors_vec.back();
-    }
-
-    // Return factors as a string
-    return factors.str();
+	// Return the string stream as a string
+    return oss.str();
 }
 
 // Evaluates whether number is prime or not
@@ -254,7 +216,7 @@ void checkNumberFeatures() {
     // Execute functions on number and store into associated variables
     sign = getSign(number);
     even_odd = isEvenOdd(number);
-    factors = getFactors(number, 12);
+    factors = getFactors(number);
     prime = isPrime(number);
 
 	// Output features of number
