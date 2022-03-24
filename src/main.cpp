@@ -26,17 +26,17 @@
 #include <iostream>
 #include <fstream>
 
-// TODO: Fix right side of graph border
 // TODO: Add stat tracking functionality
+// TODO: Fix bug where you can crash check number features mode via multiple '+' operators
 
 // https://stackoverflow.com/questions/14517546/how-can-a-c-header-file-include-implementation
 
-// Clears the screen
+// Clears the screen.
 void clearScreen() {
 	std::cout << "\033[2J\033[1;1H";
 }
 
-// Evaluate whether string is number
+// Evaluates whether string is number.
 bool isNumber(const std::string &input) {
 	if (input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos) {
 		return false;
@@ -44,6 +44,7 @@ bool isNumber(const std::string &input) {
 	return true;
 }
 
+// Determines if a coordinate is within the range of a given axis.
 bool withinRange(const int *range, int coord) {
 	if (!(coord >= range[0] && coord <= range[1])) {
 		return false;
@@ -51,6 +52,7 @@ bool withinRange(const int *range, int coord) {
 	return true;
 }
 
+// Draws a graph dynamically.
 template <typename T1, typename T2, typename T3>
 void drawGraph(T1 values, T2 *x_range, T3 *y_range) {
     size_t max_digits_x = fwn::countChars(fwn::findLargestNumber(x_range[0], x_range[1]));
