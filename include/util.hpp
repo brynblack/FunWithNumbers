@@ -1,6 +1,7 @@
 #ifndef FUNWITHNUMBERS_UTIL_HPP
 #define FUNWITHNUMBERS_UTIL_HPP
 
+#include <vector>
 #include <sstream>
 #include <iterator>
 
@@ -72,7 +73,7 @@ namespace fwn {
         // Applies this algorithm if the number is positive.
         std::vector<T> factors;
         if (n > 0) {
-            for (T i = 1; i * i <= n; i++) {
+            for (T i = 1; i * i <= (n / 2); i++) {
                 if (n % i == 0) {
                     factors.push_back(i);
                     if (n / i != i) factors.push_back(n / i);
@@ -81,7 +82,7 @@ namespace fwn {
         }
         // Applies this algorithm if the number is negative.
         else if (n < 0) {
-            for (T i = -1; i * i * -1 >= n; i--) {
+            for (T i = -1; i * i * -1 >= (n / 2); i--) {
                 if (n % i == 0) {
                     factors.push_back(i);
                     if (n / i * -1 != i) factors.push_back(n / i * -1);
