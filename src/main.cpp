@@ -24,8 +24,6 @@
 #include "util.hpp"
 
 #include <iostream>
-#include <vector>
-#include <iterator>
 #include <fstream>
 
 // TODO: Fix right side of graph border
