@@ -30,7 +30,6 @@ namespace fwn {
             void execute();
             std::string getDescription();
         };
-
     };
 }
 
