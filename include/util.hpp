@@ -70,10 +70,10 @@ namespace fwn {
     // Evaluates all possible factors of a given number.
     template <typename T>
     std::vector<T> getFactors(T n) {
-        // Applies this algorithm if the number is positive.
         std::vector<T> factors;
+        // Applies this algorithm if the number is positive.
         if (n > 0) {
-            for (T i = 1; i * i <= (n / 2); i++) {
+            for (T i = 1; i * i <= n; i++) {
                 if (n % i == 0) {
                     factors.push_back(i);
                     if (n / i != i) factors.push_back(n / i);
@@ -82,15 +82,15 @@ namespace fwn {
         }
         // Applies this algorithm if the number is negative.
         else if (n < 0) {
-            for (T i = -1; i * i * -1 >= (n / 2); i--) {
+            for (T i = -1; i * i * -1 >= n; i--) {
                 if (n % i == 0) {
                     factors.push_back(i);
                     if (n / i * -1 != i) factors.push_back(n / i * -1);
                 }
             }
         }
-        // Appends number to vector if the number is zero.
-        else factors.push_back(n);
+        // Appends 0 to vector if the number is zero.
+        else factors.push_back(0);
 
         // Sorts the vector of factors in ascending order.
         std::sort(factors.begin(), factors.end());

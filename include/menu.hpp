@@ -12,9 +12,13 @@ namespace fwn {
     private:
         class Option;
     public:
+		// Adds an option to a menu object.
         void addOption(std::string key, std::function<void()> function, std::string description);
+		// Adds a line to a menu object.
         void addLine(const std::string &line = "");
+		// Renders a menu.
         void render();
+		// Executes a specified option stored in a menu object.
         void execute(std::string option);
     private:
         std::map<std::string, Option> choices;
