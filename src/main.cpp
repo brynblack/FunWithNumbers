@@ -214,6 +214,18 @@ void plotNumbers() {
 
 // Displays overall stats from previous interactions.
 void checkOverallStats() {
+    // Instantiates a main menu object.
+    fwn::Menu menu;
+
+    // Configures the menu object to display the overall stats.
+    menu.addLine("Here are your statistics of overall use:");
+    menu.addLine(" Numbers entered: " + std::to_string(stats.getStat("numbersEntered")));
+    menu.addLine(" Total of numbers: " + std::to_string(stats.getStat("numbersTotal")));
+    menu.addLine(" Average of numbers: " + std::to_string(stats.getStat("numbersAverage")));
+    menu.addLine(" Smallest number entered: " + std::to_string(stats.getStat("smallestNumber")));
+    menu.addLine(" Largest number entered: " + std::to_string(stats.getStat("largestNumber")));
+    menu.addLine(" Coordinates plotted: " + std::to_string(stats.getStat("coordinatesPlotted")) + "\n");
+
     // Opens the stats file.
     // std::ifstream statsFile("stats.txt", std::ifstream::in);
 
@@ -232,15 +244,8 @@ void checkOverallStats() {
     //     lines.push_back(std::stoll(line));
     // }
 
-    // Displays the overall stats.
-    std::cout <<
-        "Here are your statistics of overall use:\n"
-        " Numbers entered: " << stats.getStat("numbersEntered") << "\n"
-        " Total of numbers: " << stats.getStat("numbersTotal") << "\n"
-        " Average of numbers: " << stats.getStat("numbersAverage") << "\n"
-        " Smallest number entered: " << stats.getStat("smallestNumber") << "\n"
-        " Largest number entered: " << stats.getStat("largestNumber") << "\n"
-        " Coordinates plotted: " << stats.getStat("coordinatesPlotted") << "\n";
+    // Renders the menu.
+    menu.render();
 
     // Waits for user input.
     std::cin.ignore();
