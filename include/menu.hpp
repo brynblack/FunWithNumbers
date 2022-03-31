@@ -1,10 +1,10 @@
 #ifndef FUNWITHNUMBERS_MENU_HPP
 #define FUNWITHNUMBERS_MENU_HPP
 
-#include <string>
 #include <functional>
-#include <utility>
 #include <map>
+#include <string>
+#include <utility>
 #include <vector>
 
 namespace fwn {
@@ -15,7 +15,8 @@ namespace fwn {
 		// Adds an option to a menu object.
         void addOption(std::string key, std::function<void()> function, std::string description);
 		// Adds a line to a menu object.
-        void addLine(const std::string &line = "");
+        void addLine();
+        void addLine(const std::string &line);
 		// Renders a menu.
         void render();
 		// Executes a specified option stored in a menu object.
@@ -23,7 +24,7 @@ namespace fwn {
     private:
         std::map<std::string, Option> choices;
         std::vector<std::string> lines;
-    private:
+
         class Option {
         private:
             std::function<void()> function;
@@ -32,9 +33,9 @@ namespace fwn {
             Option() = default;
             Option(std::function<void()> function, std::string description) : function(std::move(function)), description(std::move(description)) {};
             void execute();
-            std::string getDescription();
+            auto getDescription() -> std::string;
         };
     };
-}
+} // namespace fwn
 
 #endif
