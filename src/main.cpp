@@ -28,12 +28,12 @@
 #include <fstream>
 #include <iostream>
 
-// TODO: Implement saving statistics to a file
-// TODO: Fix bug where you can crash check number features mode via multiple '+' operators
+// TODO(Brynley): Implement saving statistics to a file
+// TODO(Brynley): Fix bug where you can crash check number features mode via multiple '+' operators
 
 // https://stackoverflow.com/questions/14517546/how-can-a-c-header-file-include-implementation
 
-// TODO: Make this not const
+// TODO(Brynley): Make this const
 fwn::Stats stats;
 
 // Clears the screen.
@@ -255,7 +255,7 @@ void checkOverallStats() {
 // The main entry point in the program.
 auto main() -> int {
     // Configures the statistics that will be kept
-    // TODO: Add some sort of description that can be stored
+    // TODO(Brynley): Add some sort of description that can be stored
     stats.addStat("numbersEntered");
     stats.addStat("numbersTotal");
     stats.addStat("numbersAverage");
