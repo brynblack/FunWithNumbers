@@ -18,7 +18,12 @@ namespace fwn {
         this->lines.push_back(option.getDescription());
     }
 
-    // Adds a new line to the menu object.
+	// Adds an empty new line to the menu object.
+	void Menu::addLine() {
+		this->lines.emplace_back("");
+	}
+
+    // Overload for addLine, which adds a new line with a specified string to the menu object.
     void Menu::addLine(const std::string &line) {
         this->lines.push_back(line);
     }
@@ -53,7 +58,7 @@ namespace fwn {
     }
 
     // Retrieves the description of the option.
-    std::string Menu::Option::getDescription() {
+    auto Menu::Option::getDescription() -> std::string {
         return this->description;
     }
-}
+} // namespace fwn
