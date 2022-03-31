@@ -33,6 +33,7 @@
 
 // https://stackoverflow.com/questions/14517546/how-can-a-c-header-file-include-implementation
 
+// TODO: Make this not const
 fwn::Stats stats;
 
 // Clears the screen.
@@ -251,6 +252,7 @@ void checkOverallStats() {
     std::cin.ignore();
 }
 
+// The main entry point in the program.
 auto main() -> int {
     // Configures the statistics that will be kept
     // TODO: Add some sort of description that can be stored

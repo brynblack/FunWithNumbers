@@ -14,7 +14,7 @@ namespace fwn {
 
                 public:
                     Stat() = default;
-                    Stat(long long value) : value(value) {};
+                    explicit Stat(long long value) : value(value) {};
                     auto getValue() const -> long long;
                     void setValue(long long value);
             };
