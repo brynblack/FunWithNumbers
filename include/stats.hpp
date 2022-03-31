@@ -21,9 +21,9 @@ namespace fwn {
             std::map<std::string, Stat> stats;
 
         public:
-            void addStat(const std::string &name);
-            auto getStat(const std::string &name) -> long long;
-            void setStat(const std::string &name, long long value);
+            void add(const std::string &name);
+            auto get(const std::string &name) -> long long;
+            void set(const std::string &name, long long value);
     };
 } // namespace fwn
 
