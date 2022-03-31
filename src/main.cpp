@@ -107,11 +107,11 @@ void checkNumberFeatures() {
     long long number = std::stoll(input);
 
     // Updates statistics
-    stats.setStat("numbersEntered", stats.getStat("numbersEntered") + 1);
-    stats.setStat("numbersTotal", stats.getStat("numbersTotal") + number);
-    stats.setStat("numbersAverage", stats.getStat("numbersTotal") / stats.getStat("numbersEntered"));
-    stats.setStat("smallestNumber", (number < stats.getStat("smallestNumber")) ? number : stats.getStat("smallestNumber"));
-    stats.setStat("largestNumber", (number > stats.getStat("largestNumber")) ? number : stats.getStat("largestNumber"));
+    stats.set("numbersEntered", stats.get("numbersEntered") + 1);
+    stats.set("numbersTotal", stats.get("numbersTotal") + number);
+    stats.set("numbersAverage", stats.get("numbersTotal") / stats.get("numbersEntered"));
+    stats.set("smallestNumber", (number < stats.get("smallestNumber")) ? number : stats.get("smallestNumber"));
+    stats.set("largestNumber", (number > stats.get("largestNumber")) ? number : stats.get("largestNumber"));
 
     // Evaluates the features of the number and stores into associated variables.
     auto sign = fwn::getSign(number);
@@ -191,7 +191,7 @@ void plotNumbers() {
         // Appends the coordinates to a vector of coordinates to be plotted.
         values.emplace_back(x, y);
 
-        stats.setStat("coordinatesPlotted", stats.getStat("coordinatesPlotted") + 1);
+        stats.set("coordinatesPlotted", stats.get("coordinatesPlotted") + 1);
 
         // Clears the screen.
         clearScreen();
@@ -220,12 +220,12 @@ void checkOverallStats() {
 
     // Configures the menu object to display the overall stats.
     menu.addLine("Here are your statistics of overall use:");
-    menu.addLine(" Numbers entered: " + std::to_string(stats.getStat("numbersEntered")));
-    menu.addLine(" Total of numbers: " + std::to_string(stats.getStat("numbersTotal")));
-    menu.addLine(" Average of numbers: " + std::to_string(stats.getStat("numbersAverage")));
-    menu.addLine(" Smallest number entered: " + std::to_string(stats.getStat("smallestNumber")));
-    menu.addLine(" Largest number entered: " + std::to_string(stats.getStat("largestNumber")));
-    menu.addLine(" Coordinates plotted: " + std::to_string(stats.getStat("coordinatesPlotted")) + "\n");
+    menu.addLine(" Numbers entered: " + std::to_string(stats.get("numbersEntered")));
+    menu.addLine(" Total of numbers: " + std::to_string(stats.get("numbersTotal")));
+    menu.addLine(" Average of numbers: " + std::to_string(stats.get("numbersAverage")));
+    menu.addLine(" Smallest number entered: " + std::to_string(stats.get("smallestNumber")));
+    menu.addLine(" Largest number entered: " + std::to_string(stats.get("largestNumber")));
+    menu.addLine(" Coordinates plotted: " + std::to_string(stats.get("coordinatesPlotted")) + "\n");
 
     // Clears the screen.
     clearScreen();
@@ -241,12 +241,12 @@ void checkOverallStats() {
 auto main() -> int {
     // Configures the statistics that will be kept
     // TODO(Brynley): Add some sort of description that can be stored
-    stats.addStat("numbersEntered");
-    stats.addStat("numbersTotal");
-    stats.addStat("numbersAverage");
-    stats.addStat("smallestNumber");
-    stats.addStat("largestNumber");
-    stats.addStat("coordinatesPlotted");
+    stats.add("numbersEntered");
+    stats.add("numbersTotal");
+    stats.add("numbersAverage");
+    stats.add("smallestNumber");
+    stats.add("largestNumber");
+    stats.add("coordinatesPlotted");
 
     // Declares a boolean and sets it to false.
     // This variable is used later in the do-while loop.

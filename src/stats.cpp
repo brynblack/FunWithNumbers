@@ -16,16 +16,16 @@ namespace fwn {
     //     lines.push_back(std::stoll(line));
     // }
 
-    void fwn::Stats::addStat(const std::string &name) {
+    void fwn::Stats::add(const std::string &name) {
         Stat stat { 0 };
         this->stats[name] = stat;
     }
 
-    auto fwn::Stats::getStat(const std::string &name) -> long long {
+    auto fwn::Stats::get(const std::string &name) -> long long {
         return this->stats[name].getValue();
     }
 
-    void fwn::Stats::setStat(const std::string &name, long long value) {
+    void fwn::Stats::set(const std::string &name, long long value) {
         this->stats[name].setValue(value);
     }
 
