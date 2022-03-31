@@ -25,7 +25,6 @@
 #include "util.hpp"
 
 #include <array>
-#include <fstream>
 #include <iostream>
 
 // TODO(Brynley): Implement saving statistics to a file
@@ -119,14 +118,19 @@ void checkNumberFeatures() {
     auto factors = fwn::convertVecToString(fwn::getFactors(number));
     auto prime = fwn::isPrime(number);
 
-    // Outputs the features of the number.
-    std::cout <<
-        "\n"
-        "The features of " << number << " are...\n"
-        "  " << (sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")) << "\n"
-        "  " << (even ? "Even" : "Odd") << "\n"
-        "  Factors are  " << factors << "\n"
-        "  " << (prime ? "Is a prime number" : "Is not a prime number") << "\n";
+    // Instantiates a menu object.
+    fwn::Menu menu;
+
+    // Configures the menu object to output the features of a number.
+    menu.addLine();
+    menu.addLine("The features of " + std::to_string(number) + " are...");
+    menu.addLine("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
+    menu.addLine("  " + std::string(even ? "Even" : "Odd"));
+    menu.addLine("  Factors are  " + factors);
+    menu.addLine("  " + std::string(prime ? "Is a prime number" : "Is not a prime number") + "\n");
+
+    // Renders the menu.
+    menu.render();
 
     // Waits for user input.
     std::cin.ignore();

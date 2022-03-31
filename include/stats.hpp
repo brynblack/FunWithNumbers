@@ -3,7 +3,6 @@
 
 #include <map>
 #include <string>
-#include <vector>
 
 namespace fwn {
     class Stats {
