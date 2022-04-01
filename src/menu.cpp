@@ -54,7 +54,7 @@ namespace fwn {
 
     // Executes the given function in the option object.
     void Menu::Option::execute() {
-        function();
+        this->function();
     }
 
     // Retrieves the description of the option.

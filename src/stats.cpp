@@ -1,4 +1,6 @@
 #include "stats.hpp"
+#include <fstream>
+#include <vector>
 
 namespace fwn {
     // Opens the stats file.
@@ -15,6 +17,33 @@ namespace fwn {
     //     if (!isNumber(line)) { continue; }
     //     lines.push_back(std::stoll(line));
     // }
+
+    void fwn::Stats::readFile(const std::string &name) {
+        std::ifstream statsFile(name, std::ifstream::in);
+        if (!statsFile.is_open()) { return; }
+        std::string line;
+        std::vector<long long> lines;
+        while (std::getline(statsFile, line)) {
+            // TODO(Brynley): Move isNumber helper function to utils library
+            // if (!isNumber(line)) { continue; }
+            lines.push_back(std::stoll(line));
+        }
+        statsFile.close();
+        int i = 0;
+        for (auto& stat : this->stats) {
+            stat.second.setValue(lines.at(i));
+            i++;
+        }
+    }
+
+    // TODO(Brynley): Order of stats in file is not correct
+    void fwn::Stats::saveFile(const std::string &name) {
+        std::ofstream statsFile(name, std::ios::out);
+        for (auto& stat : this->stats) {
+            statsFile << stat.second.getValue() << "\n";
+        }
+        statsFile.close();
+    }
 
     void fwn::Stats::add(const std::string &name) {
         Stat stat { 0 };

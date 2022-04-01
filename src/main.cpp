@@ -252,6 +252,9 @@ auto main() -> int {
     stats.add("largestNumber");
     stats.add("coordinatesPlotted");
 
+    // Reads any saved statistics from previous usage.
+    stats.readFile("stats.txt");
+
     // Declares a boolean and sets it to false.
     // This variable is used later in the do-while loop.
     bool quit = false;
@@ -287,6 +290,8 @@ auto main() -> int {
         // Executes the selected choice.
         menu.execute(choice);
     } while (!quit);
+
+    stats.saveFile("stats.txt");
 
     // Terminates the main function, returning 0 as the exit code.
     // An exit code of 0 usually means everything worked correctly.

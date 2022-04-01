@@ -20,6 +20,8 @@ namespace fwn {
             std::map<std::string, Stat> stats;
 
         public:
+            void readFile(const std::string &name);
+            void saveFile(const std::string &name);
             void add(const std::string &name);
             auto get(const std::string &name) -> long long;
             void set(const std::string &name, long long value);
