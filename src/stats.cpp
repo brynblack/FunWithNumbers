@@ -36,7 +36,7 @@ namespace fwn {
         }
     }
 
-    // TODO(Brynley): Order of stats in file is not correct
+    // TODO(Brynley): Order of stats in file is in reverse, need to fix
     void fwn::Stats::saveFile(const std::string &name) {
         std::ofstream statsFile(name, std::ios::out);
         for (auto& stat : this->stats) {

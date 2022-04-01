@@ -1,8 +1,8 @@
 #ifndef FUNWITHNUMBERS_STATS_HPP
 #define FUNWITHNUMBERS_STATS_HPP
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 namespace fwn {
     class Stats {
@@ -17,7 +17,7 @@ namespace fwn {
                     auto getValue() const -> long long;
                     void setValue(long long value);
             };
-            std::map<std::string, Stat> stats;
+            std::unordered_map<std::string, Stat> stats;
 
         public:
             void readFile(const std::string &name);
