@@ -35,16 +35,6 @@
 // TODO(Brynley): Make this const
 fwn::Stats stats;
 
-// Clears the screen.
-void clearScreen() {
-    std::cout << "\033[2J\033[1;1H";
-}
-
-// Evaluates whether string is number.
-auto isNumber(const std::string &input) -> bool {
-    return !(input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos);
-}
-
 // Determines if a coordinate is within the range of a given axis.
 auto withinRange(std::pair<int, int> range, int coord) -> bool {
     return coord >= range.first && coord <= range.second;
@@ -92,7 +82,7 @@ void drawGraph(T1 values, T2 x_range, T3 y_range) {
 // Evaluates and displays the features of a number.
 void checkNumberFeatures() {
     // Clears the screen.
-    clearScreen();
+    fwn::clearScreen();
 
     // Asks user to input a whole number, and stores the number into a string.
     std::cout << "Please enter a whole number that will be checked over: ";
@@ -100,7 +90,7 @@ void checkNumberFeatures() {
     std::getline(std::cin, input);
 
     // Returns if the input contains something other than digits or signs.
-    if (!isNumber(input)) { return; }
+    if (!fwn::isNumber(input)) { return; }
 
     // Converts the inputted string to a number.
     long long number = std::stoll(input);
@@ -149,7 +139,7 @@ void plotNumbers() {
     bool quit = false;
     do {
         // Clears the screen.
-        clearScreen();
+        fwn::clearScreen();
 
         // Draws the graph with any given coordinates.
         drawGraph(values, x_axis, y_axis);
@@ -161,7 +151,7 @@ void plotNumbers() {
         std::getline(std::cin, input);
 
         // Continues from the start if the coordinate is not a number.
-        if (!isNumber(input)) { continue; }
+        if (!fwn::isNumber(input)) { continue; }
 
         // Converts the inputted string to a number.
         int x = std::stoi(input);
@@ -174,7 +164,7 @@ void plotNumbers() {
         std::getline(std::cin, input);
 
         // Continues from the start if the coordinate is not a number.
-        if (!isNumber(input)) { continue; }
+        if (!fwn::isNumber(input)) { continue; }
 
         // Converts the inputted string to a number.
         int y = std::stoi(input);
@@ -198,7 +188,7 @@ void plotNumbers() {
         stats.set("coordinatesPlotted", stats.get("coordinatesPlotted") + 1);
 
         // Clears the screen.
-        clearScreen();
+        fwn::clearScreen();
 
         // Draws the graph with any given coordinates.
         drawGraph(values, x_axis, y_axis);
@@ -209,7 +199,7 @@ void plotNumbers() {
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
         if (input == "n") {
             quit = true;
-            clearScreen();
+            fwn::clearScreen();
             drawGraph(values, x_axis, y_axis);
             std::cout << "Press enter to return to the main menu...";
             std::cin.ignore();
@@ -232,7 +222,7 @@ void checkOverallStats() {
     menu.addLine(" Coordinates plotted: " + std::to_string(stats.get("coordinatesPlotted")) + "\n");
 
     // Clears the screen.
-    clearScreen();
+    fwn::clearScreen();
 
     // Renders the menu.
     menu.render();
@@ -277,7 +267,7 @@ auto main() -> int {
     // If the loop should not quit, repeats the loop until it should.
     do {
         // Clears the screen.
-        clearScreen();
+        fwn::clearScreen();
 
         // Renders the menu.
         menu.render();
