@@ -1,4 +1,5 @@
 #include "stats.hpp"
+#include "util.hpp"
 #include <fstream>
 #include <vector>
 
@@ -9,11 +10,11 @@ namespace fwn {
         std::string line;
         std::vector<long long> lines;
         while (std::getline(statsFile, line)) {
-            // TODO(Brynley): Move isNumber helper function to utils library
-            // if (!isNumber(line)) { continue; }
+            if (!isNumber(line)) { continue; }
             lines.push_back(std::stoll(line));
         }
         statsFile.close();
+        if (lines.size() < stats.size()) { return; }
         int i = 0;
         for (auto& stat : this->stats) {
             stat.second.setValue(lines.at(i));

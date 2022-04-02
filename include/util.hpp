@@ -1,11 +1,22 @@
 #ifndef FUNWITHNUMBERS_UTIL_HPP
 #define FUNWITHNUMBERS_UTIL_HPP
 
+#include <iostream>
 #include <iterator>
 #include <sstream>
 #include <vector>
 
 namespace fwn {
+    // Clears the screen.
+    inline void clearScreen() {
+        std::cout << "\033[2J\033[1;1H";
+    }
+
+    // Evaluates whether string is number.
+    inline auto isNumber(const std::string &input) -> bool {
+        return !(input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos);
+    }
+
     // Converts a vector to a string.
     template <typename T>
     auto convertVecToString(std::vector<T> v) -> std::string {
