@@ -12,6 +12,11 @@ namespace fwn {
         std::cout << "\033[2J\033[1;1H";
     }
 
+    // Determines if a coordinate is within the range of a given axis.
+    constexpr auto withinRange(std::pair<int, int> range, int coord) -> bool {
+        return coord >= range.first && coord <= range.second;
+    }
+
     // Evaluates whether string is number.
     inline auto isNumber(const std::string &input) -> bool {
         return !(input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos);
