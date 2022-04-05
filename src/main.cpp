@@ -35,11 +35,6 @@
 // TODO(Brynley): Make this const
 fwn::Stats stats;
 
-// Determines if a coordinate is within the range of a given axis.
-auto withinRange(std::pair<int, int> range, int coord) -> bool {
-    return coord >= range.first && coord <= range.second;
-}
-
 // Draws a graph dynamically.
 template <typename T1, typename T2, typename T3>
 void drawGraph(T1 values, T2 x_range, T3 y_range) {
@@ -157,7 +152,7 @@ void plotNumbers() {
         int x = std::stoi(input);
 
         // Continues from the start if the number is not within the range of the x-axis.
-        if (!withinRange(x_axis, x)) { continue; }
+        if (!fwn::withinRange(x_axis, x)) { continue; }
 
         // Asks user for a y-coordinate and stores the coordinate into a string.
         std::cout << "y axis: ";
@@ -170,7 +165,7 @@ void plotNumbers() {
         int y = std::stoi(input);
 
         // Continues from the start if the number is not within the range of the y-axis.
-        if (!withinRange(y_axis, y)) { continue; }
+        if (!fwn::withinRange(y_axis, y)) { continue; }
 
         // Continues from the start if the coordinates given are already plotted.
         bool duplicate = false;
