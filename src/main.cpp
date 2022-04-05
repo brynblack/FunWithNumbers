@@ -281,6 +281,7 @@ auto main() -> int {
         menu.execute(choice);
     } while (!quit);
 
+    // Saves the statistics collected into a file.
     stats.saveFile("stats.txt");
 
     // Terminates the main function, returning 0 as the exit code.
