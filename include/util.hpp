@@ -79,7 +79,7 @@ namespace fwn {
     template <typename T>
     constexpr auto isPrime(T n) -> bool {
         // Returns false if the number is less than or equal to 1.
-        if (n <= 1) { return false; };
+        if (n <= 1) { return false; }
 
         // Returns false if the number is divisible by any numbers from 2 to n.
         for (T i = 2; i < n; i++) {
