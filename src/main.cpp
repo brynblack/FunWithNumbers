@@ -225,6 +225,7 @@ auto checkOverallStats() -> void {
 // The main entry point in the program.
 auto main() -> int {
     // Configures the statistics that will be kept.
+    // TODO(Brynley): Stats menu is in reverse, and the stats file is in reverse; it might be something to do with this
     stats.add("numbersEntered", "Numbers entered");
     stats.add("numbersTotal", "Total of numbers");
     stats.add("numbersAverage", "Average of numbers");

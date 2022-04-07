@@ -27,15 +27,15 @@ namespace fwn {
             std::vector<std::string> lines;
 
         public:
-            // Adds an option to a menu object.
+            // Adds an option to the menu object.
             auto addOption(std::string key, std::function<void()> function, std::string description) -> void;
-            // Adds a new line to a menu object.
+            // Adds a new line to the menu object.
             auto addLine() -> void;
-            // Adds a line to a menu object.
+            // Adds a line to the menu object.
             auto addLine(const std::string &line) -> void;
-            // Renders a menu.
+            // Renders the menu.
             auto render() -> void;
-            // Executes a specified option stored in a menu object.
+            // Executes a specified option stored in the menu object.
             auto execute(std::string option) -> void;
     };
 } // namespace fwn
