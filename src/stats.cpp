@@ -5,6 +5,23 @@
 #include <vector>
 
 namespace fwn {
+    auto fwn::Stats::add(const std::string &name, const std::string &description) -> void {
+        Stat stat { 0, description };
+        this->stats[name] = stat;
+    }
+
+    auto fwn::Stats::get(const std::string &name) -> Stat {
+        return this->stats[name];
+    }
+
+    auto fwn::Stats::getAll() -> std::vector<Stat> {
+        std::vector<Stat> vStats;
+        for (const auto &stat : this->stats) {
+            vStats.push_back(stat.second);
+        }
+        return vStats;
+    }
+
     auto fwn::Stats::readFile(const std::string &name) -> void {
         std::ifstream statsFile(name, std::ifstream::in);
         if (!statsFile.is_open()) { return; }
@@ -30,23 +47,6 @@ namespace fwn {
             statsFile << stat.second.getValue() << "\n";
         }
         statsFile.close();
-    }
-
-    auto fwn::Stats::add(const std::string &name, const std::string &description) -> void {
-        Stat stat { 0, description };
-        this->stats[name] = stat;
-    }
-
-    auto fwn::Stats::get(const std::string &name) -> Stat {
-        return this->stats[name];
-    }
-
-    auto fwn::Stats::getAll() -> std::vector<Stat> {
-        std::vector<Stat> vStats;
-        for (const auto &stat : this->stats) {
-            vStats.push_back(stat.second);
-        }
-        return vStats;
     }
 
     auto fwn::Stats::set(const std::string &name, long long value) -> void {
