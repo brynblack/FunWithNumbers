@@ -4,7 +4,7 @@
 
 namespace fwn {
     // Adds a new option to the menu object.
-    void Menu::addOption(std::string key, std::function<void()> function, std::string description) {
+    auto Menu::addOption(std::string key, std::function<void()> function, std::string description) -> void {
         // Converts the key to uppercase to allow for case insensitivity.
         std::transform(key.begin(), key.end(), key.begin(), ::toupper);
 
@@ -19,17 +19,17 @@ namespace fwn {
     }
 
 	// Adds an empty new line to the menu object.
-	void Menu::addLine() {
+	auto Menu::addLine() -> void {
 		this->lines.emplace_back("");
 	}
 
     // Overload for addLine, which adds a new line with a specified string to the menu object.
-    void Menu::addLine(const std::string &line) {
+    auto Menu::addLine(const std::string &line) -> void {
         this->lines.push_back(line);
     }
 
     // Renders the main menu.
-    void Menu::render() {
+    auto Menu::render() -> void {
         // Displays each line stored in the menu object.
         for (auto& line : this->lines) {
             // Omit the newline if the line is the last line to be rendered.
@@ -42,7 +42,7 @@ namespace fwn {
     }
 
     // Executes the given option.
-    void Menu::execute(std::string option) {
+    auto Menu::execute(std::string option) -> void {
         // Converts the option to uppercase for case insensitivity.
         std::transform(option.begin(), option.end(), option.begin(), ::toupper);
 
@@ -53,7 +53,7 @@ namespace fwn {
     }
 
     // Executes the given function in the option object.
-    void Menu::Option::execute() {
+    auto Menu::Option::execute() -> void {
         this->function();
     }
 

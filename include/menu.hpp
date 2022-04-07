@@ -19,7 +19,7 @@ namespace fwn {
                     Option() = default;
                     Option(std::function<void()> function, std::string description) : function(std::move(function)), description(std::move(description)) {};
                     // Executes the option.
-                    void execute();
+                    auto execute() -> void;
                     // Returns the description of the option.
                     auto getDescription() -> std::string;
             };
@@ -28,15 +28,15 @@ namespace fwn {
 
         public:
             // Adds an option to a menu object.
-            void addOption(std::string key, std::function<void()> function, std::string description);
+            auto addOption(std::string key, std::function<void()> function, std::string description) -> void;
             // Adds a new line to a menu object.
-            void addLine();
+            auto addLine() -> void;
             // Adds a line to a menu object.
-            void addLine(const std::string &line);
+            auto addLine(const std::string &line) -> void;
             // Renders a menu.
-            void render();
+            auto render() -> void;
             // Executes a specified option stored in a menu object.
-            void execute(std::string option);
+            auto execute(std::string option) -> void;
     };
 } // namespace fwn
 
