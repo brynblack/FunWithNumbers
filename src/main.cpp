@@ -37,7 +37,7 @@ fwn::Stats stats;
 
 // Draws a graph dynamically.
 template <typename T1, typename T2, typename T3>
-void drawGraph(T1 values, T2 x_range, T3 y_range) {
+auto drawGraph(T1 values, T2 x_range, T3 y_range) -> void {
     size_t max_digits_x = fwn::countChars(fwn::findLargestNumber(x_range.first, x_range.second));
     size_t max_digits_y = fwn::countChars(fwn::findLargestNumber(y_range.first, y_range.second));
     std::cout << std::string(55, ' ') << "x axis\n";
@@ -75,7 +75,7 @@ void drawGraph(T1 values, T2 x_range, T3 y_range) {
 }
 
 // Evaluates and displays the features of a number.
-void checkNumberFeatures() {
+auto checkNumberFeatures() -> void {
     // Clears the screen.
     fwn::clearScreen();
 
@@ -91,11 +91,11 @@ void checkNumberFeatures() {
     long long number = std::stoll(input);
 
     // Updates statistics
-    stats.set("numbersEntered", stats.get("numbersEntered") + 1);
-    stats.set("numbersTotal", stats.get("numbersTotal") + number);
-    stats.set("numbersAverage", stats.get("numbersTotal") / stats.get("numbersEntered"));
-    stats.set("smallestNumber", (number < stats.get("smallestNumber")) ? number : stats.get("smallestNumber"));
-    stats.set("largestNumber", (number > stats.get("largestNumber")) ? number : stats.get("largestNumber"));
+    stats.set("numbersEntered", stats.get("numbersEntered").getValue() + 1);
+    stats.set("numbersTotal", stats.get("numbersTotal").getValue() + number);
+    stats.set("numbersAverage", stats.get("numbersTotal").getValue() / stats.get("numbersEntered").getValue());
+    stats.set("smallestNumber", (number < stats.get("smallestNumber").getValue()) ? number : stats.get("smallestNumber").getValue());
+    stats.set("largestNumber", (number > stats.get("largestNumber").getValue()) ? number : stats.get("largestNumber").getValue());
 
     // Evaluates the features of the number and stores into associated variables.
     auto sign = fwn::getSign(number);
@@ -122,7 +122,7 @@ void checkNumberFeatures() {
 }
 
 // Plots given numbers on a graph.
-void plotNumbers() {
+auto plotNumbers() -> void {
     // Sets x-axis and y-axis limits.
     const std::pair<int, int> x_axis(1, 38);
     const std::pair<int, int> y_axis(1, 12);
@@ -180,7 +180,7 @@ void plotNumbers() {
         // Appends the coordinates to a vector of coordinates to be plotted.
         values.emplace_back(x, y);
 
-        stats.set("coordinatesPlotted", stats.get("coordinatesPlotted") + 1);
+        stats.set("coordinatesPlotted", stats.get("coordinatesPlotted").getValue() + 1);
 
         // Clears the screen.
         fwn::clearScreen();
@@ -203,18 +203,26 @@ void plotNumbers() {
 }
 
 // Displays overall stats from previous interactions.
-void checkOverallStats() {
+auto checkOverallStats() -> void {
     // Instantiates a main menu object.
     fwn::Menu menu;
 
+    // Retrieves the stats into variables for readability.
+    auto numbersEntered = stats.get("numbersEntered");
+    auto numbersTotal = stats.get("numbersTotal");
+    auto numbersAverage = stats.get("numbersAverage");
+    auto smallestNumber = stats.get("smallestNumber");
+    auto largestNumber = stats.get("largestNumber");
+    auto coordinatesPlotted = stats.get("coordinatesPlotted");
+
     // Configures the menu object to display the overall stats.
     menu.addLine("Here are your statistics of overall use:");
-    menu.addLine(" Numbers entered: " + std::to_string(stats.get("numbersEntered")));
-    menu.addLine(" Total of numbers: " + std::to_string(stats.get("numbersTotal")));
-    menu.addLine(" Average of numbers: " + std::to_string(stats.get("numbersAverage")));
-    menu.addLine(" Smallest number entered: " + std::to_string(stats.get("smallestNumber")));
-    menu.addLine(" Largest number entered: " + std::to_string(stats.get("largestNumber")));
-    menu.addLine(" Coordinates plotted: " + std::to_string(stats.get("coordinatesPlotted")) + "\n");
+    menu.addLine(" " + numbersEntered.getDescription() + ": " + std::to_string(numbersEntered.getValue()));
+    menu.addLine(" " + numbersTotal.getDescription() + ": " + std::to_string(numbersTotal.getValue()));
+    menu.addLine(" " + numbersAverage.getDescription() + ": " + std::to_string(numbersAverage.getValue()));
+    menu.addLine(" " + smallestNumber.getDescription() + ": " + std::to_string(smallestNumber.getValue()));
+    menu.addLine(" " + largestNumber.getDescription() + ": " + std::to_string(largestNumber.getValue()));
+    menu.addLine(" " + coordinatesPlotted.getDescription() + ": " + std::to_string(coordinatesPlotted.getValue()));
 
     // Clears the screen.
     fwn::clearScreen();
@@ -228,14 +236,13 @@ void checkOverallStats() {
 
 // The main entry point in the program.
 auto main() -> int {
-    // Configures the statistics that will be kept
-    // TODO(Brynley): Add some sort of description that can be stored
-    stats.add("numbersEntered");
-    stats.add("numbersTotal");
-    stats.add("numbersAverage");
-    stats.add("smallestNumber");
-    stats.add("largestNumber");
-    stats.add("coordinatesPlotted");
+    // Configures the statistics that will be kept.
+    stats.add("numbersEntered", "Numbers entered");
+    stats.add("numbersTotal", "Total of numbers");
+    stats.add("numbersAverage", "Average of numbers");
+    stats.add("smallestNumber", "Smallest number entered");
+    stats.add("largestNumber", "Largest number entered");
+    stats.add("coordinatesPlotted", "Coordinates plotted");
 
     // Reads any saved statistics from previous usage.
     stats.readFile("stats.txt");

@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace fwn {
-    void fwn::Stats::readFile(const std::string &name) {
+    auto fwn::Stats::readFile(const std::string &name) -> void {
         std::ifstream statsFile(name, std::ifstream::in);
         if (!statsFile.is_open()) { return; }
         std::string line;
@@ -24,7 +24,7 @@ namespace fwn {
     }
 
     // TODO(Brynley): Order of stats in file is in reverse, need to fix
-    void fwn::Stats::saveFile(const std::string &name) {
+    auto fwn::Stats::saveFile(const std::string &name) -> void {
         std::ofstream statsFile(name, std::ios::out);
         for (auto& stat : this->stats) {
             statsFile << stat.second.getValue() << "\n";
@@ -32,24 +32,28 @@ namespace fwn {
         statsFile.close();
     }
 
-    void fwn::Stats::add(const std::string &name) {
-        Stat stat { 0 };
+    auto fwn::Stats::add(const std::string &name, const std::string &description) -> void {
+        Stat stat { 0, description };
         this->stats[name] = stat;
     }
 
-    auto fwn::Stats::get(const std::string &name) -> long long {
-        return this->stats[name].getValue();
+    auto fwn::Stats::get(const std::string &name) -> Stat {
+        return this->stats[name];
     }
 
-    void fwn::Stats::set(const std::string &name, long long value) {
+    auto fwn::Stats::set(const std::string &name, long long value) -> void {
         this->stats[name].setValue(value);
+    }
+
+    auto fwn::Stats::Stat::getDescription() -> std::string {
+        return this->description;
     }
 
     auto fwn::Stats::Stat::getValue() const -> long long {
         return this->value;
     }
 
-    void fwn::Stats::Stat::setValue(long long value) {
+    auto fwn::Stats::Stat::setValue(long long value) -> void {
         this->value = value;
     }
 } // namespace fwn

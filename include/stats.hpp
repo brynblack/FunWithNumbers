@@ -3,35 +3,39 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace fwn {
     class Stats {
         private:
             class Stat {
                 private:
-                    long long value;
+                    long long value{};
+                    std::string description;
 
                 public:
                     Stat() = default;
-                    explicit Stat(long long value) : value(value) {};
+                    Stat(long long value, std::string description) : value(value), description(std::move(description)) {};
                     // Gets the value of the statistic.
                     [[nodiscard]] auto getValue() const -> long long;
+                    // Gets the description of the statistic.
+                    auto getDescription() -> std::string;
                     // Sets the value of the statistic.
-                    void setValue(long long value);
+                    auto setValue(long long value) -> void;
             };
             std::unordered_map<std::string, Stat> stats;
 
         public:
             // Reads a statistics file.
-            void readFile(const std::string &name);
+            auto readFile(const std::string &name) -> void;
             // Saves a statistics file.
-            void saveFile(const std::string &name);
+            auto saveFile(const std::string &name) -> void;
             // Adds a new statistic.
-            void add(const std::string &name);
+            auto add(const std::string &name, const std::string &description) -> void;
             // Gets the value of a statistic.
-            auto get(const std::string &name) -> long long;
+            auto get(const std::string &name) -> Stat;
             // Sets the value of a statistic.
-            void set(const std::string &name, long long value);
+            auto set(const std::string &name, long long value) -> void;
     };
 } // namespace fwn
 

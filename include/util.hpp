@@ -8,7 +8,7 @@
 
 namespace fwn {
     // Clears the screen.
-    inline void clearScreen() {
+    inline auto clearScreen() -> void {
         std::cout << "\033[2J\033[1;1H";
     }
 
