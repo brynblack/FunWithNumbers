@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace fwn {
     class Stats {
@@ -34,6 +35,8 @@ namespace fwn {
             auto add(const std::string &name, const std::string &description) -> void;
             // Gets the value of a statistic.
             auto get(const std::string &name) -> Stat;
+            // Gets all the statistics available.
+            auto getAll() -> std::vector<Stat>;
             // Sets the value of a statistic.
             auto set(const std::string &name, long long value) -> void;
     };

@@ -41,6 +41,14 @@ namespace fwn {
         return this->stats[name];
     }
 
+    auto fwn::Stats::getAll() -> std::vector<Stat> {
+        std::vector<Stat> vStats;
+        for (const auto &stat : this->stats) {
+            vStats.push_back(stat.second);
+        }
+        return vStats;
+    }
+
     auto fwn::Stats::set(const std::string &name, long long value) -> void {
         this->stats[name].setValue(value);
     }
