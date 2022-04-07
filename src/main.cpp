@@ -27,7 +27,6 @@
 #include <array>
 #include <iostream>
 
-// TODO(Brynley): Implement saving statistics to a file
 // TODO(Brynley): Fix bug where you can crash check number features mode via multiple '+' operators
 
 // https://stackoverflow.com/questions/14517546/how-can-a-c-header-file-include-implementation
@@ -207,22 +206,11 @@ auto checkOverallStats() -> void {
     // Instantiates a main menu object.
     fwn::Menu menu;
 
-    // Retrieves the stats into variables for readability.
-    auto numbersEntered = stats.get("numbersEntered");
-    auto numbersTotal = stats.get("numbersTotal");
-    auto numbersAverage = stats.get("numbersAverage");
-    auto smallestNumber = stats.get("smallestNumber");
-    auto largestNumber = stats.get("largestNumber");
-    auto coordinatesPlotted = stats.get("coordinatesPlotted");
-
     // Configures the menu object to display the overall stats.
     menu.addLine("Here are your statistics of overall use:");
-    menu.addLine(" " + numbersEntered.getDescription() + ": " + std::to_string(numbersEntered.getValue()));
-    menu.addLine(" " + numbersTotal.getDescription() + ": " + std::to_string(numbersTotal.getValue()));
-    menu.addLine(" " + numbersAverage.getDescription() + ": " + std::to_string(numbersAverage.getValue()));
-    menu.addLine(" " + smallestNumber.getDescription() + ": " + std::to_string(smallestNumber.getValue()));
-    menu.addLine(" " + largestNumber.getDescription() + ": " + std::to_string(largestNumber.getValue()));
-    menu.addLine(" " + coordinatesPlotted.getDescription() + ": " + std::to_string(coordinatesPlotted.getValue()));
+    for (auto& stat : stats.getAll()) {
+        menu.addLine(" " + stat.getDescription() + ": " + std::to_string(stat.getValue()));
+    }
 
     // Clears the screen.
     fwn::clearScreen();
