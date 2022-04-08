@@ -90,11 +90,11 @@ auto checkNumberFeatures() -> void {
     long long number = std::stoll(input);
 
     // Updates statistics
-    stats.set("numbersEntered", stats.get("numbersEntered").getValue() + 1);
-    stats.set("numbersTotal", stats.get("numbersTotal").getValue() + number);
-    stats.set("numbersAverage", stats.get("numbersTotal").getValue() / stats.get("numbersEntered").getValue());
-    stats.set("smallestNumber", (number < stats.get("smallestNumber").getValue()) ? number : stats.get("smallestNumber").getValue());
-    stats.set("largestNumber", (number > stats.get("largestNumber").getValue()) ? number : stats.get("largestNumber").getValue());
+    stats.setValue("numbersEntered", stats.getValue("numbersEntered") + 1);
+    stats.setValue("numbersTotal", stats.getValue("numbersTotal") + number);
+    stats.setValue("numbersAverage", stats.getValue("numbersTotal") / stats.getValue("numbersEntered"));
+    stats.setValue("smallestNumber",(number < stats.getValue("smallestNumber")) ? number : stats.getValue("smallestNumber"));
+    stats.setValue("largestNumber",(number > stats.getValue("largestNumber")) ? number : stats.getValue("largestNumber"));
 
     // Evaluates the features of the number and stores into associated variables.
     auto sign = fwn::getSign(number);
@@ -168,7 +168,7 @@ auto plotNumbers() -> void {
 
         // Continues from the start if the coordinates given are already plotted.
         bool duplicate = false;
-        for (auto& pair : values) {
+        for (const auto &pair : values) {
             if (pair.first == x && pair.second == y) {
                 duplicate = true;
                 break;
@@ -179,7 +179,7 @@ auto plotNumbers() -> void {
         // Appends the coordinates to a vector of coordinates to be plotted.
         values.emplace_back(x, y);
 
-        stats.set("coordinatesPlotted", stats.get("coordinatesPlotted").getValue() + 1);
+        stats.setValue("coordinatesPlotted", stats.getValue("coordinatesPlotted") + 1);
 
         // Clears the screen.
         fwn::clearScreen();
@@ -208,8 +208,8 @@ auto checkOverallStats() -> void {
 
     // Configures the menu object to display the overall stats.
     menu.addLine("Here are your statistics of overall use:");
-    for (auto& stat : stats.getAll()) {
-        menu.addLine(" " + stat.getDescription() + ": " + std::to_string(stat.getValue()));
+    for (const auto &stat : stats.getNames()) {
+        menu.addLine(" " + stats.getDescription(stat) + ": " + std::to_string(stats.getValue(stat)));
     }
 
     // Clears the screen.

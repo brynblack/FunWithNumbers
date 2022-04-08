@@ -11,35 +11,41 @@ namespace fwn {
         private:
             class Stat {
                 private:
-                    long long value{};
                     std::string description;
+                    long long value{};
 
                 public:
                     Stat() = default;
-                    // TODO(Brynley): Add settings to control newline placement in rendering and so on.
-                    Stat(long long value, std::string description) : value(value), description(std::move(description)) {};
-                    // Gets the value of the statistic.
-                    [[nodiscard]] auto getValue() const -> long long;
+                    Stat(std::string description, long long value) : description(std::move(description)), value(value) {};
+
                     // Gets the description of the statistic.
-                    auto getDescription() -> std::string;
+                    [[nodiscard]] auto getDescription() const -> const std::string &;
+                    // Gets the value of the statistic.
+                    [[nodiscard]] auto getValue() const -> const long long &;
+
                     // Sets the value of the statistic.
-                    auto setValue(long long value) -> void;
+                    auto setValue(const long long &value) -> void;
             };
             std::unordered_map<std::string, Stat> stats;
 
         public:
             // Adds a new statistic.
-            auto add(const std::string &name, const std::string &description) -> void;
+            auto add(std::string name, std::string description) -> void;
+
+            // Gets the description of a statistic.
+            auto getDescription(const std::string &name) const -> const std::string &;
+            // Gets the names of all the statistics available.
+            auto getNames() const -> std::vector<std::string>;
             // Gets the value of a statistic.
-            auto get(const std::string &name) -> Stat;
-            // Gets all the statistics available.
-            auto getAll() -> std::vector<Stat>;
+            auto getValue(const std::string &name) const -> const long long &;
+
             // Reads a statistics file.
             auto readFile(const std::string &name) -> void;
             // Saves a statistics file.
-            auto saveFile(const std::string &name) -> void;
+            auto saveFile(const std::string &name) const -> void;
+
             // Sets the value of a statistic.
-            auto set(const std::string &name, long long value) -> void;
+            auto setValue(const std::string &name, const long long &value) -> void;
     };
 } // namespace fwn
 
