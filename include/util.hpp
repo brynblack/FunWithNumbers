@@ -13,7 +13,7 @@ namespace fwn {
     }
 
     // Determines if a coordinate is within the range of a given axis.
-    constexpr auto withinRange(std::pair<int, int> range, int coord) -> bool {
+    constexpr auto withinRange(const std::pair<int, int> &range, const int &coord) -> bool {
         return coord >= range.first && coord <= range.second;
     }
 
@@ -44,13 +44,13 @@ namespace fwn {
 
     // Counts the number of characters in any variable.
     template <typename T>
-    constexpr auto countChars(T s) -> size_t {
+    constexpr auto countChars(const T &s) -> size_t {
         return std::to_string(s).size();
 	}
 
     // Determines which number is larger, ignoring the sign.
     template <typename T>
-    constexpr auto findLargestNumber(T a, T b) -> T {
+    constexpr auto findLargestNumber(const T &a, const T &b) -> const T & {
         if (a < 0 || b < 0) {
             if (a > b) { return b; }
             return a;
@@ -61,7 +61,7 @@ namespace fwn {
 
     // Evaluates whether a number is positive, negative or zero.
     template <typename T>
-    constexpr auto getSign(T n) -> int {
+    constexpr auto getSign(const T &n) -> int {
         // Returns 1 if the number is positive.
         if (n > 0) { return 1; }
 
@@ -74,7 +74,7 @@ namespace fwn {
 
     // Evaluates whether a number is even or odd.
     template <typename T>
-    constexpr auto isEven(T n) -> bool {
+    constexpr auto isEven(const T &n) -> bool {
         // Returns true if the number does not have a remainder,
 		// and false if the number has a remainder.
 		return n % 2 == 0;
@@ -82,7 +82,7 @@ namespace fwn {
 
     // Evaluates whether a number is prime or not.
     template <typename T>
-    constexpr auto isPrime(T n) -> bool {
+    constexpr auto isPrime(const T &n) -> bool {
         // Returns false if the number is less than or equal to 1.
         if (n <= 1) { return false; }
 
@@ -97,11 +97,9 @@ namespace fwn {
 
     // Evaluates all possible factors of a given number.
     template <typename T>
-    auto getFactors(T n) -> std::vector<T> {
+    auto getFactors(const T &n) -> std::vector<T> {
 		// If the number is prime, it only has two factors.
-		if (isPrime(n)) {
-			return std::vector<T> { 1, n };
-		}
+		if (isPrime(n)) { return std::vector<T> { 1, n }; }
 
         std::vector<T> factors;
         // Applies this algorithm if the number is positive.

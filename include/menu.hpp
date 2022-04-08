@@ -18,23 +18,27 @@ namespace fwn {
                 public:
                     Option() = default;
                     Option(std::function<void()> function, std::string description) : function(std::move(function)), description(std::move(description)) {};
+
                     // Executes the option.
-                    auto execute() -> void;
+                    auto execute() const -> void;
+
                     // Returns the description of the option.
-                    auto getDescription() -> std::string;
+                    auto getDescription() -> const std::string &;
             };
             std::map<std::string, Option> choices;
             std::vector<std::string> lines;
 
         public:
-            // Adds an option to the menu object.
-            auto addOption(std::string key, std::function<void()> function, std::string description) -> void;
             // Adds a new line to the menu object.
             auto addLine() -> void;
             // Adds a line to the menu object.
             auto addLine(const std::string &line) -> void;
+            // Adds an option to the menu object.
+            auto addOption(std::string key, std::function<void()> function, std::string description) -> void;
+
             // Renders the menu.
-            auto render() -> void;
+            auto render() const -> void;
+
             // Executes a specified option stored in the menu object.
             auto execute(std::string option) -> void;
     };
