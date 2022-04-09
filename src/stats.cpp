@@ -2,29 +2,31 @@
 #include "util.hpp"
 
 #include <fstream>
+#include <memory>
 #include <vector>
 
 namespace fwn {
-    auto Stats::add(std::string name, std::string description) -> void {
-        this->stats[std::move(name)] = { std::move(description), 0 };
+    // Adds a new statistic.
+    auto Stats::add(const std::string &name, std::string description) -> void {
+        this->stats.emplace(name, Stat { name, std::move(description), 0 });
     }
 
-    auto Stats::getDescription(const std::string &name) const -> const std::string & {
-        return this->stats.at(name).getDescription();
+    // Returns a statistic object.
+    auto Stats::stat(const std::string &name) -> Stat & {
+        return this->stats.at(name);
     }
 
-    auto Stats::getNames() const -> std::vector<std::string> {
-        std::vector<std::string> vecStats;
+    // TODO(Brynley): Figure out if there is a way to avoid pointers, maybe something like references
+    // Returns a vector containing all the registered statistics.
+    auto Stats::getAll() const -> std::vector<std::unique_ptr<Stat>> {
+        std::vector<std::unique_ptr<Stat>> vecStats;
         for (const auto &stat : this->stats) {
-            vecStats.push_back(stat.first);
+            vecStats.push_back(std::make_unique<Stat>(stat.second));
         }
         return vecStats;
     }
 
-    auto Stats::getValue(const std::string &name) const -> const long long& {
-        return this->stats.at(name).getValue();
-    }
-
+    // Reads a statistic file.
     auto Stats::readFile(const std::string &name) -> void {
         std::ifstream statsFile(name, std::ifstream::in);
         if (!statsFile.is_open()) { return; }
@@ -36,7 +38,6 @@ namespace fwn {
         }
         statsFile.close();
         if (lines.size() < this->stats.size()) { return; }
-
         size_t i = 0;
         for (auto &stat : this->stats) {
             stat.second.setValue(lines.at(i));
@@ -44,6 +45,7 @@ namespace fwn {
         }
     }
 
+    // Saves a statistics file.
     auto Stats::saveFile(const std::string &name) const -> void {
         std::ofstream statsFile(name, std::ostream::out);
         for (const auto &stat : this->stats) {
@@ -52,19 +54,18 @@ namespace fwn {
         statsFile.close();
     }
 
-    auto Stats::setValue(const std::string &name, const long long &value) -> void {
-        this->stats.at(name).setValue(value);
-    }
+    // The constructor of the statistic.
+    Stats::Stat::Stat(std::string name, std::string description, long long value) : name(std::move(name)), description(std::move(description)), value(value) { }
 
-    auto Stats::Stat::getDescription() const -> const std::string & {
-        return this->description;
-    }
+    // Returns the description of the statistic.
+    auto Stats::Stat::getDescription() const -> const std::string & { return this->description; }
 
-    auto Stats::Stat::getValue() const -> const long long & {
-        return this->value;
-    }
+    // Returns the name of the statistic.
+    auto Stats::Stat::getName() const -> const std::string & { return this->name; }
 
-    auto Stats::Stat::setValue(const long long &value) -> void {
-        this->value = value;
-    }
+    // Returns the value of the statistic.
+    auto Stats::Stat::getValue() const -> const long long & { return this->value; }
+
+    // Sets the value of the statistic.
+    auto Stats::Stat::setValue(const long long &value) -> void { this->value = value; }
 } // namespace fwn

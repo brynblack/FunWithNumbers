@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.13...3.22.3)
+cmake_minimum_required(VERSION 3.13...3.23)
 
 project(
     FunWithNumbers
-    VERSION 11.2.6.1
+    VERSION 11.3.6.1
     DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
     HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
     LANGUAGES CXX)
