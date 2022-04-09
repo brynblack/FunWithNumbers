@@ -1,8 +1,8 @@
 target_sources(FunWithNumbers
 	PRIVATE
+		main.cpp
 		menu.cpp
-        stats.cpp
-		main.cpp)
+		stats.cpp)
 
 target_include_directories(FunWithNumbers
 	PRIVATE

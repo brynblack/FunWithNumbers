@@ -28,6 +28,7 @@
 #include <iostream>
 
 // TODO(Brynley): Fix bug where you can crash check number features mode via multiple '+' operators
+// TODO(Brynley): Fix crash when a number too large is entered, or the stats file contains numbers too large
 
 // https://stackoverflow.com/questions/14517546/how-can-a-c-header-file-include-implementation
 
@@ -90,11 +91,11 @@ auto checkNumberFeatures() -> void {
     long long number = std::stoll(input);
 
     // Updates statistics
-    stats.setValue("numbersEntered", stats.getValue("numbersEntered") + 1);
-    stats.setValue("numbersTotal", stats.getValue("numbersTotal") + number);
-    stats.setValue("numbersAverage", stats.getValue("numbersTotal") / stats.getValue("numbersEntered"));
-    stats.setValue("smallestNumber",(number < stats.getValue("smallestNumber")) ? number : stats.getValue("smallestNumber"));
-    stats.setValue("largestNumber",(number > stats.getValue("largestNumber")) ? number : stats.getValue("largestNumber"));
+    stats.stat("numbersEntered").setValue(stats.stat("numbersEntered").getValue() + 1);
+    stats.stat("numbersTotal").setValue(stats.stat("numbersTotal").getValue() + number);
+    stats.stat("numbersAverage").setValue(stats.stat("numbersTotal").getValue() / stats.stat("numbersEntered").getValue());
+    stats.stat("smallestNumber").setValue((number < stats.stat("smallestNumber").getValue()) ? number : stats.stat("smallestNumber").getValue());
+    stats.stat("largestNumber").setValue((number > stats.stat("largestNumber").getValue()) ? number : stats.stat("largestNumber").getValue());
 
     // Evaluates the features of the number and stores into associated variables.
     auto sign = fwn::getSign(number);
@@ -179,7 +180,7 @@ auto plotNumbers() -> void {
         // Appends the coordinates to a vector of coordinates to be plotted.
         values.emplace_back(x, y);
 
-        stats.setValue("coordinatesPlotted", stats.getValue("coordinatesPlotted") + 1);
+        stats.stat("coordinatesPlotted").setValue(stats.stat("coordinatesPlotted").getValue() + 1);
 
         // Clears the screen.
         fwn::clearScreen();
@@ -208,8 +209,8 @@ auto checkOverallStats() -> void {
 
     // Configures the menu object to display the overall stats.
     menu.addLine("Here are your statistics of overall use:");
-    for (const auto &stat : stats.getNames()) {
-        menu.addLine(" " + stats.getDescription(stat) + ": " + std::to_string(stats.getValue(stat)));
+    for (const auto &stat : stats.getAll()) {
+        menu.addLine(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
     }
 
     // Clears the screen.
