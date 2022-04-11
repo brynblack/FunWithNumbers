@@ -12,16 +12,6 @@ namespace fwn {
         std::cout << "\033[2J\033[1;1H";
     }
 
-    // Determines if a coordinate is within the range of a given axis.
-    constexpr auto withinRange(const std::pair<int, int> &range, const int &coord) -> bool {
-        return coord >= range.first && coord <= range.second;
-    }
-
-    // Evaluates whether string is number.
-    inline auto isNumber(const std::string &input) -> bool {
-        return !(input.find_first_not_of("+-0123456789") != std::string::npos || input.find_first_not_of('\n') == std::string::npos);
-    }
-
     // Converts a vector to a string.
     template <typename T>
     auto convertVecToString(std::vector<T> v) -> std::string {
@@ -42,11 +32,11 @@ namespace fwn {
         return oss.str();
     }
 
-    // Counts the number of characters in any variable.
+    // Counts the number of characters in a given value.
     template <typename T>
     constexpr auto countChars(const T &s) -> size_t {
         return std::to_string(s).size();
-	}
+    }
 
     // Determines which number is larger, ignoring the sign.
     template <typename T>
@@ -95,6 +85,7 @@ namespace fwn {
         return true;
     }
 
+    // TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran on a number
     // Evaluates all possible factors of a given number.
     template <typename T>
     auto getFactors(const T &n) -> std::vector<T> {
@@ -128,6 +119,12 @@ namespace fwn {
 
         // Returns the factors as a vector.
         return factors;
+    }
+
+    // Determines if a value is within the range of two values.
+    template <typename T1, typename T2>
+    constexpr auto withinRange(const std::pair<T1, T1> &r, const T2 &v) -> bool {
+        return v >= r.first && v <= r.second;
     }
 } // namespace fwn
 

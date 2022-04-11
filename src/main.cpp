@@ -24,15 +24,20 @@
 #include "stats.hpp"
 #include "util.hpp"
 
-#include <array>
 #include <iostream>
+#include <string>
+#include <vector>
 
-// TODO(Brynley): Fix bug where you can crash check number features mode via multiple '+' operators
-// TODO(Brynley): Fix crash when a number too large is entered, or the stats file contains numbers too large
-
-// https://stackoverflow.com/questions/14517546/how-can-a-c-header-file-include-implementation
+// TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran on a number
+// TODO(Brynley): Show y axis label on graph
+// TODO(Brynley): Make graph axis labels render dynamically
+// TODO(Brynley): Fix issue with graph rendering where the graph is one '-' too long
+// TODO(Brynley): Move graph function into its own class and make it simpler
+// TODO(Brynley): CREATE YOUR OWN WEBSITE AND CLEAN UP YOUR GITHUB PROFILE
 
 // TODO(Brynley): Make this const
+// Declares a statistics object.
+// This object contains all the class methods needed to manage statistics.
 fwn::Stats stats;
 
 // Draws a graph dynamically.
@@ -76,49 +81,74 @@ auto drawGraph(T1 values, T2 x_range, T3 y_range) -> void {
 
 // Evaluates and displays the features of a number.
 auto checkNumberFeatures() -> void {
-    // Clears the screen.
-    fwn::clearScreen();
+    bool quit = false;
+    do {
+        // Declares a menu object.
+        fwn::Menu menu;
 
-    // Asks user to input a whole number, and stores the number into a string.
-    std::cout << "Please enter a whole number that will be checked over: ";
-    std::string input;
-    std::getline(std::cin, input);
+        // Configures the menu to ask the user to input a whole number.
+        menu.addLine("Please enter a whole number that will be checked over: ");
 
-    // Returns if the input contains something other than digits or signs.
-    if (!fwn::isNumber(input)) { return; }
+        // Renders the menu.
+        menu.render();
 
-    // Converts the inputted string to a number.
-    long long number = std::stoll(input);
+        // Stores the number into a string.
+        std::string input;
+        std::getline(std::cin, input);
 
-    // Updates statistics
-    stats.stat("numbersEntered").setValue(stats.stat("numbersEntered").getValue() + 1);
-    stats.stat("numbersTotal").setValue(stats.stat("numbersTotal").getValue() + number);
-    stats.stat("numbersAverage").setValue(stats.stat("numbersTotal").getValue() / stats.stat("numbersEntered").getValue());
-    stats.stat("smallestNumber").setValue((number < stats.stat("smallestNumber").getValue()) ? number : stats.stat("smallestNumber").getValue());
-    stats.stat("largestNumber").setValue((number > stats.stat("largestNumber").getValue()) ? number : stats.stat("largestNumber").getValue());
+        // Converts the inputted string to a number, and continues if the input is not a number or if it is too large.
+        // 'const' is used to tell the compiler that a variable or return type will never change.
+        long long number;
+        try { number = std::stoll(input); }
+        catch (const std::invalid_argument &oor) { continue; }
+        catch (const std::out_of_range &oor) { continue; }
 
-    // Evaluates the features of the number and stores into associated variables.
-    auto sign = fwn::getSign(number);
-    auto even = fwn::isEven(number);
-    auto factors = fwn::convertVecToString(fwn::getFactors(number));
-    auto prime = fwn::isPrime(number);
+        // Retrieves the statistics into variables.
+        // 'auto' tells the compiler that the type of a variable can be deduced at compile time automatically.
+        // An '&' is used to declare these variables as "references" to another variable, instead of copying the value.
+        auto &numbersEntered = stats.stat("numbersEntered");
+        auto &numbersTotal = stats.stat("numbersTotal");
+        auto &numbersAverage = stats.stat("numbersAverage");
+        auto &smallestNumber = stats.stat("smallestNumber");
+        auto &largestNumber = stats.stat("largestNumber");
 
-    // Instantiates a menu object.
-    fwn::Menu menu;
+        // Updates the statistics.
+        numbersEntered.setValue(numbersEntered.getValue() + 1);
+        numbersTotal.setValue(numbersTotal.getValue() + number);
+        numbersAverage.setValue(numbersTotal.getValue() / numbersEntered.getValue());
+        smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
+        largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
 
-    // Configures the menu object to output the features of a number.
-    menu.addLine();
-    menu.addLine("The features of " + std::to_string(number) + " are...");
-    menu.addLine("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
-    menu.addLine("  " + std::string(even ? "Even" : "Odd"));
-    menu.addLine("  Factors are  " + factors);
-    menu.addLine("  " + std::string(prime ? "Is a prime number" : "Is not a prime number") + "\n");
+        // Evaluates the features of the number, then stores the features into variables.
+        auto sign = fwn::getSign(number);
+        auto even = fwn::isEven(number);
+        auto factors = fwn::convertVecToString(fwn::getFactors(number));
+        auto prime = fwn::isPrime(number);
 
-    // Renders the menu.
-    menu.render();
+        // Resets the menu, preparing it for a new configuration.
+        // This is only needed here because we want to retain the number entered on the first line.
+        menu.reset();
 
-    // Waits for user input.
-    std::cin.ignore();
+        // Configures the menu to output the features of the number with appropriate formatting.
+        menu.addLine("Please enter a whole number that will be checked over: " + std::to_string(number));
+        menu.addLine();
+        menu.addLine("The features of " + std::to_string(number) + " are...");
+        menu.addLine("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
+        menu.addLine("  " + std::string(even ? "Even" : "Odd"));
+        menu.addLine("  Factors are  " + factors);
+        menu.addLine("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
+        menu.addLine();
+
+        // Renders the menu.
+        menu.render();
+
+        // Waits for user input.
+        menu.wait();
+
+        // Sets quit to true, causing the do-while loop to break.
+        quit = true;
+
+    } while (!quit);
 }
 
 // Plots given numbers on a graph.
@@ -130,7 +160,7 @@ auto plotNumbers() -> void {
     // Declares a vector holding each point.
     std::vector<std::pair<int, int>> values;
 
-    // Declares a boolean and sets it to false.
+    // Declares a quit boolean and sets it to false.
     bool quit = false;
     do {
         // Clears the screen.
@@ -140,29 +170,32 @@ auto plotNumbers() -> void {
         drawGraph(values, x_axis, y_axis);
 
         // Asks user for an x-coordinate and stores the coordinate into a string.
-        std::cout << "Enter a coordinate below to be added to the plot:\n"
-            "x axis: ";
+        std::cout
+            << "Enter a coordinate below to be added to the plot\n"
+            << "x axis: ";
+
         std::string input;
         std::getline(std::cin, input);
 
-        // Continues from the start if the coordinate is not a number.
-        if (!fwn::isNumber(input)) { continue; }
-
-        // Converts the inputted string to a number.
-        int x = std::stoi(input);
+        // Converts the inputted string to a number. Continues from the start if the coordinate is not a number.
+        int x;
+        try { x = std::stoi(input); }
+        catch (const std::invalid_argument &oor) { continue; }
+        catch (const std::out_of_range &oor) { continue; }
 
         // Continues from the start if the number is not within the range of the x-axis.
         if (!fwn::withinRange(x_axis, x)) { continue; }
 
         // Asks user for a y-coordinate and stores the coordinate into a string.
         std::cout << "y axis: ";
+
         std::getline(std::cin, input);
 
-        // Continues from the start if the coordinate is not a number.
-        if (!fwn::isNumber(input)) { continue; }
-
-        // Converts the inputted string to a number.
-        int y = std::stoi(input);
+        // Converts the inputted string to a number. Continues from the start if the coordinate is not a number.
+        int y;
+        try { y = std::stoi(input); }
+        catch (const std::invalid_argument &oor) { continue; }
+        catch (const std::out_of_range &oor) { continue; }
 
         // Continues from the start if the number is not within the range of the y-axis.
         if (!fwn::withinRange(y_axis, y)) { continue; }
@@ -180,7 +213,9 @@ auto plotNumbers() -> void {
         // Appends the coordinates to a vector of coordinates to be plotted.
         values.emplace_back(x, y);
 
-        stats.stat("coordinatesPlotted").setValue(stats.stat("coordinatesPlotted").getValue() + 1);
+        // Updates statistics.
+        auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
+        coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
 
         // Clears the screen.
         fwn::clearScreen();
@@ -204,29 +239,26 @@ auto plotNumbers() -> void {
 
 // Displays overall stats from previous interactions.
 auto checkOverallStats() -> void {
-    // Instantiates a main menu object.
+    // Declares a menu object.
     fwn::Menu menu;
 
-    // Configures the menu object to display the overall stats.
+    // Configures the menu to display the overall statistics.
     menu.addLine("Here are your statistics of overall use:");
     for (const auto &stat : stats.getAll()) {
         menu.addLine(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
     }
-
-    // Clears the screen.
-    fwn::clearScreen();
+    menu.addLine();
 
     // Renders the menu.
     menu.render();
 
     // Waits for user input.
-    std::cin.ignore();
+    menu.wait();
 }
 
 // The main entry point in the program.
 auto main() -> int {
-    // Configures the statistics that will be kept.
-    // TODO(Brynley): Stats menu is in reverse, and the stats file is in reverse; it might be something to do with this
+    // Declares the statistics that will be used.
     stats.add("numbersEntered", "Numbers entered");
     stats.add("numbersTotal", "Total of numbers");
     stats.add("numbersAverage", "Average of numbers");
@@ -234,15 +266,15 @@ auto main() -> int {
     stats.add("largestNumber", "Largest number entered");
     stats.add("coordinatesPlotted", "Coordinates plotted");
 
-    // Reads any saved statistics from previous usage.
+    // Retrieves any saved statistics from previous usage.
     stats.readFile("stats.txt");
 
     // Declares a boolean and sets it to false.
-    // This variable is used later in the do-while loop.
+    // This boolean is used later in the do-while loop to determine whether to leave the loop.
     bool quit = false;
 
-    // Instantiates a main menu object.
-    // This object contains all the class methods needed for creating a main menu.
+    // Declares a menu object.
+    // This object contains all the class methods needed for creating and rendering a menu.
     fwn::Menu menu;
 
     // Configures the menu with all options including the layout.
@@ -258,9 +290,6 @@ auto main() -> int {
     // Runs the following code and then checks if the loop should quit.
     // If the loop should not quit, repeats the loop until it should.
     do {
-        // Clears the screen.
-        fwn::clearScreen();
-
         // Renders the menu.
         menu.render();
 
@@ -271,9 +300,10 @@ auto main() -> int {
 
         // Executes the selected choice.
         menu.execute(choice);
+
     } while (!quit);
 
-    // Saves the statistics collected into a file.
+    // Saves the statistics into a file.
     stats.saveFile("stats.txt");
 
     // Terminates the main function, returning 0 as the exit code.

@@ -4,7 +4,6 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <utility>
 #include <vector>
 
 namespace fwn {
@@ -17,7 +16,7 @@ namespace fwn {
 
                 public:
                     // The constructor of the statistic.
-                    Stat(std::string name, std::string description, long long value);
+                    Stat(std::string name, std::string description, const long long &value);
 
                     // Returns the description of the statistic.
                     [[nodiscard]] auto getDescription() const -> const std::string &;
