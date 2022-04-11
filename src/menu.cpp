@@ -22,14 +22,31 @@ namespace fwn {
         Option option { std::move(function), std::move(description) };
 
         // Stores the option object in the menu object with the key as the location.
-        this->choices[key] = option;
+        this->choices.emplace(key, option);
 
         // Appends the description to the lines stored in the menu object.
         this->lines.push_back(option.getDescription());
     }
 
-    // Renders the main menu.
+    // Executes the given option.
+    auto Menu::execute(std::string option) const -> void {
+        // Converts the option to uppercase for case insensitivity.
+        std::transform(option.begin(), option.end(), option.begin(), ::toupper);
+
+        // Executes the option if it exists in the list of choices, otherwise it returns.
+        try { this->choices.at(option).execute(); }
+        catch (const std::out_of_range &oor) { return; }
+    }
+
+    // Clears all configured options and lines.
+    auto Menu::reset() -> void {
+        this->choices.clear();
+        this->lines.clear();
+    }
+
+    // Renders the menu.
     auto Menu::render() const -> void {
+        std::cout << "\033[2J\033[1;1H";
         // Displays each line stored in the menu object.
         for (auto &line : this->lines) {
             // Omit the newline if the line is the last line to be rendered.
@@ -41,15 +58,8 @@ namespace fwn {
         }
     }
 
-    // Executes the given option.
-    auto Menu::execute(std::string option) -> void {
-        // Converts the option to uppercase for case insensitivity.
-        std::transform(option.begin(), option.end(), option.begin(), ::toupper);
-
-        // Executes the option if it exists in the list of choices.
-        if (choices.find(option) != choices.end()) {
-            this->choices.at(option).execute();
-        }
+    auto Menu::wait() const -> void {
+        std::cin.ignore();
     }
 
     // Executes the given function in the option object.
@@ -58,7 +68,7 @@ namespace fwn {
     }
 
     // Retrieves the description of the option.
-    auto Menu::Option::getDescription() -> const std::string & {
+    auto Menu::Option::getDescription() const -> const std::string & {
         return this->description;
     }
 } // namespace fwn
