@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "graph.hpp"
 #include "menu.hpp"
 #include "stats.hpp"
 #include "util.hpp"
@@ -139,6 +140,38 @@ auto checkNumberFeatures() -> void {
 
         // Breaks out of the loop.
         quit = true;
+
+    } while (!quit);
+}
+
+auto plotNumbers2() -> void {
+    bool quit = false;
+    do {
+        // Sets the size of the graph.
+        fwn::Graph graph;
+        graph.setDomain(1, 38);
+        graph.setRange(1, 12);
+
+        // Layout configuration for the menu.
+        fwn::Menu menu;
+        for (const auto &line : graph.build()) {
+            menu.addLine(line);
+        }
+        menu.addLine("Enter a coordinate below to be added to the plot:");
+        menu.addLine("x axis: ");
+
+        // Renders the menu.
+        menu.render();
+
+        // Recieves an x-coordinate as a string from the user.
+        std::string input;
+        std::getline(std::cin, input);
+
+        // Tries to convert the string to a number and restarts if it fails the following checks.
+        int x;
+        try { x = std::stoi(input); }
+        catch (const std::invalid_argument &oor) { continue; }
+        catch (const std::out_of_range &oor) { continue; }
 
     } while (!quit);
 }
@@ -264,22 +297,23 @@ auto main() -> int {
     // Configures the program.
     config();
 
-    // Layout configuration for the main menu.
-    fwn::Menu menu;
-    bool quit = false;
-    menu.addLine("Welcome to Fun With Numbers");
-    menu.addLine("Choose from the menu below:");
-    menu.addOption("A", checkNumberFeatures, " (A) Check number features");
-    menu.addOption("B", plotNumbers, " (B) Plot numbers");
-    menu.addOption("C", checkOverallStats, " (C) Check overall stats");
-    menu.addLine();
-    menu.addOption("X", [&quit]() { quit = true; }, " (X) Save and exit");
-    menu.addLine("Choice: ");
-
     // Reads any saved statistics from previous usage.
     stats.read();
 
+    bool quit = false;
     do {
+        // Layout configuration for the menu.
+        fwn::Menu menu;
+        menu.addLine("Welcome to Fun With Numbers");
+        menu.addLine("Choose from the menu below:");
+        menu.addOption("A", checkNumberFeatures, " (A) Check number features");
+        menu.addOption("B", plotNumbers, " (B) Plot numbers");
+        menu.addOption("C", checkOverallStats, " (C) Check overall stats");
+        menu.addOption("D", plotNumbers2, " (D) [WIP] Plot numbers 2.0");
+        menu.addLine();
+        menu.addOption("X", [&quit]() { quit = true; }, " (X) Save and exit");
+        menu.addLine("Choice: ");
+
         // Renders the menu.
         menu.render();
 
