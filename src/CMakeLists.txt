@@ -1,5 +1,6 @@
 target_sources(FunWithNumbers
 	PRIVATE
+        graph.cpp
 		main.cpp
 		menu.cpp
 		stats.cpp)
