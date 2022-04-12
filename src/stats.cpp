@@ -33,8 +33,8 @@ namespace fwn {
     }
 
     // Reads a statistic file.
-    auto Stats::readFile(const std::string &name) -> void {
-        std::ifstream statsFile(name, std::ifstream::in);
+    auto Stats::read() -> void {
+        std::ifstream statsFile(this->fileName, std::ifstream::in);
         if (!statsFile.is_open()) { return; }
         std::string line;
         std::vector<long long> lines;
@@ -53,12 +53,16 @@ namespace fwn {
     }
 
     // Saves a statistics file.
-    auto Stats::saveFile(const std::string &name) const -> void {
-        std::ofstream statsFile(name, std::ostream::out);
+    auto Stats::save() const -> void {
+        std::ofstream statsFile(this->fileName, std::ostream::out);
         for (const auto &stat : this->stats) {
             statsFile << stat.second.getValue() << "\n";
         }
         statsFile.close();
+    }
+
+    auto Stats::setFile(std::string name) -> void {
+        this->fileName = std::move(name);
     }
 
     // The constructor of the statistic.

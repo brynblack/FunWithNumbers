@@ -31,6 +31,7 @@ namespace fwn {
                     auto setValue(const long long &value) -> void;
             };
             std::unordered_map<std::string, Stat> stats;
+            std::string fileName;
 
         public:
             // Adds a new statistic.
@@ -42,11 +43,13 @@ namespace fwn {
             // Returns a vector containing all the registered statistics.
             auto getAll() const -> std::vector<std::unique_ptr<Stat>>;
 
+            auto setFile(std::string name) -> void;
+
             // Reads a statistics file.
-            auto readFile(const std::string &name) -> void;
+            auto read() -> void;
 
             // Saves a statistics file.
-            auto saveFile(const std::string &name) const -> void;
+            auto save() const -> void;
     };
 } // namespace fwn
 
