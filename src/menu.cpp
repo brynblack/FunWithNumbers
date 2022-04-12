@@ -40,7 +40,9 @@ namespace fwn {
 
     // Clears all configured options and lines.
     auto Menu::reset() -> void {
+        // Clears the choices that are registered.
         this->choices.clear();
+        // Clears all the registered lines in the object.
         this->lines.clear();
     }
 

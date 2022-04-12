@@ -36,8 +36,6 @@
 // TODO(Brynley): CREATE YOUR OWN WEBSITE AND CLEAN UP YOUR GITHUB PROFILE
 
 // TODO(Brynley): Make this const
-// Declares a statistics object.
-// This object contains all the class methods needed to manage statistics.
 fwn::Stats stats;
 
 // Draws a graph dynamically.
@@ -83,29 +81,24 @@ auto drawGraph(T1 values, T2 x_range, T3 y_range) -> void {
 auto checkNumberFeatures() -> void {
     bool quit = false;
     do {
-        // Declares a menu object.
+        // Layout configuration for the menu.
         fwn::Menu menu;
-
-        // Configures the menu to ask the user to input a whole number.
         menu.addLine("Please enter a whole number that will be checked over: ");
 
         // Renders the menu.
         menu.render();
 
-        // Stores the number into a string.
+        // Receives a number as a string from the user.
         std::string input;
         std::getline(std::cin, input);
 
-        // Converts the inputted string to a number, and continues if the input is not a number or if it is too large.
-        // 'const' is used to tell the compiler that a variable or return type will never change.
+        // Tries to convert the string to a number and restarts if it fails the following checks.
         long long number;
         try { number = std::stoll(input); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
 
-        // Retrieves the statistics into variables.
-        // 'auto' tells the compiler that the type of a variable can be deduced at compile time automatically.
-        // An '&' is used to declare these variables as "references" to another variable, instead of copying the value.
+        // Retrieves required statistics into variables.
         auto &numbersEntered = stats.stat("numbersEntered");
         auto &numbersTotal = stats.stat("numbersTotal");
         auto &numbersAverage = stats.stat("numbersAverage");
@@ -119,17 +112,16 @@ auto checkNumberFeatures() -> void {
         smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
         largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
 
-        // Evaluates the features of the number, then stores the features into variables.
+        // Retrieves the features of the given number into variables.
         auto sign = fwn::getSign(number);
         auto even = fwn::isEven(number);
         auto factors = fwn::convertVecToString(fwn::getFactors(number));
         auto prime = fwn::isPrime(number);
 
-        // Resets the menu, preparing it for a new configuration.
-        // This is only needed here because we want to retain the number entered on the first line.
+        // Resets the menu layout.
         menu.reset();
 
-        // Configures the menu to output the features of the number with appropriate formatting.
+        // Layout configuration for the menu.
         menu.addLine("Please enter a whole number that will be checked over: " + std::to_string(number));
         menu.addLine();
         menu.addLine("The features of " + std::to_string(number) + " are...");
@@ -145,22 +137,21 @@ auto checkNumberFeatures() -> void {
         // Waits for user input.
         menu.wait();
 
-        // Sets quit to true, causing the do-while loop to break.
+        // Breaks out of the loop.
         quit = true;
 
     } while (!quit);
 }
 
-// Plots given numbers on a graph.
+// Displays given coordinates on a graph.
 auto plotNumbers() -> void {
-    // Sets x-axis and y-axis limits.
+    // x-axis and y-axis limits.
+    // TODO: REPLACE THIS WITH A CLASS
     const std::pair<int, int> x_axis(1, 38);
     const std::pair<int, int> y_axis(1, 12);
 
-    // Declares a vector holding each point.
     std::vector<std::pair<int, int>> values;
 
-    // Declares a quit boolean and sets it to false.
     bool quit = false;
     do {
         // Clears the screen.
@@ -237,12 +228,11 @@ auto plotNumbers() -> void {
     } while (!quit);
 }
 
-// Displays overall stats from previous interactions.
+// Displays statistics relating to previous interactions.
 auto checkOverallStats() -> void {
-    // Declares a menu object.
     fwn::Menu menu;
 
-    // Configures the menu to display the overall statistics.
+    // Layout configuration for the menu.
     menu.addLine("Here are your statistics of overall use:");
     for (const auto &stat : stats.getAll()) {
         menu.addLine(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
@@ -256,9 +246,9 @@ auto checkOverallStats() -> void {
     menu.wait();
 }
 
-// The main entry point in the program.
-auto main() -> int {
-    // Declares the statistics that will be used.
+// Configures the program.
+auto config() -> void {
+    // Adds the following statistics that will be used in the program.
     stats.add("numbersEntered", "Numbers entered");
     stats.add("numbersTotal", "Total of numbers");
     stats.add("numbersAverage", "Average of numbers");
@@ -266,18 +256,17 @@ auto main() -> int {
     stats.add("largestNumber", "Largest number entered");
     stats.add("coordinatesPlotted", "Coordinates plotted");
 
-    // Retrieves any saved statistics from previous usage.
-    stats.readFile("stats.txt");
+    // Sets the file name for the statistics file.
+    stats.setFile("stats.txt");
+}
 
-    // Declares a boolean and sets it to false.
-    // This boolean is used later in the do-while loop to determine whether to leave the loop.
-    bool quit = false;
+auto main() -> int {
+    // Configures the program.
+    config();
 
-    // Declares a menu object.
-    // This object contains all the class methods needed for creating and rendering a menu.
+    // Layout configuration for the main menu.
     fwn::Menu menu;
-
-    // Configures the menu with all options including the layout.
+    bool quit = false;
     menu.addLine("Welcome to Fun With Numbers");
     menu.addLine("Choose from the menu below:");
     menu.addOption("A", checkNumberFeatures, " (A) Check number features");
@@ -287,27 +276,24 @@ auto main() -> int {
     menu.addOption("X", [&quit]() { quit = true; }, " (X) Save and exit");
     menu.addLine("Choice: ");
 
-    // Runs the following code and then checks if the loop should quit.
-    // If the loop should not quit, repeats the loop until it should.
+    // Reads any saved statistics from previous usage.
+    stats.read();
+
     do {
         // Renders the menu.
         menu.render();
 
-        // Asks user for a choice and stores the choice into a string.
-        // "std::getline" is better in this case compared to "std::cin" as it can receive enter key presses.
+        // Receives a choice from the user.
         std::string choice;
         std::getline(std::cin, choice);
 
-        // Executes the selected choice.
+        // Executes the given choice.
         menu.execute(choice);
 
     } while (!quit);
 
-    // Saves the statistics into a file.
-    stats.saveFile("stats.txt");
+    // Saves the statistics to a file.
+    stats.save();
 
-    // Terminates the main function, returning 0 as the exit code.
-    // An exit code of 0 usually means everything worked correctly.
-    // Other return codes such as -1 typically mean something went wrong.
     return 0;
 }
