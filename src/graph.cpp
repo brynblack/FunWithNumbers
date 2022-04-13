@@ -57,7 +57,7 @@ namespace fwn {
                         offset = (x - this->domain.first) + 1;
                     }
                 }
-                lines.emplace_back(line.append(std::string((this->domain.second - offset) * num_gap, ' ') + "|"));
+                lines.emplace_back(line.append(std::string((nums_domain - offset) * num_gap, ' ') + "|"));
             }
 
             if (i != this->range.second) {
