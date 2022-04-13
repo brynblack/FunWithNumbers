@@ -65,19 +65,21 @@ auto checkNumberFeatures() -> void {
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
 
-        // Retrieves required statistics into variables.
-        auto &numbersEntered = stats.stat("numbersEntered");
-        auto &numbersTotal = stats.stat("numbersTotal");
-        auto &numbersAverage = stats.stat("numbersAverage");
-        auto &smallestNumber = stats.stat("smallestNumber");
-        auto &largestNumber = stats.stat("largestNumber");
+        {
+            // Retrieves required statistics into variables.
+            auto &numbersEntered = stats.stat("numbersEntered");
+            auto &numbersTotal = stats.stat("numbersTotal");
+            auto &numbersAverage = stats.stat("numbersAverage");
+            auto &smallestNumber = stats.stat("smallestNumber");
+            auto &largestNumber = stats.stat("largestNumber");
 
-        // Updates the statistics.
-        numbersEntered.setValue(numbersEntered.getValue() + 1);
-        numbersTotal.setValue(numbersTotal.getValue() + number);
-        numbersAverage.setValue(numbersTotal.getValue() / numbersEntered.getValue());
-        smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
-        largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
+            // Updates the statistics.
+            numbersEntered.setValue(numbersEntered.getValue() + 1);
+            numbersTotal.setValue(numbersTotal.getValue() + number);
+            numbersAverage.setValue(numbersTotal.getValue() / numbersEntered.getValue());
+            smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
+            largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
+        }
 
         // Retrieves the features of the given number into variables.
         const auto &sign = fwn::getSign(number);
@@ -169,11 +171,13 @@ auto plotNumbers() -> void {
         }
         if (duplicate) { continue; }
 
-        // Retrieves required statistics into variables.
-        auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
+        {
+            // Retrieves required statistics into variables.
+            auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
 
-        // Updates the statistics.
-        coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
+            // Updates the statistics.
+            coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
+        }
 
         // Adds the point to the graph.
         graph.addPoint(x, y);
