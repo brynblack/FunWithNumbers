@@ -1,9 +1,8 @@
 #ifndef FUNWITHNUMBERS_STATS_HPP
 #define FUNWITHNUMBERS_STATS_HPP
 
-#include <memory>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 namespace fwn {
@@ -11,45 +10,33 @@ namespace fwn {
         private:
             class Stat {
                 private:
-                    std::string name, description;
+                    std::string description;
                     long long value;
 
                 public:
-                    // The constructor of the statistic.
-                    Stat(std::string name, std::string description, const long long &value);
+                    Stat(std::string description, const long long &value);
 
-                    // Returns the description of the statistic.
                     [[nodiscard]] auto getDescription() const -> const std::string &;
-
-                    // Returns the name of the statistic.
-                    [[nodiscard]] auto getName() const -> const std::string &;
-
-                    // Returns the value of the statistic.
                     [[nodiscard]] auto getValue() const -> const long long &;
 
-                    // Sets the value of the statistic.
-                    auto setValue(const long long &value) -> void;
+                    auto setValue(const long long &val) -> void;
             };
-            std::unordered_map<std::string, Stat> stats;
             std::string fileName;
+            std::vector<std::string> names;
+            std::map<std::string, Stat> stats;
 
         public:
-            // Adds a new statistic.
-            auto add(const std::string &name, std::string description) -> void;
+            auto add(const std::string &name, std::string desc) -> void;
 
-            // Returns a statistic object.
-            auto stat(const std::string &name) -> Stat &;
+            [[nodiscard]] auto getNames() const -> const std::vector<std::string> &;
 
-            // Returns a vector containing all the registered statistics.
-            auto getAll() const -> std::vector<std::unique_ptr<Stat>>;
+            auto save() const -> void;
 
             auto setFile(std::string name) -> void;
 
-            // Reads a statistics file.
-            auto read() -> void;
+            auto stat(const std::string &name) -> Stat &;
 
-            // Saves a statistics file.
-            auto save() const -> void;
+            auto read() -> void;
     };
 } // namespace fwn
 

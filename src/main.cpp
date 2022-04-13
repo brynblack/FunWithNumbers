@@ -25,57 +25,27 @@
 #include "stats.hpp"
 #include "util.hpp"
 
-#include <iostream>
 #include <string>
-#include <vector>
 
-// TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran on a number
-// TODO(Brynley): Show y axis label on graph
-// TODO(Brynley): Make graph axis labels render dynamically
-// TODO(Brynley): Fix issue with graph rendering where the graph is one '-' too long
-// TODO(Brynley): Move graph function into its own class and make it simpler
-// TODO(Brynley): CREATE YOUR OWN WEBSITE AND CLEAN UP YOUR GITHUB PROFILE
+// TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran.
+// TODO(Brynley): Make graph axis labels render dynamically (x-axis done, y-axis needs to be done).
+// TODO(Brynley): Create your own website and clean up your GitHub profile.
 
-// TODO(Brynley): Make this const
+// TODO: Try to somehow avoid this as a global variable.
 fwn::Stats stats;
 
-// Draws a graph dynamically.
-template <typename T1, typename T2, typename T3>
-auto drawGraph(T1 values, T2 x_range, T3 y_range) -> void {
-    size_t max_digits_x = fwn::countChars(fwn::findLargestNumber(x_range.first, x_range.second));
-    size_t max_digits_y = fwn::countChars(fwn::findLargestNumber(y_range.first, y_range.second));
-    std::cout << std::string(55, ' ') << "x axis\n";
-    std::cout << std::string(max_digits_y + 4, ' ');
-    for (int i = x_range.first; i <= x_range.second; i++) {
-        size_t spaces = max_digits_x - fwn::countChars(i + 1);
-        std::cout << i << std::string(spaces + 1, ' ');
-    }
-    std::cout <<
-        "\n" <<
-        std::string(max_digits_y + 1, ' ') << std::string(3 + ((x_range.second - x_range.first) + 1) * (max_digits_x + 1), '-') << "\n";
-    for (int i = y_range.first; i <= y_range.second; i++) {
-        std::cout << std::string((max_digits_y + 1) - fwn::countChars(i), ' ') << i << "|" << " ";
-        int offset1 = 0;
-        auto offset2 = max_digits_x - 1;
-        std::sort(values.begin(), values.end());
+// Configures the program.
+auto config() -> void {
+    // Adds the following statistics that will be used in the program.
+    stats.add("numbersEntered", "Numbers entered");
+    stats.add("numbersTotal", "Total of numbers");
+    stats.add("numbersAverage", "Average of numbers");
+    stats.add("smallestNumber", "Smallest number entered");
+    stats.add("largestNumber", "Largest number entered");
+    stats.add("coordinatesPlotted", "Coordinates plotted");
 
-        for (auto coords : values) {
-            auto x = coords.first;
-            auto y = coords.second;
-            if (i == y) {
-                std::cout << std::string(((x - x_range.first) - offset1) * (max_digits_x + 1) + offset2, ' ') << "x";
-                offset1 = x - x_range.first;
-                offset2 = max_digits_x - (max_digits_x + 1);
-            }
-        }
-
-        std::cout << std::string((x_range.second - offset1) * (max_digits_x + 1) + offset2 - 1, ' ') << "|" << "\n";
-
-        if (i != y_range.second) {
-            std::cout << std::string(max_digits_y + 1, ' ') << "|" << std::string(((x_range.second - x_range.first) + 1) * (max_digits_x + 1) + 1, ' ') << "|\n";
-        }
-    }
-    std::cout << std::string(max_digits_y + 1, ' ') << std::string(3 + ((x_range.second - x_range.first) + 1) * (max_digits_x + 1), '-') << "\n";
+    // Sets the file name for the statistics file.
+    stats.setFile("stats.txt");
 }
 
 // Evaluates and displays the features of a number.
@@ -89,13 +59,9 @@ auto checkNumberFeatures() -> void {
         // Renders the menu.
         menu.render();
 
-        // Receives a number as a string from the user.
-        std::string input;
-        std::getline(std::cin, input);
-
-        // Tries to convert the string to a number and restarts if it fails the following checks.
+        // Receives a number from the user and restarts if it fails the following checks.
         long long number;
-        try { number = std::stoll(input); }
+        try { number = std::stoll(fwn::readLine()); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
 
@@ -114,10 +80,10 @@ auto checkNumberFeatures() -> void {
         largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
 
         // Retrieves the features of the given number into variables.
-        auto sign = fwn::getSign(number);
-        auto even = fwn::isEven(number);
-        auto factors = fwn::convertVecToString(fwn::getFactors(number));
-        auto prime = fwn::isPrime(number);
+        const auto &sign = fwn::getSign(number);
+        const auto &even = fwn::isEven(number);
+        const auto &factors = fwn::convertVecToString(fwn::getFactors(number));
+        const auto &prime = fwn::isPrime(number);
 
         // Resets the menu layout.
         menu.reset();
@@ -144,14 +110,16 @@ auto checkNumberFeatures() -> void {
     } while (!quit);
 }
 
-auto plotNumbers2() -> void {
+// Plots given coordinates on a graph.
+auto plotNumbers() -> void {
+    // Sets the size of the graph.
+    fwn::Graph graph;
+    graph.setDomain(1, 38);
+    graph.setRange(1, 12);
+
     bool quit = false;
     do {
-        // Sets the size of the graph.
-        fwn::Graph graph;
-        graph.setDomain(1, 38);
-        graph.setRange(1, 12);
-
+        // TODO: Maybe add a replaceLine method to prevent repetition.
         // Layout configuration for the menu.
         fwn::Menu menu;
         for (const auto &line : graph.build()) {
@@ -163,112 +131,99 @@ auto plotNumbers2() -> void {
         // Renders the menu.
         menu.render();
 
-        // Recieves an x-coordinate as a string from the user.
-        std::string input;
-        std::getline(std::cin, input);
-
-        // Tries to convert the string to a number and restarts if it fails the following checks.
+        // Receives an x-coordinate from the user and restarts if it fails the following checks.
         int x;
-        try { x = std::stoi(input); }
+        try { x = std::stoi(fwn::readLine()); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
+        if (!fwn::withinRange(graph.getDomain(), x)) { continue; }
 
-    } while (!quit);
-}
+        // Resets the menu layout.
+        menu.reset();
 
-// Displays given coordinates on a graph.
-auto plotNumbers() -> void {
-    // x-axis and y-axis limits.
-    // TODO: REPLACE THIS WITH A CLASS
-    const std::pair<int, int> x_axis(1, 38);
-    const std::pair<int, int> y_axis(1, 12);
+        // Layout configuration for the menu.
+        for (const auto &line : graph.build()) {
+            menu.addLine(line);
+        }
+        menu.addLine("Enter a coordinate below to be added to the plot:");
+        menu.addLine("x axis: " + std::to_string(x));
+        menu.addLine("y axis: ");
 
-    std::vector<std::pair<int, int>> values;
+        // Renders the menu.
+        menu.render();
 
-    bool quit = false;
-    do {
-        // Clears the screen.
-        fwn::clearScreen();
-
-        // Draws the graph with any given coordinates.
-        drawGraph(values, x_axis, y_axis);
-
-        // Asks user for an x-coordinate and stores the coordinate into a string.
-        std::cout
-            << "Enter a coordinate below to be added to the plot\n"
-            << "x axis: ";
-
-        std::string input;
-        std::getline(std::cin, input);
-
-        // Converts the inputted string to a number. Continues from the start if the coordinate is not a number.
-        int x;
-        try { x = std::stoi(input); }
-        catch (const std::invalid_argument &oor) { continue; }
-        catch (const std::out_of_range &oor) { continue; }
-
-        // Continues from the start if the number is not within the range of the x-axis.
-        if (!fwn::withinRange(x_axis, x)) { continue; }
-
-        // Asks user for a y-coordinate and stores the coordinate into a string.
-        std::cout << "y axis: ";
-
-        std::getline(std::cin, input);
-
-        // Converts the inputted string to a number. Continues from the start if the coordinate is not a number.
+        // Receives a y-coordinate from the user and restarts if it fails the following checks.
         int y;
-        try { y = std::stoi(input); }
+        try { y = std::stoi(fwn::readLine()); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
+        if (!fwn::withinRange(graph.getRange(), y)) { continue; }
 
-        // Continues from the start if the number is not within the range of the y-axis.
-        if (!fwn::withinRange(y_axis, y)) { continue; }
-
-        // Continues from the start if the coordinates given are already plotted.
+        // Restarts if the coordinate given is already plotted on the graph.
         bool duplicate = false;
-        for (const auto &pair : values) {
-            if (pair.first == x && pair.second == y) {
+        for (const auto &point : graph.getPoints()) {
+            if (point.getX() == x && point.getY() == y) {
                 duplicate = true;
                 break;
             }
         }
         if (duplicate) { continue; }
 
-        // Appends the coordinates to a vector of coordinates to be plotted.
-        values.emplace_back(x, y);
-
-        // Updates statistics.
+        // Retrieves required statistics into variables.
         auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
+
+        // Updates the statistics.
         coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
 
-        // Clears the screen.
-        fwn::clearScreen();
+        // Adds the point to the graph.
+        graph.addPoint(x, y);
 
-        // Draws the graph with any given coordinates.
-        drawGraph(values, x_axis, y_axis);
+        // Resets the menu layout.
+        menu.reset();
 
-        // Asks the user if they want to add another coordinate.
-        std::cout << "Do you wish to add another coordinate (y/n)? ";
-        std::getline(std::cin, input);
-        std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-        if (input == "n") {
-            quit = true;
-            fwn::clearScreen();
-            drawGraph(values, x_axis, y_axis);
-            std::cout << "Press enter to return to the main menu...";
-            std::cin.ignore();
+        // Layout configuration for the menu.
+        for (const auto &line : graph.build()) {
+            menu.addLine(line);
         }
+        menu.addLine("Do you wish to add another coordinate (y/n)? ");
+        // TODO(Brynley): Use a reference instead of copy by value.
+        menu.addOption("n", [&graph, menu, &quit]() mutable -> void {
+            // Resets the menu layout.
+            menu.reset();
+
+            // Layout configuration for the menu.
+            for (const auto &line : graph.build()) {
+                menu.addLine(line);
+            }
+            menu.addLine("Press enter to return to the menu...");
+
+            // Renders the menu.
+            menu.render();
+
+            // Waits for user input.
+            menu.wait();
+
+            // Breaks out of the loop.
+            quit = true;
+        });
+
+        // Renders the menu.
+        menu.render();
+
+        // Receives a choice from the user and executes it.
+        menu.execute(fwn::readLine());
+
     } while (!quit);
 }
 
 // Displays statistics relating to previous interactions.
 auto checkOverallStats() -> void {
-    fwn::Menu menu;
-
     // Layout configuration for the menu.
+    fwn::Menu menu;
     menu.addLine("Here are your statistics of overall use:");
-    for (const auto &stat : stats.getAll()) {
-        menu.addLine(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
+    for (const auto &name : stats.getNames()) {
+        const auto &stat = stats.stat(name);
+        menu.addLine(" " + stat.getDescription() + ": " + std::to_string(stat.getValue()));
     }
     menu.addLine();
 
@@ -279,20 +234,6 @@ auto checkOverallStats() -> void {
     menu.wait();
 }
 
-// Configures the program.
-auto config() -> void {
-    // Adds the following statistics that will be used in the program.
-    stats.add("numbersEntered", "Numbers entered");
-    stats.add("numbersTotal", "Total of numbers");
-    stats.add("numbersAverage", "Average of numbers");
-    stats.add("smallestNumber", "Smallest number entered");
-    stats.add("largestNumber", "Largest number entered");
-    stats.add("coordinatesPlotted", "Coordinates plotted");
-
-    // Sets the file name for the statistics file.
-    stats.setFile("stats.txt");
-}
-
 auto main() -> int {
     // Configures the program.
     config();
@@ -300,31 +241,28 @@ auto main() -> int {
     // Reads any saved statistics from previous usage.
     stats.read();
 
-    bool quit = false;
-    do {
+    {
         // Layout configuration for the menu.
+        bool quit = false;
         fwn::Menu menu;
         menu.addLine("Welcome to Fun With Numbers");
         menu.addLine("Choose from the menu below:");
-        menu.addOption("A", checkNumberFeatures, " (A) Check number features");
-        menu.addOption("B", plotNumbers, " (B) Plot numbers");
-        menu.addOption("C", checkOverallStats, " (C) Check overall stats");
-        menu.addOption("D", plotNumbers2, " (D) [WIP] Plot numbers 2.0");
+        menu.addOption("a", checkNumberFeatures, " (A) Check number features");
+        menu.addOption("b", plotNumbers, " (B) Plot numbers");
+        menu.addOption("c", checkOverallStats, " (C) Check overall stats");
         menu.addLine();
-        menu.addOption("X", [&quit]() { quit = true; }, " (X) Save and exit");
+        menu.addOption("x", [&quit]() -> void { quit = true; }, " (X) Save and exit");
         menu.addLine("Choice: ");
 
-        // Renders the menu.
-        menu.render();
+        do {
+            // Renders the menu.
+            menu.render();
 
-        // Receives a choice from the user.
-        std::string choice;
-        std::getline(std::cin, choice);
+            // Receives a choice from the user and executes it.
+            menu.execute(fwn::readLine());
 
-        // Executes the given choice.
-        menu.execute(choice);
-
-    } while (!quit);
+        } while (!quit);
+    }
 
     // Saves the statistics to a file.
     stats.save();
