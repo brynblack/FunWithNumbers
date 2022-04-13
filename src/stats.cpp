@@ -4,55 +4,29 @@
 #include <iostream>
 
 namespace fwn {
-    // Adds a new statistic.
-    auto Stats::add(const std::string &name, std::string description) -> void {
-        this->stats.emplace(name, Stat { name, std::move(description), 0 });
+    Stats::Stat::Stat(std::string description, const long long &value) : description(std::move(description)), value(value) { }
+
+    auto Stats::Stat::getDescription() const -> const std::string & {
+        return this->description;
     }
 
-    // Returns a statistic object.
-    auto Stats::stat(const std::string &name) -> Stat & {
-        try { return this->stats.at(name); }
-        catch (const std::out_of_range &oor) {
-            std::cout << "ERROR: Stat \"" << name << "\" is not registered, registering..." << "\n";
-            this->stats.emplace(name, Stat { name, "Lorem Ipsum", 0 });
-            return this->stats.at(name);
-        }
+    auto Stats::Stat::getValue() const -> const long long & {
+        return this->value;
     }
 
-    // TODO(Brynley): Figure out if there is a way to avoid pointers, maybe something like references
-    // Returns a vector containing all the registered statistics.
-    auto Stats::getAll() const -> std::vector<std::unique_ptr<Stat>> {
-        std::vector<std::unique_ptr<Stat>> vecStats;
-        // TODO(Brynley): Stats menu is in reverse, and the stats file is in reverse; it might be something to do with this
-        // TODO: THIS IS STARTING FROM ELEMENT 0 IN THE MAP, AND IS MOVING THE FIRST ELEMENT TO THE BACK OF THE VECTOR
-        // USE A REVERSE FOR LOOP
-        for (const auto &stat : this->stats) {
-            vecStats.push_back(std::make_unique<Stat>(stat.second));
-        }
-        return vecStats;
+    auto Stats::Stat::setValue(const long long &val) -> void {
+        this->value = val;
     }
 
-    // Reads a statistic file.
-    auto Stats::read() -> void {
-        std::ifstream statsFile(this->fileName, std::ifstream::in);
-        if (!statsFile.is_open()) { return; }
-        std::string line;
-        std::vector<long long> lines;
-        while (std::getline(statsFile, line)) {
-            try { lines.push_back(std::stoll(line)); }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
-        }
-        statsFile.close();
-        if (lines.size() < this->stats.size()) { return; }
-        size_t i = 0;
-        for (auto &stat : this->stats) {
-            stat.second.setValue(lines.at(i));
-            i++;
-        }
+    auto Stats::add(const std::string &name, std::string desc) -> void {
+        this->stats.emplace(name, Stat {std::move(desc), 0 });
+        this->names.push_back(name);
     }
 
-    // Saves a statistics file.
+    auto Stats::getNames() const -> const std::vector<std::string> & {
+        return this->names;
+    }
+
     auto Stats::save() const -> void {
         std::ofstream statsFile(this->fileName, std::ostream::out);
         for (const auto &stat : this->stats) {
@@ -65,26 +39,32 @@ namespace fwn {
         this->fileName = std::move(name);
     }
 
-    // The constructor of the statistic.
-    Stats::Stat::Stat(std::string name, std::string description, const long long &value) : name(std::move(name)), description(std::move(description)), value(value) { }
-
-    // Returns the description of the statistic.
-    auto Stats::Stat::getDescription() const -> const std::string & {
-        return this->description;
+    auto Stats::stat(const std::string &name) -> Stat & {
+        try { return this->stats.at(name); }
+        catch (const std::out_of_range &oor) {
+            std::cout << "ERROR: The stat \"" << name << "\" is not registered. The program will now exit." << "\n";
+            exit(-1);
+        }
     }
 
-    // Returns the name of the statistic.
-    auto Stats::Stat::getName() const -> const std::string & {
-        return this->name;
-    }
-
-    // Returns the value of the statistic.
-    auto Stats::Stat::getValue() const -> const long long & {
-        return this->value;
-    }
-
-    // Sets the value of the statistic.
-    auto Stats::Stat::setValue(const long long &value) -> void {
-        this->value = value;
+    auto Stats::read() -> void {
+        std::ifstream statsFile(this->fileName, std::ifstream::in);
+        if (!statsFile.is_open()) { return; }
+        std::vector<long long> lines;
+        {
+            std::string line;
+            while (std::getline(statsFile, line)) {
+                try { lines.push_back(std::stoll(line)); }
+                catch (const std::invalid_argument &oor) { continue; }
+                catch (const std::out_of_range &oor) { continue; }
+            }
+        }
+        statsFile.close();
+        if (lines.size() < this->stats.size()) { return; }
+        size_t i = 0;
+        for (const auto &name: this->names) {
+            this->stats.at(name).setValue(lines.at(i));
+            i++;
+        }
     }
 } // namespace fwn

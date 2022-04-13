@@ -24,9 +24,11 @@ namespace fwn {
        public:
            auto addPoint(const int &x, const int &y) -> void;
 
-           [[nodiscard]] auto build() const -> std::vector<std::string>;
+           [[nodiscard]] auto build() -> std::vector<std::string>;
 
-           auto reset() -> void;
+           [[nodiscard]] auto getDomain() const -> const std::pair<int, int> &;
+           [[nodiscard]] auto getPoints() const -> const std::vector<Point> &;
+           [[nodiscard]] auto getRange() const -> const std::pair<int, int> &;
 
            auto setDomain(const int &nx, const int &px) -> void;
            auto setRange(const int &ny, const int &py) -> void;

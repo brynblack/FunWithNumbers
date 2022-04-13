@@ -8,8 +8,10 @@
 
 namespace fwn {
     // Clears the screen.
-    inline auto clearScreen() -> void {
-        std::cout << "\033[2J\033[1;1H";
+    inline auto readLine() -> std::string {
+        std::string input;
+        std::getline(std::cin, input);
+        return input;
     }
 
     // Converts a vector to a string.
