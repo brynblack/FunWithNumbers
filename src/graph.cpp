@@ -22,6 +22,7 @@ namespace fwn {
         std::vector<std::string> lines;
 
         const auto nums_domain = (this->domain.second - this->domain.first) + 1;
+//        const auto nums_range = (this->range.second - this->range.first) + 1;
 
         const size_t max_chars_x = fwn::countChars(fwn::findLargestNumber(this->domain.first, this->domain.second));
         const size_t max_chars_y = fwn::countChars(fwn::findLargestNumber(this->range.first, this->range.second));
@@ -29,7 +30,10 @@ namespace fwn {
         const size_t num_gap = max_chars_x + 1; // The interval between each number.
         const size_t plot_start = 1 + max_chars_y + 1; // The offset from the left until the start of where points can be plotted.
 
-        lines.emplace_back(std::string(plot_start + (std::floor(nums_domain / 2) * num_gap - num_gap * 2), ' ') + "x axis");
+        const size_t x_label_os = num_gap * -2; // The x-axis label offset.
+        const size_t x_centre = std::floor(nums_domain / 2); // The centre of the x-axis.
+
+        lines.emplace_back(std::string(plot_start + x_centre * num_gap + x_label_os, ' ') + "x axis");
 
         {
             std::string line = std::string(plot_start, ' ');
@@ -40,14 +44,14 @@ namespace fwn {
             lines.emplace_back(line);
         }
 
-        lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + (nums_domain * num_gap) + 1, '-'));
+        lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + nums_domain * num_gap + 1, '-'));
 
         std::sort(this->points.begin(), this->points.end(), [](Point const &a, Point const &b) {
             return a.getX() < b.getX();
         });
         for (auto i = this->range.first; i <= this->range.second; i++) {
             {
-                std::string line = std::string((plot_start - 1) - fwn::countChars(i), ' ') + std::to_string(i) + "|";
+                std::string line = std::string(plot_start - 1 - fwn::countChars(i), ' ') + std::to_string(i) + "|";
                 int offset = 0;
                 for (const auto &point: this->points) {
                     auto x = point.getX();

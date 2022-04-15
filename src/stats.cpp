@@ -23,8 +23,12 @@ namespace fwn {
         this->names.push_back(name);
     }
 
-    auto Stats::getNames() const -> const std::vector<std::string> & {
-        return this->names;
+    auto Stats::getStats() -> std::vector<Stat *> {
+        std::vector<Stat *> vStats;
+        for (auto &stat : this->stats) {
+            vStats.push_back(&stat.second);
+        }
+        return vStats;
     }
 
     auto Stats::save() const -> void {

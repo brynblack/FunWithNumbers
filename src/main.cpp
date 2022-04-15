@@ -34,20 +34,6 @@
 // TODO: Try to somehow avoid this as a global variable.
 fwn::Stats stats;
 
-// Configures the program.
-auto config() -> void {
-    // Adds the following statistics that will be used in the program.
-    stats.add("numbersEntered", "Numbers entered");
-    stats.add("numbersTotal", "Total of numbers");
-    stats.add("numbersAverage", "Average of numbers");
-    stats.add("smallestNumber", "Smallest number entered");
-    stats.add("largestNumber", "Largest number entered");
-    stats.add("coordinatesPlotted", "Coordinates plotted");
-
-    // Sets the file name for the statistics file.
-    stats.setFile("stats.txt");
-}
-
 // Evaluates and displays the features of a number.
 auto checkNumberFeatures() -> void {
     bool quit = false;
@@ -100,10 +86,8 @@ auto checkNumberFeatures() -> void {
         menu.addLine("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
         menu.addLine();
 
-        // Renders the menu.
+        // Renders the menu and waits for user input.
         menu.render();
-
-        // Waits for user input.
         menu.wait();
 
         // Breaks out of the loop.
@@ -201,10 +185,8 @@ auto plotNumbers() -> void {
             }
             menu.addLine("Press enter to return to the menu...");
 
-            // Renders the menu.
+            // Renders the menu and waits for user input.
             menu.render();
-
-            // Waits for user input.
             menu.wait();
 
             // Breaks out of the loop.
@@ -225,17 +207,52 @@ auto checkOverallStats() -> void {
     // Layout configuration for the menu.
     fwn::Menu menu;
     menu.addLine("Here are your statistics of overall use:");
-    for (const auto &name : stats.getNames()) {
-        const auto &stat = stats.stat(name);
-        menu.addLine(" " + stat.getDescription() + ": " + std::to_string(stat.getValue()));
+    for (const auto &stat : stats.getStats()) {
+        menu.addLine(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
     }
     menu.addLine();
 
-    // Renders the menu.
+    // Renders the menu and waits for user input.
     menu.render();
-
-    // Waits for user input.
     menu.wait();
+}
+
+// Shows the main menu.
+auto mainMenu() -> void {
+    // Layout configuration for the menu.
+    fwn::Menu menu;
+    bool quit = false;
+    menu.addLine("Welcome to Fun With Numbers");
+    menu.addLine("Choose from the menu below:");
+    menu.addOption("a", checkNumberFeatures, " (A) Check number features");
+    menu.addOption("b", plotNumbers, " (B) Plot numbers");
+    menu.addOption("c", checkOverallStats, " (C) Check overall stats");
+    menu.addLine();
+    menu.addOption("x", [&quit]() -> void { quit = true; }, " (X) Save and exit");
+    menu.addLine("Choice: ");
+
+    do {
+        // Renders the menu.
+        menu.render();
+
+        // Receives a choice from the user and executes it.
+        menu.execute(fwn::readLine());
+
+    } while (!quit);
+}
+
+// Configures the program.
+auto config() -> void {
+    // Adds the following statistics that will be used in the program.
+    stats.add("numbersEntered", "Numbers entered");
+    stats.add("numbersTotal", "Total of numbers");
+    stats.add("numbersAverage", "Average of numbers");
+    stats.add("smallestNumber", "Smallest number entered");
+    stats.add("largestNumber", "Largest number entered");
+    stats.add("coordinatesPlotted", "Coordinates plotted");
+
+    // Sets the file name for the statistics file.
+    stats.setFile("stats.txt");
 }
 
 auto main() -> int {
@@ -245,28 +262,8 @@ auto main() -> int {
     // Reads any saved statistics from previous usage.
     stats.read();
 
-    {
-        // Layout configuration for the menu.
-        bool quit = false;
-        fwn::Menu menu;
-        menu.addLine("Welcome to Fun With Numbers");
-        menu.addLine("Choose from the menu below:");
-        menu.addOption("a", checkNumberFeatures, " (A) Check number features");
-        menu.addOption("b", plotNumbers, " (B) Plot numbers");
-        menu.addOption("c", checkOverallStats, " (C) Check overall stats");
-        menu.addLine();
-        menu.addOption("x", [&quit]() -> void { quit = true; }, " (X) Save and exit");
-        menu.addLine("Choice: ");
-
-        do {
-            // Renders the menu.
-            menu.render();
-
-            // Receives a choice from the user and executes it.
-            menu.execute(fwn::readLine());
-
-        } while (!quit);
-    }
+    // Shows the main menu.
+    mainMenu();
 
     // Saves the statistics to a file.
     stats.save();
