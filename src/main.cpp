@@ -28,7 +28,6 @@
 #include <string>
 
 // TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran.
-// TODO(Brynley): Make graph axis labels render dynamically (x-axis done, y-axis needs to be done).
 // TODO(Brynley): Create your own website and clean up your GitHub profile.
 
 // TODO: Try to somehow avoid this as a global variable.
