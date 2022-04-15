@@ -28,7 +28,7 @@ namespace fwn {
         public:
             auto add(const std::string &name, std::string desc) -> void;
 
-            [[nodiscard]] auto getNames() const -> const std::vector<std::string> &;
+            auto getStats() -> std::vector<Stat *>;
 
             auto save() const -> void;
 
