@@ -25,8 +25,8 @@ namespace fwn {
 
     auto Stats::getStats() -> std::vector<Stat *> {
         std::vector<Stat *> vStats;
-        for (auto &stat : this->stats) {
-            vStats.push_back(&stat.second);
+        for (const auto &stat : this->names) {
+            vStats.push_back(&this->stats.at(stat));
         }
         return vStats;
     }
