@@ -10,11 +10,11 @@ namespace fwn {
         private:
             class Stat {
                 private:
-                    std::string description;
+                    std::string desc;
                     long long value;
 
                 public:
-                    Stat(std::string description, const long long &value);
+                    Stat(std::string &&desc, const long long &value);
 
                     [[nodiscard]] auto getDescription() const -> const std::string &;
                     [[nodiscard]] auto getValue() const -> const long long &;
@@ -26,13 +26,13 @@ namespace fwn {
             std::map<std::string, Stat> stats;
 
         public:
-            auto add(const std::string &name, std::string desc) -> void;
+            auto add(const std::string &name, std::string &&desc) -> void;
 
             auto getStats() -> std::vector<Stat *>;
 
             auto save() const -> void;
 
-            auto setFile(std::string name) -> void;
+            auto setFile(std::string &&name) -> void;
 
             auto stat(const std::string &name) -> Stat &;
 

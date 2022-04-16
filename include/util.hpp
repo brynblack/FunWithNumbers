@@ -7,13 +7,6 @@
 #include <vector>
 
 namespace fwn {
-    // Clears the screen.
-    inline auto readLine() -> std::string {
-        std::string input;
-        std::getline(std::cin, input);
-        return input;
-    }
-
     // Converts a vector to a string.
     template <typename T>
     auto convertVecToString(std::vector<T> v) -> std::string {

@@ -4,10 +4,10 @@
 #include <iostream>
 
 namespace fwn {
-    Stats::Stat::Stat(std::string description, const long long &value) : description(std::move(description)), value(value) { }
+    Stats::Stat::Stat(std::string &&desc, const long long &value) : desc(std::move(desc)), value(value) {}
 
     auto Stats::Stat::getDescription() const -> const std::string & {
-        return this->description;
+        return this->desc;
     }
 
     auto Stats::Stat::getValue() const -> const long long & {
@@ -18,8 +18,8 @@ namespace fwn {
         this->value = val;
     }
 
-    auto Stats::add(const std::string &name, std::string desc) -> void {
-        this->stats.emplace(name, Stat {std::move(desc), 0 });
+    auto Stats::add(const std::string &name, std::string &&desc) -> void {
+        this->stats.emplace(name, Stat { std::move(desc), 0 });
         this->names.push_back(name);
     }
 
@@ -39,7 +39,7 @@ namespace fwn {
         statsFile.close();
     }
 
-    auto Stats::setFile(std::string name) -> void {
+    auto Stats::setFile(std::string &&name) -> void {
         this->fileName = std::move(name);
     }
 

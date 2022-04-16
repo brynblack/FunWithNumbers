@@ -11,10 +11,10 @@ namespace fwn {
         private:
             class Option {
                 private:
-                    std::function<void()> function;
+                    std::function<void()> func;
 
                 public:
-                    explicit Option(std::function<void()> function);
+                    explicit Option(std::function<void()> &&func);
 
                     auto execute() const -> void;
             };
@@ -25,12 +25,14 @@ namespace fwn {
             auto addLine() -> void;
             auto addLine(const std::string &line) -> void;
 
-            auto addOption(std::string key, std::function<void()> func) -> void;
-            auto addOption(std::string key, std::function<void()> func, const std::string &desc) -> void;
+            auto addOption(std::string &&key, std::function<void()> &&func) -> void;
+            auto addOption(std::string &&key, std::function<void()> &&func, std::string &&desc) -> void;
 
             auto execute(std::string option) const -> void;
 
-            auto wait() const -> void;
+            static auto wait() -> void;
+
+            static auto readLine() -> std::string;
 
             auto render() const -> void;
 
