@@ -37,11 +37,10 @@ namespace fwn {
     auto Menu::render() const -> void {
         std::cout << "\033[2J\033[1;1H";
         for (const auto &line : this->lines) {
-            if (&line == &this->lines.back()) {
-                std::cout << line;
-                break;
+            std::cout << line;
+            if (&line != &this->lines.back()) {
+                std::cout << "\n";
             }
-            std::cout << line << "\n";
         }
     }
 
