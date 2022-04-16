@@ -18,8 +18,8 @@ namespace fwn {
         this->points.emplace_back(Point { x, y });
     }
 
-    auto Graph::build() -> std::vector<std::string> {
-        std::vector<std::string> lines;
+    auto Graph::build() -> void {
+        std::vector<std::string> _lines;
 
         const auto nums_domain = (this->domain.second - this->domain.first) + 1;
         const auto nums_range = (this->range.second - this->range.first) + 1;
@@ -36,7 +36,7 @@ namespace fwn {
         const std::string x_axis_title = "x axis";
         const std::string y_axis_title = "y axis";
 
-        lines.emplace_back(std::string(plot_start + x_centre * num_gap + x_label_os, ' ') + x_axis_title);
+        _lines.emplace_back(std::string(plot_start + x_centre * num_gap + x_label_os, ' ') + x_axis_title);
 
         {
             std::string line = std::string(plot_start, ' ');
@@ -44,10 +44,10 @@ namespace fwn {
                 auto spaces = max_chars_x - fwn::countChars(i) + 1;
                 line.append(std::string(spaces, ' ') + std::to_string(i));
             }
-            lines.emplace_back(line);
+            _lines.emplace_back(line);
         }
 
-        lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + nums_domain * num_gap + 1, '-'));
+        _lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + nums_domain * num_gap + 1, '-'));
 
         std::sort(this->points.begin(), this->points.end(), [](Point const &a, Point const &b) {
             return a.getX() < b.getX();
@@ -72,22 +72,26 @@ namespace fwn {
                         offset = (x - this->domain.first) + 1;
                     }
                 }
-                lines.emplace_back(line.append(std::string((nums_domain - offset) * num_gap, ' ') + "|"));
+                _lines.emplace_back(line.append(std::string((nums_domain - offset) * num_gap, ' ') + "|"));
             }
 
             a++;
             if (i != this->range.second) {
-                lines.emplace_back(y_axis_chars.at(a) + std::string(plot_start - 2, ' ') + "|" + std::string(nums_domain * num_gap, ' ') + "|");
+                _lines.emplace_back(y_axis_chars.at(a) + std::string(plot_start - 2, ' ') + "|" + std::string(nums_domain * num_gap, ' ') + "|");
             }
             a++;
         }
-        lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + (nums_domain * num_gap) + 1, '-'));
+        _lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + (nums_domain * num_gap) + 1, '-'));
 
-        return lines;
+        this->lines = std::move(_lines);
     }
 
     auto Graph::getDomain() const -> const std::pair<int, int> & {
         return this->domain;
+    }
+
+    auto Graph::getLines() const -> const std::vector<std::string> & {
+        return this->lines;
     }
 
     auto Graph::getPoints() const -> const std::vector<Point> & {

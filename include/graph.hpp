@@ -19,14 +19,16 @@ namespace fwn {
                    [[nodiscard]] auto getY() const -> const int &;
            };
            std::pair<int, int> domain, range;
+           std::vector<std::string> lines;
            std::vector<Point> points;
 
        public:
            auto addPoint(const int &x, const int &y) -> void;
 
-           [[nodiscard]] auto build() -> std::vector<std::string>;
+           auto build() -> void;
 
            [[nodiscard]] auto getDomain() const -> const std::pair<int, int> &;
+           [[nodiscard]] auto getLines() const -> const std::vector<std::string> &;
            [[nodiscard]] auto getPoints() const -> const std::vector<Point> &;
            [[nodiscard]] auto getRange() const -> const std::pair<int, int> &;
 

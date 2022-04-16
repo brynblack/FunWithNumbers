@@ -28,9 +28,7 @@
 #include <string>
 
 // TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran.
-// TODO(Brynley): Create your own website and clean up your GitHub profile.
 
-// TODO: Try to somehow avoid this as a global variable.
 fwn::Stats stats;
 
 // Evaluates and displays the features of a number.
@@ -46,7 +44,7 @@ auto checkNumberFeatures() -> void {
 
         // Receives a number from the user and restarts if it fails the following checks.
         long long number;
-        try { number = std::stoll(fwn::readLine()); }
+        try { number = std::stoll(fwn::Menu::readLine()); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
 
@@ -87,7 +85,7 @@ auto checkNumberFeatures() -> void {
 
         // Renders the menu and waits for user input.
         menu.render();
-        menu.wait();
+        fwn::Menu::wait();
 
         // Breaks out of the loop.
         quit = true;
@@ -104,10 +102,10 @@ auto plotNumbers() -> void {
 
     bool quit = false;
     do {
-        // TODO: Maybe add a replaceLine method to prevent repetition.
         // Layout configuration for the menu.
         fwn::Menu menu;
-        for (const auto &line : graph.build()) {
+        graph.build();
+        for (const auto &line : graph.getLines()) {
             menu.addLine(line);
         }
         menu.addLine("Enter a coordinate below to be added to the plot:");
@@ -118,7 +116,7 @@ auto plotNumbers() -> void {
 
         // Receives an x-coordinate from the user and restarts if it fails the following checks.
         int x;
-        try { x = std::stoi(fwn::readLine()); }
+        try { x = std::stoi(fwn::Menu::readLine()); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
         if (!fwn::withinRange(graph.getDomain(), x)) { continue; }
@@ -127,7 +125,7 @@ auto plotNumbers() -> void {
         menu.reset();
 
         // Layout configuration for the menu.
-        for (const auto &line : graph.build()) {
+        for (const auto &line : graph.getLines()) {
             menu.addLine(line);
         }
         menu.addLine("Enter a coordinate below to be added to the plot:");
@@ -139,7 +137,7 @@ auto plotNumbers() -> void {
 
         // Receives a y-coordinate from the user and restarts if it fails the following checks.
         int y;
-        try { y = std::stoi(fwn::readLine()); }
+        try { y = std::stoi(fwn::Menu::readLine()); }
         catch (const std::invalid_argument &oor) { continue; }
         catch (const std::out_of_range &oor) { continue; }
         if (!fwn::withinRange(graph.getRange(), y)) { continue; }
@@ -169,7 +167,8 @@ auto plotNumbers() -> void {
         menu.reset();
 
         // Layout configuration for the menu.
-        for (const auto &line : graph.build()) {
+        graph.build();
+        for (const auto &line : graph.getLines()) {
             menu.addLine(line);
         }
         menu.addLine("Do you wish to add another coordinate (y/n)? ");
@@ -179,14 +178,14 @@ auto plotNumbers() -> void {
             menu.reset();
 
             // Layout configuration for the menu.
-            for (const auto &line : graph.build()) {
+            for (const auto &line : graph.getLines()) {
                 menu.addLine(line);
             }
             menu.addLine("Press enter to return to the menu...");
 
             // Renders the menu and waits for user input.
             menu.render();
-            menu.wait();
+            fwn::Menu::wait();
 
             // Breaks out of the loop.
             quit = true;
@@ -196,7 +195,7 @@ auto plotNumbers() -> void {
         menu.render();
 
         // Receives a choice from the user and executes it.
-        menu.execute(fwn::readLine());
+        menu.execute(fwn::Menu::readLine());
 
     } while (!quit);
 }
@@ -213,7 +212,7 @@ auto checkOverallStats() -> void {
 
     // Renders the menu and waits for user input.
     menu.render();
-    menu.wait();
+    fwn::Menu::wait();
 }
 
 // Shows the main menu.
@@ -235,7 +234,7 @@ auto mainMenu() -> void {
         menu.render();
 
         // Receives a choice from the user and executes it.
-        menu.execute(fwn::readLine());
+        menu.execute(fwn::Menu::readLine());
 
     } while (!quit);
 }
