@@ -242,6 +242,9 @@ auto mainMenu() -> void {
 
 // Configures the program.
 auto config() -> void {
+    // Disable stdio stream synchronisation.
+    std::ios::sync_with_stdio(false);
+
     // Adds the following statistics that will be used in the program.
     stats.add("numbersEntered", "Numbers entered");
     stats.add("numbersTotal", "Total of numbers");
