@@ -1,7 +1,6 @@
 #ifndef FUNWITHNUMBERS_UTIL_HPP
 #define FUNWITHNUMBERS_UTIL_HPP
 
-#include <iostream>
 #include <iterator>
 #include <sstream>
 #include <vector>
@@ -123,4 +122,4 @@ namespace fwn {
     }
 } // namespace fwn
 
-#endif
+#endif // FUNWITHNUMBERS_UTIL_HPP
