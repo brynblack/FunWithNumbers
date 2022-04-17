@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.23)
 
 project(
     FunWithNumbers
-    VERSION 13.8.7.4
+    VERSION 14.8.7.4
     DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
     HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
     LANGUAGES CXX)
@@ -12,37 +12,37 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE STRING "Whether to export compile_com
 
 # Set default build type if not already set
 set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Build type" FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
+endif ()
 
 add_executable(FunWithNumbers)
 add_library(project_options INTERFACE)
 
 set_target_properties(FunWithNumbers
     PROPERTIES
-        CXX_EXTENSIONS OFF
-        RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/build/debug"
-        RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/build/release")
+    CXX_EXTENSIONS OFF
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/build/debug"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/build/release")
 
 target_compile_features(project_options
     INTERFACE
-        cxx_std_20)
+    cxx_std_20)
 
 target_link_options(project_options
     INTERFACE
-        "$<$<CONFIG:Debug>:-static;-Og;-g>"
-		"$<$<CONFIG:Release>:-static;-Ofast>")
+    "$<$<CONFIG:Debug>:-static;-Og;-g>"
+    "$<$<CONFIG:Release>:-static;-Ofast>")
 
 target_compile_options(project_options
-	INTERFACE
-		-Wall -Wextra)
+    INTERFACE
+    -Wall -Wextra)
 # Check if compiler supports Interprocedural Optimization, and enable if it is supported
 include(CheckIPOSupported)
 check_ipo_supported(RESULT result)
-if(result)
+if (result)
     set_target_properties(FunWithNumbers PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
-endif()
+endif ()
 
 add_subdirectory(src)

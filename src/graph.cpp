@@ -4,7 +4,7 @@
 #include <cmath>
 
 namespace fwn {
-    Graph::Point::Point(const int &x_coord, const int &y_coord) : x(x_coord), y(y_coord) { }
+    Graph::Point::Point(const int &x_coord, const int &y_coord) : x(x_coord), y(y_coord) {}
 
     auto Graph::Point::getX() const -> const int & {
         return this->x;
@@ -28,7 +28,8 @@ namespace fwn {
         const size_t max_chars_y = fwn::countChars(fwn::findLargestNumber(this->range.first, this->range.second));
 
         const size_t num_gap = max_chars_x + 1; // The interval between each number.
-        const size_t plot_start = 1 + max_chars_y + 1; // The offset from the left until the start of where points can be plotted.
+        const size_t plot_start =
+                1 + max_chars_y + 1; // The offset from the left until the start of where points can be plotted.
 
         const size_t x_label_os = num_gap * -2; // The x-axis label offset.
         const size_t x_centre = std::floor(nums_domain / 2); // The centre of the x-axis.
@@ -53,16 +54,19 @@ namespace fwn {
             return a.getX() < b.getX();
         });
         std::vector<std::string> y_axis_chars(nums_range * 2 - 1, " ");
-        const auto y_offset = std::ceil(y_axis_chars.size() / 2 - y_axis_title.size() / 3 - 1); // The centre of the y-axis.
+        const auto y_offset = std::ceil(
+                y_axis_chars.size() / 2 - y_axis_title.size() / 3 - 1); // The centre of the y-axis.
         int b = 0;
-        for (const auto &c : y_axis_title) {
+        for (const auto &c: y_axis_title) {
             y_axis_chars.at(y_offset + b) = c;
             b++;
         }
         int a = 0;
         for (auto i = this->range.first; i <= this->range.second; i++) {
             {
-                std::string line = y_axis_chars.at(a) + std::string(plot_start - 2 - fwn::countChars(i), ' ') + std::to_string(i) + "|";
+                std::string line =
+                        y_axis_chars.at(a) + std::string(plot_start - 2 - fwn::countChars(i), ' ') + std::to_string(i) +
+                        "|";
                 int offset = 0;
                 for (const auto &point: this->points) {
                     auto x = point.getX();
@@ -77,7 +81,8 @@ namespace fwn {
 
             a++;
             if (i != this->range.second) {
-                _lines.emplace_back(y_axis_chars.at(a) + std::string(plot_start - 2, ' ') + "|" + std::string(nums_domain * num_gap, ' ') + "|");
+                _lines.emplace_back(y_axis_chars.at(a) + std::string(plot_start - 2, ' ') + "|" +
+                                    std::string(nums_domain * num_gap, ' ') + "|");
             }
             a++;
         }

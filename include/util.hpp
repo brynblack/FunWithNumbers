@@ -61,8 +61,8 @@ namespace fwn {
     template <typename T>
     constexpr auto isEven(const T &n) -> bool {
         // Returns true if the number does not have a remainder,
-		// and false if the number has a remainder.
-		return n % 2 == 0;
+        // and false if the number has a remainder.
+        return n % 2 == 0;
     }
 
     // Evaluates whether a number is prime or not.
@@ -84,8 +84,8 @@ namespace fwn {
     // Evaluates all possible factors of a given number.
     template <typename T>
     auto getFactors(const T &n) -> std::vector<T> {
-		// If the number is prime, it only has two factors.
-		if (isPrime(n)) { return std::vector<T> { 1, n }; }
+        // If the number is prime, it only has two factors.
+        if (isPrime(n)) { return std::vector<T> { 1, n }; }
 
         std::vector<T> factors;
         // Applies this algorithm if the number is positive.
@@ -97,7 +97,7 @@ namespace fwn {
                 }
             }
         }
-        // Applies this algorithm if the number is negative.
+            // Applies this algorithm if the number is negative.
         else if (n < 0) {
             for (T i = -1; i * i * -1 >= n; i--) {
                 if (n % i == 0) {
@@ -106,7 +106,7 @@ namespace fwn {
                 }
             }
         }
-        // Appends 0 to vector if the number is zero.
+            // Appends 0 to vector if the number is zero.
         else { factors.push_back(0); }
 
         // Sorts the vector of factors in ascending order.

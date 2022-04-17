@@ -25,7 +25,7 @@ namespace fwn {
 
     auto Stats::getStats() -> std::vector<Stat *> {
         std::vector<Stat *> vStats;
-        for (const auto &stat : this->names) {
+        for (const auto &stat: this->names) {
             vStats.push_back(&this->stats.at(stat));
         }
         return vStats;
@@ -33,7 +33,7 @@ namespace fwn {
 
     auto Stats::save() const -> void {
         std::ofstream statsFile(this->fileName, std::ostream::out);
-        for (const auto &stat : this->stats) {
+        for (const auto &stat: this->stats) {
             statsFile << stat.second.getValue() << "\n";
         }
         statsFile.close();
@@ -46,7 +46,7 @@ namespace fwn {
     auto Stats::stat(const std::string &name) -> Stat & {
         try { return this->stats.at(name); }
         catch (const std::out_of_range &oor) {
-            std::cout << "ERROR: The stat \"" << name << "\" is not registered. The program will now exit." << "\n";
+            std::cerr << "ERROR: The stat \"" << name << "\" is not registered. The program will now exit." << "\n";
             exit(-1);
         }
     }
