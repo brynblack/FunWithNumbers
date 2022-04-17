@@ -21,7 +21,8 @@
 // SOFTWARE.
 
 #include "graph.hpp"
-#include "menu.hpp"
+#include "io.hpp"
+#include "options.hpp"
 #include "stats.hpp"
 #include "util.hpp"
 
@@ -31,61 +32,53 @@
 
 fwn::Stats stats;
 
-// Evaluates and displays the features of a number.
+// Evaluates and displays the features of a given number.
 auto checkNumberFeatures() -> void {
     bool quit = false;
     do {
-        // Layout configuration for the menu.
-        fwn::Menu menu;
-        menu.addLine("Please enter a whole number that will be checked over: ");
-
-        // Renders the menu.
-        menu.render();
-
-        // Receives a number from the user and restarts if it fails the following checks.
-        long long number;
-        try { number = std::stoll(fwn::Menu::readLine()); }
-        catch (const std::invalid_argument &oor) { continue; }
-        catch (const std::out_of_range &oor) { continue; }
-
         {
-            // Retrieves required statistics into variables.
-            auto &numbersEntered = stats.stat("numbersEntered");
-            auto &numbersTotal = stats.stat("numbersTotal");
-            auto &numbersAverage = stats.stat("numbersAverage");
-            auto &smallestNumber = stats.stat("smallestNumber");
-            auto &largestNumber = stats.stat("largestNumber");
+            // Clears the screen.
+            fwn::clear();
 
-            // Updates the statistics.
-            numbersEntered.setValue(numbersEntered.getValue() + 1);
-            numbersTotal.setValue(numbersTotal.getValue() + number);
-            numbersAverage.setValue(numbersTotal.getValue() / numbersEntered.getValue());
-            smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
-            largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
+            // Receives a number from the user and runs the following checks.
+            long long number;
+            try { number = std::stoll(fwn::input("Please enter a whole number that will be checked over: ")); }
+            catch (const std::invalid_argument &oor) { continue; }
+            catch (const std::out_of_range &oor) { continue; }
+
+            {
+                // Retrieves relevant statistics into variables.
+                auto &numbersEntered = stats.stat("numbersEntered");
+                auto &numbersTotal = stats.stat("numbersTotal");
+                auto &numbersAverage = stats.stat("numbersAverage");
+                auto &smallestNumber = stats.stat("smallestNumber");
+                auto &largestNumber = stats.stat("largestNumber");
+
+                // Updates the statistics.
+                numbersEntered.setValue(numbersEntered.getValue() + 1);
+                numbersTotal.setValue(numbersTotal.getValue() + number);
+                numbersAverage.setValue(numbersTotal.getValue() / numbersEntered.getValue());
+                smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
+                largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
+            }
+
+            {
+                // Retrieves the features of the given number into variables.
+                const auto &sign = fwn::getSign(number);
+                const auto &even = fwn::isEven(number);
+                const auto &factors = fwn::convertVecToString(fwn::getFactors(number));
+                const auto &prime = fwn::isPrime(number);
+
+                // Displays the features of the number.
+                fwn::print("");
+                fwn::print("The features of " + std::to_string(number) + " are...");
+                fwn::print("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
+                fwn::print("  " + std::string(even ? "Even" : "Odd"));
+                fwn::print("  Factors are  " + factors);
+                fwn::print("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
+                fwn::input("");
+            }
         }
-
-        // Retrieves the features of the given number into variables.
-        const auto &sign = fwn::getSign(number);
-        const auto &even = fwn::isEven(number);
-        const auto &factors = fwn::convertVecToString(fwn::getFactors(number));
-        const auto &prime = fwn::isPrime(number);
-
-        // Resets the menu layout.
-        menu.reset();
-
-        // Layout configuration for the menu.
-        menu.addLine("Please enter a whole number that will be checked over: " + std::to_string(number));
-        menu.addLine();
-        menu.addLine("The features of " + std::to_string(number) + " are...");
-        menu.addLine("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
-        menu.addLine("  " + std::string(even ? "Even" : "Odd"));
-        menu.addLine("  Factors are  " + factors);
-        menu.addLine("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
-        menu.addLine();
-
-        // Renders the menu and waits for user input.
-        menu.render();
-        fwn::Menu::wait();
 
         // Breaks out of the loop.
         quit = true;
@@ -95,146 +88,141 @@ auto checkNumberFeatures() -> void {
 
 // Plots given coordinates on a graph.
 auto plotNumbers() -> void {
-    // Sets the size of the graph.
     fwn::Graph graph;
+
+    // Sets the constraints of the graph.
     graph.setDomain(1, 38);
     graph.setRange(1, 12);
 
     bool quit = false;
     do {
-        // Layout configuration for the menu.
-        fwn::Menu menu;
+        // Clears the screen.
+        fwn::clear();
+
+        // Builds the graph.
         graph.build();
-        for (const auto &line : graph.getLines()) {
-            menu.addLine(line);
+
+        // Displays the graph.
+        for (const auto &line: graph.getLines()) {
+            fwn::print(line);
         }
-        menu.addLine("Enter a coordinate below to be added to the plot:");
-        menu.addLine("x axis: ");
-
-        // Renders the menu.
-        menu.render();
-
-        // Receives an x-coordinate from the user and restarts if it fails the following checks.
-        int x;
-        try { x = std::stoi(fwn::Menu::readLine()); }
-        catch (const std::invalid_argument &oor) { continue; }
-        catch (const std::out_of_range &oor) { continue; }
-        if (!fwn::withinRange(graph.getDomain(), x)) { continue; }
-
-        // Resets the menu layout.
-        menu.reset();
-
-        // Layout configuration for the menu.
-        for (const auto &line : graph.getLines()) {
-            menu.addLine(line);
-        }
-        menu.addLine("Enter a coordinate below to be added to the plot:");
-        menu.addLine("x axis: " + std::to_string(x));
-        menu.addLine("y axis: ");
-
-        // Renders the menu.
-        menu.render();
-
-        // Receives a y-coordinate from the user and restarts if it fails the following checks.
-        int y;
-        try { y = std::stoi(fwn::Menu::readLine()); }
-        catch (const std::invalid_argument &oor) { continue; }
-        catch (const std::out_of_range &oor) { continue; }
-        if (!fwn::withinRange(graph.getRange(), y)) { continue; }
-
-        // Restarts if the coordinate given is already plotted on the graph.
-        bool duplicate = false;
-        for (const auto &point : graph.getPoints()) {
-            if (point.getX() == x && point.getY() == y) {
-                duplicate = true;
-                break;
-            }
-        }
-        if (duplicate) { continue; }
+        fwn::print("Enter a coordinate below to be added to the plot:");
 
         {
-            // Retrieves required statistics into variables.
-            auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
+            // Receives an x-coordinate from the user and runs the following checks.
+            int x;
+            try { x = std::stoi(fwn::input("x axis: ")); }
+            catch (const std::invalid_argument &oor) { continue; }
+            catch (const std::out_of_range &oor) { continue; }
+            if (!fwn::withinRange(graph.getDomain(), x)) { continue; }
 
-            // Updates the statistics.
-            coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
-        }
+            // Receives a y-coordinate from the user and runs the following checks.
+            int y;
+            try { y = std::stoi(fwn::input("y axis: ")); }
+            catch (const std::invalid_argument &oor) { continue; }
+            catch (const std::out_of_range &oor) { continue; }
+            if (!fwn::withinRange(graph.getRange(), y)) { continue; }
 
-        // Adds the point to the graph.
-        graph.addPoint(x, y);
-
-        // Resets the menu layout.
-        menu.reset();
-
-        // Layout configuration for the menu.
-        graph.build();
-        for (const auto &line : graph.getLines()) {
-            menu.addLine(line);
-        }
-        menu.addLine("Do you wish to add another coordinate (y/n)? ");
-        // TODO(Brynley): Use a reference instead of copy by value.
-        menu.addOption("n", [&graph, menu, &quit]() mutable -> void {
-            // Resets the menu layout.
-            menu.reset();
-
-            // Layout configuration for the menu.
-            for (const auto &line : graph.getLines()) {
-                menu.addLine(line);
+            // Checks if the coordinate given is already plotted on the graph.
+            bool duplicate = false;
+            for (const auto &point: graph.getPoints()) {
+                if (point.getX() == x && point.getY() == y) {
+                    duplicate = true;
+                    break;
+                }
             }
-            menu.addLine("Press enter to return to the menu...");
+            if (duplicate) { continue; }
 
-            // Renders the menu and waits for user input.
-            menu.render();
-            fwn::Menu::wait();
+            {
+                // Retrieves required statistics into variables.
+                auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
+
+                // Updates the statistics.
+                coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
+            }
+
+            // Adds the point to the graph.
+            graph.addPoint(x, y);
+        }
+
+        // Clears the screen.
+        fwn::clear();
+
+        // Builds the graph.
+        graph.build();
+
+        fwn::Options options;
+
+        // Options configuration.
+        options.add("n", [&graph, &quit]() -> void {
+            // Clears the screen.
+            fwn::clear();
+
+            // Displays the graph.
+            for (const auto &line: graph.getLines()) {
+                fwn::print(line);
+            }
+
+            // Waits for user input.
+            fwn::input("Press enter to return to the menu...");
 
             // Breaks out of the loop.
             quit = true;
+
         });
 
-        // Renders the menu.
-        menu.render();
+        // Displays the graph.
+        for (const auto &line: graph.getLines()) {
+            fwn::print(line);
+        }
 
         // Receives a choice from the user and executes it.
-        menu.execute(fwn::Menu::readLine());
+        options.execute(fwn::input("Do you wish to add another coordinate (y/n)? "));
 
     } while (!quit);
 }
 
 // Displays statistics relating to previous interactions.
 auto checkOverallStats() -> void {
-    // Layout configuration for the menu.
-    fwn::Menu menu;
-    menu.addLine("Here are your statistics of overall use:");
-    for (const auto &stat : stats.getStats()) {
-        menu.addLine(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
-    }
-    menu.addLine();
+    // Clears the screen.
+    fwn::clear();
 
-    // Renders the menu and waits for user input.
-    menu.render();
-    fwn::Menu::wait();
+    // Displays the overall statistics.
+    fwn::print("Here are your statistics of overall use:");
+    for (const auto &stat: stats.getStats()) {
+        fwn::print(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
+    }
+
+    // Waits for user input.
+    fwn::input("");
 }
 
 // Shows the main menu.
 auto mainMenu() -> void {
-    // Layout configuration for the menu.
-    fwn::Menu menu;
+    fwn::Options options;
     bool quit = false;
-    menu.addLine("Welcome to Fun With Numbers");
-    menu.addLine("Choose from the menu below:");
-    menu.addOption("a", checkNumberFeatures, " (A) Check number features");
-    menu.addOption("b", plotNumbers, " (B) Plot numbers");
-    menu.addOption("c", checkOverallStats, " (C) Check overall stats");
-    menu.addLine();
-    menu.addOption("x", [&quit]() -> void { quit = true; }, " (X) Save and exit");
-    menu.addLine("Choice: ");
+
+    // Options configuration.
+    options.add("a", checkNumberFeatures);
+    options.add("b", plotNumbers);
+    options.add("c", checkOverallStats);
+    options.add("x", [&quit]() -> void { quit = true; });
 
     do {
-        // Renders the menu.
-        menu.render();
+        // Clears the screen.
+        fwn::clear();
+
+        // Displays the menu.
+        fwn::print("Welcome to Fun With Numbers");
+        fwn::print("Choose from the menu below:");
+        fwn::print(" (A) Check number features");
+        fwn::print(" (B) Plot numbers");
+        fwn::print(" (C) Check overall stats");
+        fwn::print("");
+        fwn::print(" (X) Save and exit");
 
         // Receives a choice from the user and executes it.
-        menu.execute(fwn::Menu::readLine());
+        options.execute(fwn::input("Choice: "));
 
     } while (!quit);
 }
@@ -263,7 +251,7 @@ auto main() -> int {
     // Reads any saved statistics from previous usage.
     stats.read();
 
-    // Shows the main menu.
+    // Displays the main menu.
     mainMenu();
 
     // Saves the statistics to a file.

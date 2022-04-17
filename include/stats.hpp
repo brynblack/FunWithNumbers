@@ -17,10 +17,12 @@ namespace fwn {
                     Stat(std::string &&desc, const long long &value);
 
                     [[nodiscard]] auto getDescription() const -> const std::string &;
+
                     [[nodiscard]] auto getValue() const -> const long long &;
 
                     auto setValue(const long long &val) -> void;
             };
+
             std::string fileName;
             std::vector<std::string> names;
             std::map<std::string, Stat> stats;
@@ -40,4 +42,4 @@ namespace fwn {
     };
 } // namespace fwn
 
-#endif
+#endif // FUNWITHNUMBERS_STATS_HPP
