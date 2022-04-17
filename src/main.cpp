@@ -82,7 +82,6 @@ auto checkNumberFeatures() -> void {
 
         // Breaks out of the loop.
         quit = true;
-
     } while (!quit);
 }
 
@@ -168,7 +167,6 @@ auto plotNumbers() -> void {
 
             // Breaks out of the loop.
             quit = true;
-
         });
 
         // Displays the graph.
@@ -178,7 +176,6 @@ auto plotNumbers() -> void {
 
         // Receives a choice from the user and executes it.
         options.execute(fwn::input("Do you wish to add another coordinate (y/n)? "));
-
     } while (!quit);
 }
 
@@ -223,7 +220,6 @@ auto mainMenu() -> void {
 
         // Receives a choice from the user and executes it.
         options.execute(fwn::input("Choice: "));
-
     } while (!quit);
 }
 
