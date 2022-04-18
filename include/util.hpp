@@ -71,7 +71,7 @@ namespace fwn {
         if (n <= 1) { return false; }
 
         // Returns false if the number is divisible by any numbers from 2 to n.
-        for (T i = 2; i < n; i++) {
+        for (T i = 2; i < n; ++i) {
             if (n % i == 0) { return false; }
         }
 
@@ -89,7 +89,7 @@ namespace fwn {
         std::vector<T> factors;
         // Applies this algorithm if the number is positive.
         if (n > 0) {
-            for (T i = 1; i * i <= n; i++) {
+            for (T i = 1; i * i <= n; ++i) {
                 if (n % i == 0) {
                     factors.push_back(i);
                     if (n / i != i) { factors.push_back(n / i); }
@@ -98,7 +98,7 @@ namespace fwn {
         }
             // Applies this algorithm if the number is negative.
         else if (n < 0) {
-            for (T i = -1; i * i * -1 >= n; i--) {
+            for (T i = -1; i * i * -1 >= n; --i) {
                 if (n % i == 0) {
                     factors.push_back(i);
                     if (n / i * -1 != i) { factors.push_back(n / i * -1); }
