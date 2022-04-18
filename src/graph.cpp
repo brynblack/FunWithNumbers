@@ -41,7 +41,7 @@ namespace fwn {
 
         {
             std::string line = std::string(plot_start, ' ');
-            for (auto i = this->domain.first; i <= this->domain.second; i++) {
+            for (auto i = this->domain.first; i <= this->domain.second; ++i) {
                 auto spaces = max_chars_x - fwn::countChars(i) + 1;
                 line.append(std::string(spaces, ' ') + std::to_string(i));
             }
@@ -54,15 +54,13 @@ namespace fwn {
             return a.getX() < b.getX();
         });
         std::vector<std::string> y_axis_chars(nums_range * 2 - 1, " ");
-        const auto y_offset = std::ceil(
-                y_axis_chars.size() / 2 - y_axis_title.size() / 3 - 1); // The centre of the y-axis.
-        int b = 0;
+        const auto y_offset = static_cast<long>(std::ceil(
+                y_axis_chars.size() / 2 - y_axis_title.size() / 3 - 1)); // The centre of the y-axis.
         for (const auto &c: y_axis_title) {
-            y_axis_chars.at(y_offset + b) = c;
-            b++;
+            y_axis_chars.at(y_offset + (&c - &y_axis_title.front())) = c;
         }
         int a = 0;
-        for (auto i = this->range.first; i <= this->range.second; i++) {
+        for (auto i = this->range.first; i <= this->range.second; ++i) {
             {
                 std::string line =
                         y_axis_chars.at(a) + std::string(plot_start - 2 - fwn::countChars(i), ' ') + std::to_string(i) +
@@ -79,12 +77,12 @@ namespace fwn {
                 _lines.emplace_back(line.append(std::string((nums_domain - offset) * num_gap, ' ') + "|"));
             }
 
-            a++;
+            ++a;
             if (i != this->range.second) {
                 _lines.emplace_back(y_axis_chars.at(a) + std::string(plot_start - 2, ' ') + "|" +
                                     std::string(nums_domain * num_gap, ' ') + "|");
             }
-            a++;
+            ++a;
         }
         _lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + (nums_domain * num_gap) + 1, '-'));
 

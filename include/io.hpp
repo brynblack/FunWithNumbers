@@ -17,8 +17,8 @@ namespace fwn {
     }
 
     template <typename T>
-    auto print(const T &str, const std::string &end = "\n") -> void {
-        std::cout << str << end;
+    auto print(const T &str) -> void {
+        std::cout << str << "\n";
     }
 } // namespace fwn
 

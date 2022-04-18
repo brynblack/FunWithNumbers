@@ -24,8 +24,6 @@ namespace fwn {
             auto add(std::string &&option, std::function<void()> &&func) -> void;
 
             auto execute(std::string option) const -> void;
-
-            auto reset() -> void;
     };
 } // namespace fwn
 

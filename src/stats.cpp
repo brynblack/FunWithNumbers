@@ -52,23 +52,23 @@ namespace fwn {
     }
 
     auto Stats::read() -> void {
-        std::ifstream statsFile(this->fileName, std::ifstream::in);
-        if (!statsFile.is_open()) { return; }
         std::vector<long long> lines;
         {
-            std::string line;
-            while (std::getline(statsFile, line)) {
-                try { lines.push_back(std::stoll(line)); }
-                catch (const std::invalid_argument &oor) { continue; }
-                catch (const std::out_of_range &oor) { continue; }
+            std::ifstream statsFile(this->fileName, std::ifstream::in);
+            if (!statsFile.is_open()) { return; }
+            {
+                std::string line;
+                while (std::getline(statsFile, line)) {
+                    try { lines.push_back(std::stoll(line)); }
+                    catch (const std::invalid_argument &oor) { continue; }
+                    catch (const std::out_of_range &oor) { continue; }
+                }
             }
+            statsFile.close();
         }
-        statsFile.close();
         if (lines.size() < this->stats.size()) { return; }
-        size_t i = 0;
         for (const auto &name: this->names) {
-            this->stats.at(name).setValue(lines.at(i));
-            i++;
+            this->stats.at(name).setValue(lines.at(&name - &this->names.front()));
         }
     }
 } // namespace fwn

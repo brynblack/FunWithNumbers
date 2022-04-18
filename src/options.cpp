@@ -19,8 +19,4 @@ namespace fwn {
         try { this->choices.at(option).execute(); }
         catch (const std::out_of_range &oor) { return; }
     }
-
-    auto Options::reset() -> void {
-        this->choices.clear();
-    }
 } // namespace fwn
