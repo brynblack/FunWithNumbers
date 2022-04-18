@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.23)
 
 project(
     FunWithNumbers
-    VERSION 14.9.7.5
+    VERSION 14.9.7.6
     DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
     HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
     LANGUAGES CXX)
@@ -32,8 +32,8 @@ target_compile_features(project_options
 
 target_link_options(project_options
     INTERFACE
-    "$<$<CONFIG:Debug>:-static;-Og;-g>"
-    "$<$<CONFIG:Release>:-static;-Ofast>")
+    "$<$<CONFIG:Debug>:-g;-Og;-static>"
+    "$<$<CONFIG:Release>:-Ofast;-s;-static>")
 
 target_compile_options(project_options
     INTERFACE
