@@ -70,8 +70,8 @@ namespace fwn {
         // Returns false if the number is less than or equal to 1.
         if (n <= 1) { return false; }
 
-        // Returns false if the number is divisible by any numbers from 2 to n.
-        for (T i = 2; i < n; ++i) {
+        // Returns false if the number is divisible by any numbers from 2 to sqrt(n).
+        for (T i = 2; i * i <= n; ++i) {
             if (n % i == 0) { return false; }
         }
 
@@ -79,14 +79,11 @@ namespace fwn {
         return true;
     }
 
-    // TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran on a number
     // Evaluates all possible factors of a given number.
     template <typename T>
     auto getFactors(const T &n) -> std::vector<T> {
-        // If the number is prime, it only has two factors.
-        if (isPrime(n)) { return std::vector<T> { 1, n }; }
-
         std::vector<T> factors;
+
         // Applies this algorithm if the number is positive.
         if (n > 0) {
             for (T i = 1; i * i <= n; ++i) {
