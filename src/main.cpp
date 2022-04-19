@@ -120,15 +120,17 @@ auto plotNumbers() -> void {
             catch (const std::out_of_range &oor) { continue; }
             if (!fwn::withinRange(graph.getRange(), y)) { continue; }
 
-            // Checks if the coordinate given is already plotted on the graph.
-            bool duplicate = false;
-            for (const auto &point: graph.getPoints()) {
-                if (point.getX() == x && point.getY() == y) {
-                    duplicate = true;
-                    break;
+            {
+                // Checks if the coordinate given is already plotted on the graph.
+                bool duplicate = false;
+                for (const auto &point: graph.getPoints()) {
+                    if (point.getX() == x && point.getY() == y) {
+                        duplicate = true;
+                        break;
+                    }
                 }
+                if (duplicate) { continue; }
             }
-            if (duplicate) { continue; }
 
             {
                 // Retrieves required statistics into variables.
