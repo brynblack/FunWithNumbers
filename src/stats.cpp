@@ -33,8 +33,8 @@ namespace fwn {
 
     auto Stats::save() const -> void {
         std::ofstream statsFile(this->fileName, std::ostream::out);
-        for (const auto &stat: this->stats) {
-            statsFile << stat.second.getValue() << "\n";
+        for (const auto &name: this->names) {
+            statsFile << stats.at(name).getValue() << "\n";
         }
         statsFile.close();
     }

@@ -28,8 +28,6 @@
 
 #include <string>
 
-// TODO(Brynley): Fix bug where specific numbers crash the program when getFactors is ran.
-
 fwn::Stats stats;
 
 // Evaluates and displays the features of a given number.
