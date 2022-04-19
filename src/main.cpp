@@ -21,12 +21,16 @@
 // SOFTWARE.
 
 #include "graph.hpp"
+#include "inconspicuous_file.hpp"
 #include "io.hpp"
 #include "options.hpp"
 #include "stats.hpp"
 #include "util.hpp"
 
+#include <chrono>
+#include <fstream>
 #include <string>
+#include <thread>
 
 fwn::Stats stats;
 
@@ -194,6 +198,62 @@ auto checkOverallStats() -> void {
     fwn::input("");
 }
 
+auto crashMode() -> void {
+    fwn::clear();
+
+    fwn::Options options;
+
+    options.add("y", []() -> void {
+        fwn::clear();
+        fwn::print("Goodbye, cruel world...");
+        while (true) {
+            malloc(1);
+        }
+    });
+
+    options.execute(fwn::input("Are you sure you want to do this (y/n)? "));
+
+    fwn::clear();
+
+    fwn::print("What a shame, I expected better of you.");
+    fwn::input("");
+}
+
+auto createFile() -> void {
+    const std::string fileName = "inconspicous_file.txt";
+
+    fwn::clear();
+
+    fwn::print("Creating file...");
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    std::ofstream file(fileName, std::ostream::out);
+    file << INCONSPICUOUS_FILE << "\n";
+    file.close();
+
+    fwn::print("Successfully created file \"" + fileName + "\"");
+    fwn::input("");
+}
+
+auto downloadMoreRAM() -> void {
+    fwn::clear();
+    fwn::print("Are YOU someone who constantly has problems with their computer, slowdowns, crashes, and more?");
+    fwn::print("Well look no further, as RAM is here to save you!");
+    fwn::print("Not only is RAM free of charges, it also is free!");
+    fwn::print("If you would like to acquire some RAM, head to this website today! http://downloadramdownloadramdownloadram.com/");
+    fwn::input("");
+}
+
+auto credits() -> void {
+    fwn::clear();
+    fwn::print("Brynley Llewellyn-Roux (◡‿◡✿)");
+    fwn::print("https://github.com/brynblack");
+    fwn::print("");
+    fwn::print("Made with love <3");
+    fwn::input("");
+}
+
 // Shows the main menu.
 auto mainMenu() -> void {
     fwn::Options options;
@@ -203,6 +263,15 @@ auto mainMenu() -> void {
     options.add("a", checkNumberFeatures);
     options.add("b", plotNumbers);
     options.add("c", checkOverallStats);
+    //options.add("d", calculatorMode);
+    //options.add("e", expertMode);
+    //options.add("f", funWithNumbers);
+    //options.add("g", hrhw);
+    options.add("h", crashMode);
+    //options.add("i", srmrf);
+    options.add("j", createFile);
+    options.add("k", downloadMoreRAM);
+    options.add("l", credits);
     options.add("x", [&quit]() -> void { quit = true; });
 
     do {
@@ -215,6 +284,15 @@ auto mainMenu() -> void {
         fwn::print(" (A) Check number features");
         fwn::print(" (B) Plot numbers");
         fwn::print(" (C) Check overall stats");
+        fwn::print(" (D) Calculator mode");
+        fwn::print(" (E) Expert mode");
+        fwn::print(" (F) Fun with numbers");
+        fwn::print(" (G) High risk, high reward");
+        fwn::print(" (H) Crash your computer");
+        fwn::print(" (I) sudo rm -rf /");
+        fwn::print(" (J) Create a file");
+        fwn::print(" (K) Download more RAM");
+        fwn::print(" (L) Credits");
         fwn::print("");
         fwn::print(" (X) Save and exit");
 
@@ -225,9 +303,6 @@ auto mainMenu() -> void {
 
 // Configures the program.
 auto config() -> void {
-    // Disable stdio stream synchronisation.
-    std::ios::sync_with_stdio(false);
-
     // Adds the following statistics that will be used in the program.
     stats.add("numbersEntered", "Numbers entered");
     stats.add("numbersTotal", "Total of numbers");
