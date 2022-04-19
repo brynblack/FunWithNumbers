@@ -76,7 +76,7 @@ auto checkNumberFeatures() -> void {
                 fwn::print("The features of " + std::to_string(number) + " are...");
                 fwn::print("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
                 fwn::print("  " + std::string(even ? "Even" : "Odd"));
-                fwn::print("  Factors are  " + factors);
+                fwn::print("  Factors are " + factors);
                 fwn::print("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
                 fwn::input("");
             }
@@ -179,7 +179,7 @@ auto plotNumbers() -> void {
         }
 
         // Receives a choice from the user and executes it.
-        options.execute(fwn::input("Do you wish to add another coordinate (y/n)? "));
+        options.execute(fwn::input("Do you wish to add another coordinate (Y/n)? "));
     } while (!quit);
 }
 
@@ -211,7 +211,7 @@ auto crashMode() -> void {
         }
     });
 
-    options.execute(fwn::input("Are you sure you want to do this (y/n)? "));
+    options.execute(fwn::input("Are you sure you want to do this (y/N)? "));
 
     fwn::clear();
 
@@ -279,7 +279,7 @@ auto mainMenu() -> void {
         fwn::clear();
 
         // Displays the menu.
-        fwn::print("Welcome to Fun With Numbers");
+        fwn::print("Welcome to Fun With Numbers!");
         fwn::print("Choose from the menu below:");
         fwn::print(" (A) Check number features");
         fwn::print(" (B) Plot numbers");
