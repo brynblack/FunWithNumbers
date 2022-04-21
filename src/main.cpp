@@ -40,7 +40,12 @@ auto checkNumberFeatures() -> void {
 
             // Receives a number from the user and runs the following checks.
             long long number;
-            try { number = std::stoll(fwn::input("Please enter a whole number that will be checked over: ")); }
+            try {
+                size_t size;
+                std::string input = fwn::input("Please enter a whole number that will be checked over: ");
+                number = std::stoll(input, &size);
+                if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
+            }
             catch (const std::invalid_argument &oor) { continue; }
             catch (const std::out_of_range &oor) { continue; }
 
@@ -108,17 +113,27 @@ auto plotNumbers() -> void {
         {
             // Receives an x-coordinate from the user and runs the following checks.
             int x;
-            try { x = std::stoi(fwn::input("x axis: ")); }
+            try {
+                size_t size;
+                std::string input = fwn::input("x axis: ");
+                x = std::stoi(input, &size);
+                if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
+                if (!fwn::withinRange(graph.getDomain(), x)) { throw std::out_of_range("Coordinate out of range"); }
+            }
             catch (const std::invalid_argument &oor) { continue; }
             catch (const std::out_of_range &oor) { continue; }
-            if (!fwn::withinRange(graph.getDomain(), x)) { continue; }
 
             // Receives a y-coordinate from the user and runs the following checks.
             int y;
-            try { y = std::stoi(fwn::input("y axis: ")); }
+            try {
+                size_t size;
+                std::string input = fwn::input("y axis: ");
+                y = std::stoi(input, &size);
+                if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
+                if (!fwn::withinRange(graph.getRange(), y)) { throw std::out_of_range("Coordinate out of range"); }
+            }
             catch (const std::invalid_argument &oor) { continue; }
             catch (const std::out_of_range &oor) { continue; }
-            if (!fwn::withinRange(graph.getRange(), y)) { continue; }
 
             {
                 // Checks if the coordinate given is already plotted on the graph.
