@@ -15,14 +15,17 @@ namespace fwn {
                 public:
                     explicit Option(std::function<void()> &&func);
 
+                    // Executes the option.
                     auto execute() const -> void;
             };
 
             std::map<std::string, Option> choices;
 
         public:
+            // Adds a new option.
             auto add(std::string &&option, std::function<void()> &&func) -> void;
 
+            // Executes a given option.
             auto execute(std::string option) const -> void;
     };
 } // namespace fwn
