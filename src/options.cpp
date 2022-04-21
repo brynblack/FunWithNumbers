@@ -3,7 +3,7 @@
 #include <iostream>
 
 namespace fwn {
-    Options::Option::Option(std::function<void()> &&function) : func(std::move(function)) {}
+    Options::Option::Option(std::function<void()> &&func) : func(std::move(func)) {}
 
     auto Options::Option::execute() const -> void {
         this->func();
