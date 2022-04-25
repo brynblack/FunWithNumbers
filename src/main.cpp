@@ -69,7 +69,7 @@ auto checkNumberFeatures() -> void {
                 // Retrieves the features of the given number into variables.
                 const auto &sign = fwn::getSign(number);
                 const auto &even = fwn::isEven(number);
-                const auto &factors = fwn::convertVecToString(fwn::getFactors(number));
+                const auto &divisors = fwn::convertVecToString(fwn::getDivisors(number));
                 const auto &prime = fwn::isPrime(number);
 
                 // Displays the features of the number.
@@ -77,7 +77,7 @@ auto checkNumberFeatures() -> void {
                 fwn::print("The features of " + std::to_string(number) + " are...");
                 fwn::print("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
                 fwn::print("  " + std::string(even ? "Even" : "Odd"));
-                fwn::print("  Factors are  " + factors);
+                fwn::print("  Factors are  " + divisors);
                 fwn::print("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
                 fwn::input("");
             }
