@@ -79,37 +79,31 @@ namespace fwn {
         return true;
     }
 
-    // Evaluates all possible factors of a given number.
+    // Evaluates all possible divisors of a given number.
     template <typename T>
-    auto getFactors(const T &n) -> std::vector<T> {
-        std::vector<T> factors;
+    auto getDivisors(T n) -> std::vector<T> {
+        // Converts n to an absolute value.
+        n = std::abs(n);
 
-        // Applies this algorithm if the number is positive.
-        if (n > 0) {
-            for (T i = 1; i * i <= n; ++i) {
-                if (n % i == 0) {
-                    factors.push_back(i);
-                    if (n / i != i) { factors.push_back(n / i); }
+        std::vector<T> divisors;
+
+        // Optimised version of the Trial Division algorithm.
+        for (T i = 1; i * i <= n; ++i) {
+            if (n % i == 0) {
+                divisors.push_back(i * -1);
+                divisors.push_back(i);
+                if (n / i != i) {
+                    divisors.push_back(n / i * -1);
+                    divisors.push_back(n / i);
                 }
             }
         }
-            // Applies this algorithm if the number is negative.
-        else if (n < 0) {
-            for (T i = -1; i * i * -1 >= n; --i) {
-                if (n % i == 0) {
-                    factors.push_back(i);
-                    if (n / i * -1 != i) { factors.push_back(n / i * -1); }
-                }
-            }
-        }
-            // Appends 0 to vector if the number is zero.
-        else { factors.push_back(0); }
 
-        // Sorts the vector of factors in ascending order.
-        std::sort(factors.begin(), factors.end());
+        // Sorts the divisors in ascending order.
+        std::sort(divisors.begin(), divisors.end());
 
-        // Returns the factors as a vector.
-        return factors;
+        // Returns the vector of divisors.
+        return divisors;
     }
 
     // Determines if a value is within the range of two values.
