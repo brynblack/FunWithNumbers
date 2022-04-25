@@ -1,5 +1,5 @@
-#ifndef FUNWITHNUMBERS_UTIL_HPP
-#define FUNWITHNUMBERS_UTIL_HPP
+#ifndef FWN_UTIL_HPP
+#define FWN_UTIL_HPP
 
 #include <iterator>
 #include <sstream>
@@ -113,4 +113,4 @@ namespace fwn {
     }
 } // namespace fwn
 
-#endif // FUNWITHNUMBERS_UTIL_HPP
+#endif // FWN_UTIL_HPP

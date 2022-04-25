@@ -1,5 +1,5 @@
-#ifndef FUNWITHNUMBERS_STATS_HPP
-#define FUNWITHNUMBERS_STATS_HPP
+#ifndef FWN_STATS_HPP
+#define FWN_STATS_HPP
 
 #include <string>
 #include <map>
@@ -51,4 +51,4 @@ namespace fwn {
     };
 } // namespace fwn
 
-#endif // FUNWITHNUMBERS_STATS_HPP
+#endif // FWN_STATS_HPP

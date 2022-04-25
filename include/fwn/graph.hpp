@@ -1,5 +1,5 @@
-#ifndef FUNWITHNUMBERS_GRAPH_HPP
-#define FUNWITHNUMBERS_GRAPH_HPP
+#ifndef FWN_GRAPH_HPP
+#define FWN_GRAPH_HPP
 
 #include <string>
 #include <utility>
@@ -53,4 +53,4 @@ namespace fwn {
     };
 } // namespace fwn 
 
-#endif // FUNWITHNUMBERS_GRAPH_HPP
+#endif // FWN_GRAPH_HPP

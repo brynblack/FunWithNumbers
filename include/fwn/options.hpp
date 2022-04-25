@@ -1,5 +1,5 @@
-#ifndef FUNWITHNUMBERS_OPTIONS_HPP
-#define FUNWITHNUMBERS_OPTIONS_HPP
+#ifndef FWN_OPTIONS_HPP
+#define FWN_OPTIONS_HPP
 
 #include <functional>
 #include <map>
@@ -30,4 +30,4 @@ namespace fwn {
     };
 } // namespace fwn
 
-#endif // FUNWITHNUMBERS_OPTIONS_HPP
+#endif // FWN_OPTIONS_HPP
