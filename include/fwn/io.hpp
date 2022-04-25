@@ -1,5 +1,5 @@
-#ifndef FUNWITHNUMBERS_IO_HPP
-#define FUNWITHNUMBERS_IO_HPP
+#ifndef FWN_IO_HPP
+#define FWN_IO_HPP
 
 #include <iostream>
 
@@ -25,4 +25,4 @@ namespace fwn {
     }
 } // namespace fwn
 
-#endif // FUNWITHNUMBERS_IO_HPP
+#endif // FWN_IO_HPP

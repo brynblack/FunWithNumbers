@@ -1,5 +1,5 @@
-#include "graph.hpp"
-#include "util.hpp"
+#include "fwn/graph.hpp"
+#include "fwn/util.hpp"
 
 #include <cmath>
 
