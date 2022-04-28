@@ -22,6 +22,7 @@
 
 #include "fwn/graph.hpp"
 #include "fwn/io.hpp"
+#include "fwn/menu.hpp"
 #include "fwn/options.hpp"
 #include "fwn/stats.hpp"
 #include "fwn/util.hpp"
@@ -31,16 +32,19 @@
 fwn::Stats stats;
 
 // Evaluates and displays the features of a given number.
-auto checkNumberFeatures() -> void {
+auto checkNumberFeatures() -> void
+{
     bool quit = false;
-    do {
+    do
+    {
         {
             // Clears the screen.
             fwn::clear();
 
             // Receives a number from the user and runs the following checks.
             long long number;
-            try {
+            try
+            {
                 size_t size;
                 std::string input = fwn::input("Please enter a whole number that will be checked over: ");
                 number = std::stoll(input, &size);
@@ -85,11 +89,13 @@ auto checkNumberFeatures() -> void {
 
         // Breaks out of the loop.
         quit = true;
-    } while (!quit);
+    }
+    while (!quit);
 }
 
 // Plots given coordinates on a graph.
-auto plotNumbers() -> void {
+auto plotNumbers() -> void
+{
     fwn::Graph graph;
 
     // Sets the constraints of the graph.
@@ -97,7 +103,8 @@ auto plotNumbers() -> void {
     graph.setRange(1, 12);
 
     bool quit = false;
-    do {
+    do
+    {
         // Clears the screen.
         fwn::clear();
 
@@ -105,7 +112,8 @@ auto plotNumbers() -> void {
         graph.build();
 
         // Displays the graph.
-        for (const auto &line: graph.getLines()) {
+        for (const auto &line: graph.getLines())
+        {
             fwn::print(line);
         }
         fwn::print("Enter a coordinate below to be added to the plot:");
@@ -113,7 +121,8 @@ auto plotNumbers() -> void {
         {
             // Receives an x-coordinate from the user and runs the following checks.
             int x;
-            try {
+            try
+            {
                 size_t size;
                 std::string input = fwn::input("x axis: ");
                 x = std::stoi(input, &size);
@@ -125,7 +134,8 @@ auto plotNumbers() -> void {
 
             // Receives a y-coordinate from the user and runs the following checks.
             int y;
-            try {
+            try
+            {
                 size_t size;
                 std::string input = fwn::input("y axis: ");
                 y = std::stoi(input, &size);
@@ -138,8 +148,10 @@ auto plotNumbers() -> void {
             {
                 // Checks if the coordinate given is already plotted on the graph.
                 bool duplicate = false;
-                for (const auto &point: graph.getPoints()) {
-                    if (point.getX() == x && point.getY() == y) {
+                for (const auto &point: graph.getPoints())
+                {
+                    if (point.getX() == x && point.getY() == y)
+                    {
                         duplicate = true;
                         break;
                     }
@@ -168,12 +180,14 @@ auto plotNumbers() -> void {
         fwn::Options options;
 
         // Options configuration.
-        options.add("n", [&graph, &quit]() -> void {
+        options.add("n", [&graph, &quit]() -> void
+        {
             // Clears the screen.
             fwn::clear();
 
             // Displays the graph.
-            for (const auto &line: graph.getLines()) {
+            for (const auto &line: graph.getLines())
+            {
                 fwn::print(line);
             }
 
@@ -185,23 +199,27 @@ auto plotNumbers() -> void {
         });
 
         // Displays the graph.
-        for (const auto &line: graph.getLines()) {
+        for (const auto &line: graph.getLines())
+        {
             fwn::print(line);
         }
 
         // Receives a choice from the user and executes it.
         options.execute(fwn::input("Do you wish to add another coordinate (y/n)? "));
-    } while (!quit);
+    }
+    while (!quit);
 }
 
 // Displays statistics relating to previous interactions.
-auto checkOverallStats() -> void {
+auto checkOverallStats() -> void
+{
     // Clears the screen.
     fwn::clear();
 
     // Displays the overall statistics.
     fwn::print("Here are your statistics of overall use:");
-    for (const auto &stat: stats.getStats()) {
+    for (const auto &stat: stats.getStats())
+    {
         fwn::print(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
     }
 
@@ -209,37 +227,30 @@ auto checkOverallStats() -> void {
     fwn::input("");
 }
 
-// Shows the main menu.
-auto mainMenu() -> void {
-    fwn::Options options;
+auto mainMenu() -> void
+{
+    fwn::Menu menu;
     bool quit = false;
 
-    // Options configuration.
-    options.add("a", checkNumberFeatures);
-    options.add("b", plotNumbers);
-    options.add("c", checkOverallStats);
-    options.add("x", [&quit]() -> void { quit = true; });
+    menu.add("Welcome to Fun With Numbers");
+    menu.add("Choose from the menu below:");
+    menu.add("a", "Check number features", checkNumberFeatures);
+    menu.add("b", "Plot numbers",          plotNumbers);
+    menu.add("c", "Check overall stats",   checkOverallStats);
+    menu.add();
+    menu.add("x", "Save and exit",         [&quit]() -> void { quit = true; });
+    menu.add("Choice: ");
 
-    do {
-        // Clears the screen.
-        fwn::clear();
-
-        // Displays the menu.
-        fwn::print("Welcome to Fun With Numbers");
-        fwn::print("Choose from the menu below:");
-        fwn::print(" (A) Check number features");
-        fwn::print(" (B) Plot numbers");
-        fwn::print(" (C) Check overall stats");
-        fwn::print("");
-        fwn::print(" (X) Save and exit");
-
-        // Receives a choice from the user and executes it.
-        options.execute(fwn::input("Choice: "));
-    } while (!quit);
+    do
+    {
+        menu.run();
+    }
+    while (!quit);
 }
 
 // Configures the program.
-auto config() -> void {
+auto config() -> void
+{
     // Disable stdio stream synchronisation.
     std::ios::sync_with_stdio(false);
 
@@ -255,7 +266,8 @@ auto config() -> void {
     stats.setFile("stats.txt");
 }
 
-auto main() -> int {
+auto main() -> int
+{
     // Configures the program.
     config();
 

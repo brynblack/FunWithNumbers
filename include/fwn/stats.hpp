@@ -1,14 +1,17 @@
 #ifndef FWN_STATS_HPP
 #define FWN_STATS_HPP
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
-namespace fwn {
-    class Stats {
+namespace fwn
+{
+    class Stats
+    {
         private:
-            class Stat {
+            class Stat
+            {
                 private:
                     std::string desc;
                     long long value;
