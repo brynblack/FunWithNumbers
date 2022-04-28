@@ -80,7 +80,7 @@ namespace fwn {
     }
 
     // Evaluates all possible divisors of a given number.
-    template <typename T>
+    template <std::integral T>
     auto getDivisors(T n) -> std::vector<T> {
         // Converts n to an absolute value.
         n = std::abs(n);
