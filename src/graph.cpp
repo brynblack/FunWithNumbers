@@ -6,19 +6,23 @@
 namespace fwn {
     Graph::Point::Point(const int &x_coord, const int &y_coord) : x(x_coord), y(y_coord) {}
 
-    auto Graph::Point::getX() const -> const int & {
+    auto Graph::Point::getX() const -> const int &
+    {
         return this->x;
     }
 
-    auto Graph::Point::getY() const -> const int & {
+    auto Graph::Point::getY() const -> const int &
+    {
         return this->y;
     }
 
-    auto Graph::addPoint(const int &x, const int &y) -> void {
+    auto Graph::addPoint(const int &x, const int &y) -> void
+    {
         this->points.emplace_back(Point { x, y });
     }
 
-    auto Graph::build() -> void {
+    auto Graph::build() -> void
+    {
         std::vector<std::string> _lines;
 
         const auto nums_domain = (this->domain.second - this->domain.first) + 1;
@@ -41,7 +45,8 @@ namespace fwn {
 
         {
             std::string line = std::string(plot_start, ' ');
-            for (auto i = this->domain.first; i <= this->domain.second; ++i) {
+            for (auto i = this->domain.first; i <= this->domain.second; ++i)
+            {
                 auto spaces = max_chars_x - fwn::countChars(i) + 1;
                 line.append(std::string(spaces, ' ') + std::to_string(i));
             }
@@ -50,26 +55,31 @@ namespace fwn {
 
         _lines.emplace_back(std::string(plot_start - 1, ' ') + std::string(1 + nums_domain * num_gap + 1, '-'));
 
-        std::sort(this->points.begin(), this->points.end(), [](Point const &a, Point const &b) {
+        std::sort(this->points.begin(), this->points.end(), [](Point const &a, Point const &b)
+        {
             return a.getX() < b.getX();
         });
         std::vector<std::string> y_axis_chars(nums_range * 2 - 1, " ");
         const auto y_offset = static_cast<long>(std::ceil(
                 y_axis_chars.size() / 2 - y_axis_title.size() / 3 - 1)); // The centre of the y-axis.
-        for (const auto &c: y_axis_title) {
+        for (const auto &c: y_axis_title)
+        {
             y_axis_chars.at(y_offset + (&c - &y_axis_title.front())) = c;
         }
         int a = 0;
-        for (auto i = this->range.first; i <= this->range.second; ++i) {
+        for (auto i = this->range.first; i <= this->range.second; ++i)
+        {
             {
                 std::string line =
                         y_axis_chars.at(a) + std::string(plot_start - 2 - fwn::countChars(i), ' ') + std::to_string(i) +
                         "|";
                 int offset = 0;
-                for (const auto &point: this->points) {
+                for (const auto &point: this->points)
+                {
                     auto x = point.getX();
                     auto y = point.getY();
-                    if (i == y) {
+                    if (i == y)
+                    {
                         line.append(std::string(((x - this->domain.first) + 1 - offset) * num_gap - 1, ' ') + "x");
                         offset = (x - this->domain.first) + 1;
                     }
@@ -78,7 +88,8 @@ namespace fwn {
             }
 
             ++a;
-            if (i != this->range.second) {
+            if (i != this->range.second)
+            {
                 _lines.emplace_back(y_axis_chars.at(a) + std::string(plot_start - 2, ' ') + "|" +
                                     std::string(nums_domain * num_gap, ' ') + "|");
             }
@@ -89,27 +100,33 @@ namespace fwn {
         this->lines = std::move(_lines);
     }
 
-    auto Graph::getDomain() const -> const std::pair<int, int> & {
+    auto Graph::getDomain() const -> const std::pair<int, int> &
+    {
         return this->domain;
     }
 
-    auto Graph::getLines() const -> const std::vector<std::string> & {
+    auto Graph::getLines() const -> const std::vector<std::string> &
+    {
         return this->lines;
     }
 
-    auto Graph::getPoints() const -> const std::vector<Point> & {
+    auto Graph::getPoints() const -> const std::vector<Point> &
+    {
         return this->points;
     }
 
-    auto Graph::getRange() const -> const std::pair<int, int> & {
+    auto Graph::getRange() const -> const std::pair<int, int> &
+    {
         return this->range;
     }
 
-    auto Graph::setDomain(const int &nx, const int &px) -> void {
+    auto Graph::setDomain(const int &nx, const int &px) -> void
+    {
         this->domain = std::make_pair(nx, px);
     }
 
-    auto Graph::setRange(const int &ny, const int &py) -> void {
+    auto Graph::setRange(const int &ny, const int &py) -> void
+    {
         this->range = std::make_pair(ny, py);
     }
 } // namespace fwn

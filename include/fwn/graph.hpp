@@ -5,10 +5,13 @@
 #include <utility>
 #include <vector>
 
-namespace fwn {
-    class Graph {
+namespace fwn
+{
+    class Graph
+    {
         private:
-            class Point {
+            class Point
+            {
                 private:
                     int x, y;
 
