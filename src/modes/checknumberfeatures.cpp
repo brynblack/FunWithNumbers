@@ -62,5 +62,4 @@ auto fwn::modes::checkNumberFeatures() -> void
         quit = true;
     }
     while (!quit);
-
 }
