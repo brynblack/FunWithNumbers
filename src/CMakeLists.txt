@@ -1,11 +1,11 @@
 target_sources(FunWithNumbers
     PRIVATE
-    buffer.cpp
-    graph.cpp
+    core/buffer.cpp
+    core/graph.cpp
     main.cpp
-    menu.cpp
-    options.cpp
-    stats.cpp)
+    core/menu.cpp
+    core/options.cpp
+    core/stats.cpp)
 
 target_include_directories(FunWithNumbers
     PRIVATE

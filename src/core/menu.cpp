@@ -1,5 +1,6 @@
-#include "fwn/menu.hpp"
-#include "fwn/io.hpp"
+#include "fwn/core/menu.hpp"
+#include "fwn/core/io.hpp"
+#include "fwn/core/util.hpp"
 
 auto fwn::Menu::add() -> void
 {
@@ -26,34 +27,26 @@ auto fwn::Menu::add(const std::string &opt, std::function<void()> &&func) -> voi
     this->Options::add(opt, std::move(func));
 }
 
-auto fwn::Menu::add(std::string &&opt, std::string &&desc, std::function<void()> &&func) -> void
+auto fwn::Menu::add(std::string &&opt, std::string &&line, std::function<void()> &&func) -> void
 {
-    auto temp = opt;
-    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-    this->Buffer::add(" (" + std::move(temp) + ") " + std::move(desc));
+    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + std::move(line));
     this->Options::add(std::move(opt), std::move(func));
 }
 
-auto fwn::Menu::add(const std::string &opt, std::string &&desc, std::function<void()> &&func) -> void
+auto fwn::Menu::add(const std::string &opt, std::string &&line, std::function<void()> &&func) -> void
 {
-    auto temp = opt;
-    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-    this->Buffer::add(" (" + std::move(temp) + ") " + std::move(desc));
+    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + std::move(line));
     this->Options::add(opt, std::move(func));
 }
-auto fwn::Menu::add(std::string &&opt, const std::string &desc, std::function<void()> &&func) -> void
+auto fwn::Menu::add(std::string &&opt, const std::string &line, std::function<void()> &&func) -> void
 {
-    auto temp = opt;
-    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-    this->Buffer::add(" (" + opt + ") " + desc);
+    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + line);
     this->Options::add(std::move(opt), std::move(func));
 }
 
-auto fwn::Menu::add(const std::string &opt, const std::string &desc, std::function<void()> &&func) -> void
+auto fwn::Menu::add(const std::string &opt, const std::string &line, std::function<void()> &&func) -> void
 {
-    auto temp = opt;
-    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-    this->Buffer::add(" (" + opt + ") " + desc);
+    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + line);
     this->Options::add(opt, std::move(func));
 }
 

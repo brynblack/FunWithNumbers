@@ -1,4 +1,4 @@
-#include "fwn/stats.hpp"
+#include "fwn/core/stats.hpp"
 
 #include <fstream>
 #include <iostream>
