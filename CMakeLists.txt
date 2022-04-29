@@ -22,6 +22,8 @@ add_library(project_options INTERFACE)
 
 set_target_properties(FunWithNumbers
     PROPERTIES
+    CXX_EXTENSIONS OFF
+    CXX_STANDARD 20
     RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/build/debug"
     RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/build/release")
 
