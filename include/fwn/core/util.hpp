@@ -99,11 +99,8 @@ namespace fwn
 
     // Evaluates all possible divisors of a given number.
     template <std::integral T>
-    auto getDivisors(T n) -> std::vector<T>
+    auto getDivisors(const T& n) -> std::vector<T>
     {
-        // Converts n to an absolute value.
-        n = std::abs(n);
-
         std::vector<T> divisors;
 
         // Optimised version of the Trial Division algorithm.
@@ -111,13 +108,8 @@ namespace fwn
         {
             if (n % i == 0)
             {
-                divisors.push_back(i * -1);
                 divisors.push_back(i);
-                if (n / i != i)
-                {
-                    divisors.push_back(n / i * -1);
-                    divisors.push_back(n / i);
-                }
+                if (n / i != i) { divisors.push_back(n / i); }
             }
         }
 
