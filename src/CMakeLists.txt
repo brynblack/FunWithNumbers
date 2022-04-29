@@ -7,6 +7,7 @@ target_sources(FunWithNumbers
     core/stats.cpp
     modes/checknumberfeatures.cpp
     modes/checkoverallstats.cpp
+    modes/credits.cpp
     modes/plotnumbers.cpp
     main.cpp
     variables.cpp)

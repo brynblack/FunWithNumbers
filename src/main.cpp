@@ -27,6 +27,7 @@
 
 #include "fwn/modes/checknumberfeatures.hpp"
 #include "fwn/modes/checkoverallstats.hpp"
+#include "fwn/modes/credits.hpp"
 #include "fwn/modes/plotnumbers.hpp"
 
 #include <string>
@@ -43,6 +44,7 @@ auto mainMenu() -> void
     menu.add("a", "Check number features", fwn::modes::checkNumberFeatures);
     menu.add("b", "Plot numbers",          fwn::modes::plotNumbers);
     menu.add("c", "Check overall stats",   fwn::modes::checkOverallStats);
+    menu.add("g", "Credits",               fwn::modes::credits);
     menu.add();
     menu.add("x", "Save and exit",         [&quit]() -> void { quit = true; });
     menu.add("Choice: ");
