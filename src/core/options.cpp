@@ -1,20 +1,23 @@
-#include "options.hpp"
+#include "fwn/core/options.hpp"
 
 #include <iostream>
 
 namespace fwn {
-    Options::Option::Option(std::function<void()> &&function) : func(std::move(function)) {}
+    Options::Option::Option(std::function<void()> &&func) : func(std::move(func)) {}
 
-    auto Options::Option::execute() const -> void {
+    auto Options::Option::execute() const -> void
+    {
         this->func();
     }
 
-    auto Options::add(std::string &&option, std::function<void()> &&func) -> void {
+    auto Options::add(std::string &&option, std::function<void()> &&func) -> void
+    {
         std::transform(option.begin(), option.end(), option.begin(), ::tolower);
         this->choices.emplace(std::move(option), Option { std::move(func) });
     }
 
-    auto Options::execute(std::string option) const -> void {
+    auto Options::execute(std::string option) const -> void
+    {
         std::transform(option.begin(), option.end(), option.begin(), ::tolower);
         try { this->choices.at(option).execute(); }
         catch (const std::out_of_range &oor) { return; }

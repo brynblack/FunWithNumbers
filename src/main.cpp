@@ -20,289 +20,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "graph.hpp"
-#include "inconspicuous_file.hpp"
-#include "io.hpp"
-#include "options.hpp"
-#include "stats.hpp"
-#include "util.hpp"
+#include "fwn/core/io.hpp"
+#include "fwn/core/menu.hpp"
 
-#include <chrono>
-#include <fstream>
+#include "fwn/variables.hpp"
+
+#include "fwn/modes/checknumberfeatures.hpp"
+#include "fwn/modes/checkoverallstats.hpp"
+#include "fwn/modes/credits.hpp"
+#include "fwn/modes/plotnumbers.hpp"
+
 #include <string>
-#include <thread>
 
-fwn::Stats stats;
-
-// Evaluates and displays the features of a given number.
-auto checkNumberFeatures() -> void {
+// Presents the main menu to the user.
+auto mainMenu() -> void
+{
+    fwn::Menu menu;
     bool quit = false;
-    do {
-        {
-            // Clears the screen.
-            fwn::clear();
 
-            // Receives a number from the user and runs the following checks.
-            long long number;
-            try { number = std::stoll(fwn::input("Please enter a whole number that will be checked over: ")); }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
+    // Adds the menu features.
+    menu.add("Welcome to Fun With Numbers");
+    menu.add("Choose from the menu below:");
+    menu.add("a", "Check number features", fwn::modes::checkNumberFeatures);
+    menu.add("b", "Plot numbers",          fwn::modes::plotNumbers);
+    menu.add("c", "Check overall stats",   fwn::modes::checkOverallStats);
+    menu.add("g", "Credits",               fwn::modes::credits);
+    menu.add();
+    menu.add("x", "Save and exit",         [&quit]() -> void { quit = true; });
+    menu.add("Choice: ");
 
-            {
-                // Retrieves relevant statistics into variables.
-                auto &numbersEntered = stats.stat("numbersEntered");
-                auto &numbersTotal = stats.stat("numbersTotal");
-                auto &numbersAverage = stats.stat("numbersAverage");
-                auto &smallestNumber = stats.stat("smallestNumber");
-                auto &largestNumber = stats.stat("largestNumber");
-
-                // Updates the statistics.
-                numbersEntered.setValue(numbersEntered.getValue() + 1);
-                numbersTotal.setValue(numbersTotal.getValue() + number);
-                numbersAverage.setValue(numbersTotal.getValue() / numbersEntered.getValue());
-                smallestNumber.setValue((number < smallestNumber.getValue()) ? number : smallestNumber.getValue());
-                largestNumber.setValue((number > largestNumber.getValue()) ? number : largestNumber.getValue());
-            }
-
-            {
-                // Retrieves the features of the given number into variables.
-                const auto &sign = fwn::getSign(number);
-                const auto &even = fwn::isEven(number);
-                const auto &factors = fwn::convertVecToString(fwn::getFactors(number));
-                const auto &prime = fwn::isPrime(number);
-
-                // Displays the features of the number.
-                fwn::print("");
-                fwn::print("The features of " + std::to_string(number) + " are...");
-                fwn::print("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
-                fwn::print("  " + std::string(even ? "Even" : "Odd"));
-                fwn::print("  Factors are " + factors);
-                fwn::print("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
-                fwn::input("");
-            }
-        }
-
-        // Breaks out of the loop.
-        quit = true;
-    } while (!quit);
-}
-
-// Plots given coordinates on a graph.
-auto plotNumbers() -> void {
-    fwn::Graph graph;
-
-    // Sets the constraints of the graph.
-    graph.setDomain(1, 38);
-    graph.setRange(1, 12);
-
-    bool quit = false;
-    do {
-        // Clears the screen.
-        fwn::clear();
-
-        // Builds the graph.
-        graph.build();
-
-        // Displays the graph.
-        for (const auto &line: graph.getLines()) {
-            fwn::print(line);
-        }
-        fwn::print("Enter a coordinate below to be added to the plot:");
-
-        {
-            // Receives an x-coordinate from the user and runs the following checks.
-            int x;
-            try { x = std::stoi(fwn::input("x axis: ")); }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
-            if (!fwn::withinRange(graph.getDomain(), x)) { continue; }
-
-            // Receives a y-coordinate from the user and runs the following checks.
-            int y;
-            try { y = std::stoi(fwn::input("y axis: ")); }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
-            if (!fwn::withinRange(graph.getRange(), y)) { continue; }
-
-            {
-                // Checks if the coordinate given is already plotted on the graph.
-                bool duplicate = false;
-                for (const auto &point: graph.getPoints()) {
-                    if (point.getX() == x && point.getY() == y) {
-                        duplicate = true;
-                        break;
-                    }
-                }
-                if (duplicate) { continue; }
-            }
-
-            {
-                // Retrieves required statistics into variables.
-                auto &coordinatesPlotted = stats.stat("coordinatesPlotted");
-
-                // Updates the statistics.
-                coordinatesPlotted.setValue(coordinatesPlotted.getValue() + 1);
-            }
-
-            // Adds the point to the graph.
-            graph.addPoint(x, y);
-        }
-
-        // Clears the screen.
-        fwn::clear();
-
-        // Builds the graph.
-        graph.build();
-
-        fwn::Options options;
-
-        // Options configuration.
-        options.add("n", [&graph, &quit]() -> void {
-            // Clears the screen.
-            fwn::clear();
-
-            // Displays the graph.
-            for (const auto &line: graph.getLines()) {
-                fwn::print(line);
-            }
-
-            // Waits for user input.
-            fwn::input("Press enter to return to the menu...");
-
-            // Breaks out of the loop.
-            quit = true;
-        });
-
-        // Displays the graph.
-        for (const auto &line: graph.getLines()) {
-            fwn::print(line);
-        }
-
-        // Receives a choice from the user and executes it.
-        options.execute(fwn::input("Do you wish to add another coordinate (Y/n)? "));
-    } while (!quit);
-}
-
-// Displays statistics relating to previous interactions.
-auto checkOverallStats() -> void {
-    // Clears the screen.
-    fwn::clear();
-
-    // Displays the overall statistics.
-    fwn::print("Here are your statistics of overall use:");
-    for (const auto &stat: stats.getStats()) {
-        fwn::print(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
+    do
+    {
+        // Runs the menu.
+        menu.run();
     }
-
-    // Waits for user input.
-    fwn::input("");
-}
-
-auto crashMode() -> void {
-    fwn::clear();
-
-    fwn::Options options;
-
-    options.add("y", []() -> void {
-        fwn::clear();
-        fwn::print("Goodbye, cruel world...");
-        while (true) {
-            malloc(1);
-        }
-    });
-
-    options.execute(fwn::input("Are you sure you want to do this (y/N)? "));
-
-    fwn::clear();
-
-    fwn::print("What a shame, I expected better of you.");
-    fwn::input("");
-}
-
-auto createFile() -> void {
-    const std::string fileName = "inconspicous_file.txt";
-
-    fwn::clear();
-
-    fwn::print("Creating file...");
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-    std::ofstream file(fileName, std::ostream::out);
-    file << INCONSPICUOUS_FILE << "\n";
-    file.close();
-
-    fwn::print("Successfully created file \"" + fileName + "\"");
-    fwn::input("");
-}
-
-auto downloadMoreRAM() -> void {
-    fwn::clear();
-    fwn::print("Are YOU someone who constantly has problems with their computer, slowdowns, crashes, and more?");
-    fwn::print("Well look no further, as RAM is here to save you!");
-    fwn::print("Not only is RAM free of charges, it also is free!");
-    fwn::print("If you would like to acquire some RAM, head to this website today! http://downloadramdownloadramdownloadram.com/");
-    fwn::input("");
-}
-
-auto credits() -> void {
-    fwn::clear();
-    fwn::print("Brynley Llewellyn-Roux (◡‿◡✿)");
-    fwn::print("https://github.com/brynblack");
-    fwn::print("");
-    fwn::print("Made with love <3");
-    fwn::input("");
-}
-
-// Shows the main menu.
-auto mainMenu() -> void {
-    fwn::Options options;
-    bool quit = false;
-
-    // Options configuration.
-    options.add("a", checkNumberFeatures);
-    options.add("b", plotNumbers);
-    options.add("c", checkOverallStats);
-    //options.add("d", calculatorMode);
-    //options.add("e", expertMode);
-    //options.add("f", funWithNumbers);
-    //options.add("g", hrhw);
-    options.add("h", crashMode);
-    //options.add("i", srmrf);
-    options.add("j", createFile);
-    options.add("k", downloadMoreRAM);
-    options.add("l", credits);
-    options.add("x", [&quit]() -> void { quit = true; });
-
-    do {
-        // Clears the screen.
-        fwn::clear();
-
-        // Displays the menu.
-        fwn::print("Welcome to Fun With Numbers!");
-        fwn::print("Choose from the menu below:");
-        fwn::print(" (A) Check number features");
-        fwn::print(" (B) Plot numbers");
-        fwn::print(" (C) Check overall stats");
-        fwn::print(" (D) Calculator mode");
-        fwn::print(" (E) Expert mode");
-        fwn::print(" (F) Fun with numbers");
-        fwn::print(" (G) High risk, high reward");
-        fwn::print(" (H) Crash your computer");
-        fwn::print(" (I) sudo rm -rf /");
-        fwn::print(" (J) Create a file");
-        fwn::print(" (K) Download more RAM");
-        fwn::print(" (L) Credits");
-        fwn::print("");
-        fwn::print(" (X) Save and exit");
-
-        // Receives a choice from the user and executes it.
-        options.execute(fwn::input("Choice: "));
-    } while (!quit);
+    while (!quit);
 }
 
 // Configures the program.
-auto config() -> void {
+auto config() -> void
+{
+    // Disable stdio stream synchronisation.
+    std::ios::sync_with_stdio(false);
+
     // Adds the following statistics that will be used in the program.
     stats.add("numbersEntered", "Numbers entered");
     stats.add("numbersTotal", "Total of numbers");
@@ -315,7 +75,8 @@ auto config() -> void {
     stats.setFile("stats.txt");
 }
 
-auto main() -> int {
+auto main() -> int
+{
     // Configures the program.
     config();
 

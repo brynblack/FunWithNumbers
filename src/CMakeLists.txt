@@ -1,9 +1,16 @@
 target_sources(FunWithNumbers
     PRIVATE
-    graph.cpp
+    core/buffer.cpp
+    core/graph.cpp
+    core/menu.cpp
+    core/options.cpp
+    core/stats.cpp
+    modes/checknumberfeatures.cpp
+    modes/checkoverallstats.cpp
+    modes/credits.cpp
+    modes/plotnumbers.cpp
     main.cpp
-    options.cpp
-    stats.cpp)
+    variables.cpp)
 
 target_include_directories(FunWithNumbers
     PRIVATE
