@@ -1,5 +1,5 @@
-#ifndef FWN_MENU_HPP
-#define FWN_MENU_HPP
+#ifndef FWN_CORE_CORE_MENU_HPP
+#define FWN_CORE_CORE_MENU_HPP
 
 #include "buffer.hpp"
 #include "options.hpp"
@@ -32,4 +32,4 @@ namespace fwn
     };
 } // namespace fwn
 
-#endif // FWN_MENU_HPP
+#endif // FWN_CORE_CORE_MENU_HPP

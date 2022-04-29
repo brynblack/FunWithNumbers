@@ -1,5 +1,5 @@
-#ifndef FWN_GRAPH_HPP
-#define FWN_GRAPH_HPP
+#ifndef FWN_CORE_GRAPH_HPP
+#define FWN_CORE_GRAPH_HPP
 
 #include <string>
 #include <utility>
@@ -56,4 +56,4 @@ namespace fwn
     };
 } // namespace fwn 
 
-#endif // FWN_GRAPH_HPP
+#endif // FWN_CORE_GRAPH_HPP

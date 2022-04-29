@@ -1,5 +1,5 @@
-#ifndef FWN_UTIL_HPP
-#define FWN_UTIL_HPP
+#ifndef FWN_CORE_UTIL_HPP
+#define FWN_CORE_UTIL_HPP
 
 #include <concepts>
 #include <iterator>
@@ -136,4 +136,4 @@ namespace fwn
     }
 } // namespace fwn
 
-#endif // FWN_UTIL_HPP
+#endif // FWN_CORE_UTIL_HPP

@@ -1,5 +1,5 @@
-#ifndef FWN_IO_HPP
-#define FWN_IO_HPP
+#ifndef FWN_CORE_IO_HPP
+#define FWN_CORE_IO_HPP
 
 #include <iostream>
 
@@ -50,4 +50,4 @@ namespace fwn
     }
 } // namespace fwn
 
-#endif // FWN_IO_HPP
+#endif // FWN_CORE_IO_HPP

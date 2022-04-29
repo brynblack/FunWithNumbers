@@ -1,5 +1,5 @@
-#ifndef FWN_STATS_HPP
-#define FWN_STATS_HPP
+#ifndef FWN_CORE_STATS_HPP
+#define FWN_CORE_STATS_HPP
 
 #include <map>
 #include <string>
@@ -54,4 +54,4 @@ namespace fwn
     };
 } // namespace fwn
 
-#endif // FWN_STATS_HPP
+#endif // FWN_CORE_STATS_HPP
