@@ -1,6 +1,7 @@
 #ifndef FWN_UTIL_HPP
 #define FWN_UTIL_HPP
 
+#include <concepts>
 #include <iterator>
 #include <sstream>
 #include <vector>
