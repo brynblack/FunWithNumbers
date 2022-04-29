@@ -1,5 +1,5 @@
-#ifndef FWN_OPTIONS_HPP
-#define FWN_OPTIONS_HPP
+#ifndef FWN_CORE_OPTIONS_HPP
+#define FWN_CORE_OPTIONS_HPP
 
 #include <functional>
 #include <map>
@@ -34,4 +34,4 @@ namespace fwn
     };
 } // namespace fwn
 
-#endif // FWN_OPTIONS_HPP
+#endif // FWN_CORE_OPTIONS_HPP

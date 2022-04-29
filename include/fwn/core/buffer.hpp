@@ -1,5 +1,5 @@
-#ifndef FWN_BUFFER_HPP
-#define FWN_BUFFER_HPP
+#ifndef FWN_CORE_BUFFER_HPP
+#define FWN_CORE_BUFFER_HPP
 
 #include <string>
 #include <vector>
@@ -26,4 +26,4 @@ namespace fwn
     };
 } // namespace fwn
 
-#endif // FWN_BUFFER_HPP
+#endif // FWN_CORE_BUFFER_HPP
