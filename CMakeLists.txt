@@ -20,10 +20,12 @@ endif ()
 add_executable(FunWithNumbers)
 add_library(project_options INTERFACE)
 
+set(CMAKE_CXX_STANDARD 20);
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE);
+
 set_target_properties(FunWithNumbers
     PROPERTIES
     CXX_EXTENSIONS OFF
-    CXX_STANDARD 20
     RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/build/debug"
     RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/build/release")
 
