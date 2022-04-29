@@ -3,7 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-namespace fwn {
+namespace fwn
+{
     Stats::Stat::Stat(std::string &&desc, const long long &value) : desc(std::move(desc)), value(value) {}
 
     auto Stats::Stat::getDescription() const -> const std::string &

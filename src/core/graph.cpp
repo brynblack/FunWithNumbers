@@ -3,7 +3,8 @@
 
 #include <cmath>
 
-namespace fwn {
+namespace fwn
+{
     Graph::Point::Point(const int &x_coord, const int &y_coord) : x(x_coord), y(y_coord) {}
 
     auto Graph::Point::getX() const -> const int &
