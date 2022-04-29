@@ -8,12 +8,14 @@ auto fwn::modes::credits() -> void
     fwn::clear();
 
     // Displays the credits.
-    fwn::print("Made with love <3");
-    fwn::print();
-    fwn::print("Brynley Llewellyn-Roux (◡‿◡✿)");
-    fwn::print("https://github.com/brynblack");
-    fwn::print();
-    fwn::print("Copyright (c) 2022 Brynley Llewellyn-Roux");
+    fwn::print("---------------------------------------------");
+    fwn::print("| Made with love <3                         |");
+    fwn::print("|                                           |");
+    fwn::print("| Brynley Llewellyn-Roux (◡‿◡✿)            |");
+    fwn::print("| https://github.com/brynblack              |");
+    fwn::print("|                                           |");
+    fwn::print("| Copyright (c) 2022 Brynley Llewellyn-Roux |");
+    fwn::print("---------------------------------------------");
 
     // Waits for user input.
     fwn::input();

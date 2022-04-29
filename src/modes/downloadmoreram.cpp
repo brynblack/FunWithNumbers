@@ -21,14 +21,18 @@ auto fwn::modes::downloadMoreRAM() -> void
     fwn::clear();
 
     // Displays the available options.
-    fwn::print("Available RAM options:");
-    fwn::print(" (1) 1024MB");
-    fwn::print(" (2) 2048MB");
-    fwn::print(" (3) 4096MB");
-    fwn::print(" (4) 18446744073709551615MB");
+    fwn::print("-------------------------------");
+    fwn::print("| Available RAM options:");
+    fwn::print("|  (1) 1024MB");
+    fwn::print("|  (2) 2048MB");
+    fwn::print("|  (3) 4096MB");
+    fwn::print("|  (4) 18446744073709551615MB");
+    fwn::print("-------------------------------");
 
     // Executes a given option.
-    options.execute(fwn::input("Please select an option: "));
+    options.execute(fwn::input("| Please select an option: "));
+
+    fwn::clear();
 
     // Begins "downloading" the RAM.
     fwn::printNow("Calculating available space...");

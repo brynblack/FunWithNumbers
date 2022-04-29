@@ -17,7 +17,8 @@ auto fwn::modes::checkNumberFeatures() -> void
             try
             {
                 size_t size;
-                std::string input = fwn::input("Please enter a whole number that will be checked over: ");
+                                    fwn::print("---------------------------------------------------------");
+                std::string input = fwn::input("| Please enter a whole number that will be checked over: ");
                 number = std::stoll(input, &size);
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
             }
@@ -48,13 +49,13 @@ auto fwn::modes::checkNumberFeatures() -> void
                 const auto &prime = fwn::isPrime(number);
 
                 // Displays the features of the number.
-                fwn::print("");
-                fwn::print("The features of " + std::to_string(number) + " are...");
-                fwn::print("  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
-                fwn::print("  " + std::string(even ? "Even" : "Odd"));
-                fwn::print("  Factors are  " + divisors);
-                fwn::print("  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
-                fwn::input("");
+                fwn::print("|");
+                fwn::print("| The features of " + std::to_string(number) + " are...");
+                fwn::print("|  " + std::string(sign > 0 ? "Positive" : (sign < 0 ? "Negative" : "Zero")));
+                fwn::print("|  " + std::string(even ? "Even" : "Odd"));
+                fwn::print("|  Factors are " + divisors);
+                fwn::print("|  " + std::string(prime ? "Is a prime number" : "Is not a prime number"));
+                fwn::input();
             }
         }
 

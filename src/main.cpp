@@ -42,8 +42,9 @@ auto mainMenu() -> void
     bool quit = false;
 
     // Adds the menu features.
-    menu.add("Welcome to Fun With Numbers");
+    menu.add("Welcome to Fun With Numbers!");
     menu.add("Choose from the menu below:");
+    menu.add("----------------------------");
     menu.add("a", "Check number features", fwn::modes::checkNumberFeatures);
     menu.add("b", "Plot numbers", fwn::modes::plotNumbers);
     menu.add("c", "Check overall stats", fwn::modes::checkOverallStats);
@@ -53,6 +54,7 @@ auto mainMenu() -> void
     menu.add("g", "Credits", fwn::modes::credits);
     menu.add();
     menu.add("x", "Save and exit", [&quit]() -> void { quit = true; });
+    menu.add("----------------------------");
     menu.add("Choice: ");
 
     do

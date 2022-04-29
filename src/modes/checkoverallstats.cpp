@@ -10,10 +10,11 @@ auto fwn::modes::checkOverallStats() -> void
     fwn::clear();
 
     // Displays the overall statistics.
-    fwn::print("Here are your statistics of overall use:");
+    fwn::print("-------------------------------------------");
+    fwn::print("| Here are your statistics of overall use:");
     for (const auto &stat: stats.getStats())
     {
-        fwn::print(" " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
+        fwn::print("|  " + stat->getDescription() + ": " + std::to_string(stat->getValue()));
     }
 
     // Waits for user input.

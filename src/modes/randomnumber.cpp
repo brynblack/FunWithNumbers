@@ -28,7 +28,8 @@ auto fwn::modes::randomNumber() -> void
         try
         {
             size_t size;
-            std::string input = fwn::input("Pick a number between " + std::to_string(nums.first) + " and " + std::to_string(nums.second) + ": ");
+            fwn::print("------------------------------------");
+            std::string input = fwn::input("| Pick a number between " + std::to_string(nums.first) + " and " + std::to_string(nums.second) + ": ");
             answer = std::stoull(input, &size);
             if (answer < nums.first || answer > nums.second)
             {
@@ -43,13 +44,13 @@ auto fwn::modes::randomNumber() -> void
         // Otherwise, the number is randomised again and the process restarts.
         if (answer == value)
         {
-            fwn::print("You guessed the number!");
+            fwn::print("| You guessed the number!");
             value = distN(rng);
         }
         else
         {
-            fwn::print("You got it wrong!");
-            fwn::print("Your answer was " + std::string(answer > value ? "higher" : "lower") + " than the actual number.");
+            fwn::print("| You got it wrong!");
+            fwn::print("| Your answer was " + std::string(answer > value ? "higher" : "lower") + " than the actual number.");
         }
 
         fwn::Options options;
@@ -61,7 +62,8 @@ auto fwn::modes::randomNumber() -> void
         });
 
         // Executes a given option.
-        options.execute(fwn::input("Would you like to continue (Y/n)? "));
+        fwn::print("|-----------------------------------");
+        options.execute(fwn::input("| Would you like to continue (Y/n)? "));
     }
     while (!quit);
 }
