@@ -18,11 +18,11 @@ auto fwn::modes::checkNumberFeatures() -> void
             {
                 size_t size;
                 std::string input = fwn::input("Please enter a whole number that will be checked over: ");
-                number = std::stoll(input, &size);
+                number = std::stoi(input, &size);
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
             }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
+            catch (const std::invalid_argument &oor) { exit(-1); }
+            catch (const std::out_of_range &oor) { exit(-1); }
 
             {
                 // Retrieves relevant statistics into variables.

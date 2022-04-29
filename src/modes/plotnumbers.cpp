@@ -42,8 +42,8 @@ auto fwn::modes::plotNumbers() -> void
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
                 if (!fwn::withinRange(graph.getDomain(), x)) { throw std::out_of_range("Coordinate out of range"); }
             }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
+            catch (const std::invalid_argument &oor) { exit(-1); }
+            catch (const std::out_of_range &oor) { exit(-1); }
 
             // Receives a y-coordinate from the user and runs the following checks.
             int y;
@@ -55,22 +55,8 @@ auto fwn::modes::plotNumbers() -> void
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
                 if (!fwn::withinRange(graph.getRange(), y)) { throw std::out_of_range("Coordinate out of range"); }
             }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
-
-            {
-                // Checks if the coordinate given is already plotted on the graph.
-                bool duplicate = false;
-                for (const auto &point: graph.getPoints())
-                {
-                    if (point.getX() == x && point.getY() == y)
-                    {
-                        duplicate = true;
-                        break;
-                    }
-                }
-                if (duplicate) { continue; }
-            }
+            catch (const std::invalid_argument &oor) { exit(-1); }
+            catch (const std::out_of_range &oor) { exit(-1); }
 
             {
                 // Retrieves required statistics into variables.
