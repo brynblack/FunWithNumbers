@@ -20,8 +20,8 @@ endif ()
 add_executable(FunWithNumbers)
 add_library(project_options INTERFACE)
 
-set(CMAKE_CXX_STANDARD 20);
-set(CMAKE_CXX_STANDARD_REQUIRED TRUE);
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set_target_properties(FunWithNumbers
     PROPERTIES
