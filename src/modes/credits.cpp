@@ -4,8 +4,10 @@
 
 auto fwn::modes::credits() -> void
 {
+    // Clears the screen.
     fwn::clear();
 
+    // Displays the credits.
     fwn::print("Made with love <3");
     fwn::print();
     fwn::print("Brynley Llewellyn-Roux (◡‿◡✿)");
@@ -13,5 +15,6 @@ auto fwn::modes::credits() -> void
     fwn::print();
     fwn::print("Copyright (c) 2022 Brynley Llewellyn-Roux");
 
+    // Waits for user input.
     fwn::input();
 }

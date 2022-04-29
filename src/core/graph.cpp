@@ -17,11 +17,13 @@ namespace fwn
         return this->y;
     }
 
+    // Adds a new point to the graph.
     auto Graph::addPoint(const int &x, const int &y) -> void
     {
         this->points.emplace_back(Point { x, y });
     }
 
+    // Builds the graph.
     auto Graph::build() -> void
     {
         std::vector<std::string> _lines;
@@ -101,31 +103,37 @@ namespace fwn
         this->lines = std::move(_lines);
     }
 
+    // Returns the domain of the graph.
     auto Graph::getDomain() const -> const std::pair<int, int> &
     {
         return this->domain;
     }
 
+    // Returns a vector containing the built graph.
     auto Graph::getLines() const -> const std::vector<std::string> &
     {
         return this->lines;
     }
 
+    // Returns a vector containing the registered points.
     auto Graph::getPoints() const -> const std::vector<Point> &
     {
         return this->points;
     }
 
+    // Returns the range of the graph.
     auto Graph::getRange() const -> const std::pair<int, int> &
     {
         return this->range;
     }
 
+    // Sets the domain of the graph.
     auto Graph::setDomain(const int &nx, const int &px) -> void
     {
         this->domain = std::make_pair(nx, px);
     }
 
+    // Sets the range of the graph.
     auto Graph::setRange(const int &ny, const int &py) -> void
     {
         this->range = std::make_pair(ny, py);

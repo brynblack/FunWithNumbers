@@ -14,13 +14,16 @@ auto fwn::modes::randomNumber() -> void
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> distN(nums.first, nums.second);
 
+    // Generates the initial random number.
     auto value = distN(rng);
 
     bool quit = false;
     do
     {
+        // Clears the screen.
         fwn::clear();
 
+        // Attempts to convert the input to a number, and restarts if it fails.
         unsigned long long answer;
         try
         {
@@ -36,6 +39,8 @@ auto fwn::modes::randomNumber() -> void
         catch (const std::invalid_argument &err) { continue; }
         catch (const std::out_of_range &err) { continue; }
 
+        // Checks if the answer was correct or not. Restarts if the given answer is not the same as the number.
+        // Otherwise, the number is randomised again and the process restarts.
         if (answer == value)
         {
             fwn::print("You guessed the number!");
@@ -49,11 +54,13 @@ auto fwn::modes::randomNumber() -> void
 
         fwn::Options options;
 
+        // Configures the options.
         options.add("n", [&quit]() -> void
         {
             quit = true;
         });
 
+        // Executes a given option.
         options.execute(fwn::input("Would you like to continue (Y/n)? "));
     }
     while (!quit);

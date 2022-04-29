@@ -2,32 +2,38 @@
 #include "fwn/core/io.hpp"
 #include "fwn/core/util.hpp"
 
+// Adds a new line to the menu.
 auto fwn::Menu::add() -> void
 {
     this->Buffer::add();
 }
 
+// Adds a new line with a given string rvalue to the menu.
 auto fwn::Menu::add(std::string &&line) -> void
 {
     this->Buffer::add(std::move(line));
 }
 
+// Adds a new line with a given string lvalue to the menu.
 auto fwn::Menu::add(const std::string &line) -> void
 {
     this->Buffer::add(line);
 }
 
+// Adds a new option to the menu.
 auto fwn::Menu::add(std::string &&opt, std::function<void()> &&func) -> void
 {
     this->Options::add(std::move(opt), std::move(func));
 }
 
+// Adds a new option to the menu with a string description.
 auto fwn::Menu::add(std::string &&opt, std::string &&line, std::function<void()> &&func) -> void
 {
     this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + std::move(line));
     this->Options::add(std::move(opt), std::move(func));
 }
 
+// Renders the menu.
 auto fwn::Menu::render() const -> void
 {
     fwn::clear();
@@ -41,6 +47,7 @@ auto fwn::Menu::render() const -> void
     }
 }
 
+// Runs the menu.
 auto fwn::Menu::run() -> void
 {
     this->render();

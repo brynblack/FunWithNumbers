@@ -9,24 +9,28 @@
 auto fwn::modes::downloadMoreRAM() -> void
 {
     fwn::Options options;
-
     std::string RAM;
 
+    // Configures the options.
     options.add("1", [&RAM]() -> void { RAM = "1024"; });
     options.add("2", [&RAM]() -> void { RAM = "2048"; });
     options.add("3", [&RAM]() -> void { RAM = "4096"; });
     options.add("4", [&RAM]() -> void { RAM = "18446744073709551616"; });
 
+    // Clears the screen.
     fwn::clear();
 
+    // Displays the available options.
     fwn::print("Available RAM options:");
     fwn::print(" (1) 1024MB");
     fwn::print(" (2) 2048MB");
     fwn::print(" (3) 4096MB");
     fwn::print(" (4) 18446744073709551615MB");
 
+    // Executes a given option.
     options.execute(fwn::input("Please select an option: "));
 
+    // Begins "downloading" the RAM.
     fwn::printNow("Calculating available space...");
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     fwn::printNow("Measuring the transistor size...");
@@ -52,5 +56,7 @@ auto fwn::modes::downloadMoreRAM() -> void
     fwn::printNow("Cleaning up...");
     std::this_thread::sleep_for(std::chrono::milliseconds(2500));
     fwn::printNow("Successfully installed " + RAM + "MB of RAM!!!");
+
+    // Waits for user input.
     fwn::input();
 }

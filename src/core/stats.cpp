@@ -7,27 +7,32 @@ namespace fwn
 {
     Stats::Stat::Stat(std::string &&desc, const long long &value) : desc(std::move(desc)), value(value) {}
 
+    // Returns the description of the statistic.
     auto Stats::Stat::getDescription() const -> const std::string &
     {
         return this->desc;
     }
 
+    // Returns the value of the statistic.
     auto Stats::Stat::getValue() const -> const long long &
     {
         return this->value;
     }
 
+    // Sets the value of the statistic.
     auto Stats::Stat::setValue(const long long &val) -> void
     {
         this->value = val;
     }
 
+    // Adds a new statistic.
     auto Stats::add(const std::string &name, std::string &&desc) -> void
     {
         this->stats.emplace(name, Stat { std::move(desc), 0 });
         this->names.push_back(name);
     }
 
+    // Returns a vector of pointers pointing to the registered statistics.
     auto Stats::getStats() -> std::vector<Stat *>
     {
         std::vector<Stat *> vStats;
@@ -38,6 +43,7 @@ namespace fwn
         return vStats;
     }
 
+    // Saves the statistics to a file.
     auto Stats::save() const -> void
     {
         std::ofstream statsFile(this->fileName, std::ostream::out);
@@ -48,11 +54,13 @@ namespace fwn
         statsFile.close();
     }
 
+    // Sets the statistics filename.
     auto Stats::setFile(std::string &&name) -> void
     {
         this->fileName = std::move(name);
     }
 
+    // Returns a reference to a statistic.
     auto Stats::stat(const std::string &name) -> Stat &
     {
         try { return this->stats.at(name); }
@@ -63,6 +71,7 @@ namespace fwn
         }
     }
 
+    // Reads from the statistics file and saves into memory.
     auto Stats::read() -> void
     {
         std::vector<long long> lines;
