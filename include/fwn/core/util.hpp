@@ -99,7 +99,7 @@ namespace fwn
 
     // Evaluates all possible divisors of a given number.
     template <std::integral T>
-    auto getDivisors(const T& n) -> std::vector<T>
+    auto getDivisors(const T &n) -> std::vector<T>
     {
         std::vector<T> divisors;
 

@@ -22,38 +22,16 @@ auto fwn::Menu::add(std::string &&opt, std::function<void()> &&func) -> void
     this->Options::add(std::move(opt), std::move(func));
 }
 
-auto fwn::Menu::add(const std::string &opt, std::function<void()> &&func) -> void
-{
-    this->Options::add(opt, std::move(func));
-}
-
 auto fwn::Menu::add(std::string &&opt, std::string &&line, std::function<void()> &&func) -> void
 {
     this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + std::move(line));
     this->Options::add(std::move(opt), std::move(func));
 }
 
-auto fwn::Menu::add(const std::string &opt, std::string &&line, std::function<void()> &&func) -> void
-{
-    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + std::move(line));
-    this->Options::add(opt, std::move(func));
-}
-auto fwn::Menu::add(std::string &&opt, const std::string &line, std::function<void()> &&func) -> void
-{
-    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + line);
-    this->Options::add(std::move(opt), std::move(func));
-}
-
-auto fwn::Menu::add(const std::string &opt, const std::string &line, std::function<void()> &&func) -> void
-{
-    this->Buffer::add(" (" + fwn::toUpper(opt) + ") " + line);
-    this->Options::add(opt, std::move(func));
-}
-
 auto fwn::Menu::render() const -> void
 {
     fwn::clear();
-    for (const auto &line : this->Buffer::getLines())
+    for (const auto &line: this->Buffer::getLines())
     {
         fwn::print(line, "");
         if (&line != &this->Buffer::getLines().back())

@@ -24,9 +24,8 @@ auto fwn::Buffer::getLines() const -> const std::vector<std::string> &
 auto fwn::Buffer::render() const -> void
 {
     fwn::clear();
-    for (const auto &line : this->lines)
+    for (const auto &line: this->lines)
     {
         fwn::print(line);
     }
 }
-

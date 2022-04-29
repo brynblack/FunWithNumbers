@@ -26,8 +26,7 @@ namespace fwn
 
         public:
             // Adds a new option.
-            auto add(std::string &&option, std::function<void()> &&func) -> void;
-            auto add(const std::string &option, std::function<void()> &&func) -> void;
+            virtual auto add(std::string &&option, std::function<void()> &&func) -> void;
 
             // Executes a given option.
             auto execute(std::string option) const -> void;

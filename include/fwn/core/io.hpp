@@ -19,7 +19,7 @@ namespace fwn
         return input;
     }
 
-    // Accepts input from the user and returns it.
+    // Prompts the user with a given value, and then accepts input from the user, returning it.
     template <typename T>
     auto input(const T &str) -> std::string
     {
@@ -29,7 +29,7 @@ namespace fwn
         return input;
     }
 
-    // Displays a given value on the screen.
+    // Displays a newline on the screen.
     inline auto print() -> void
     {
         std::cout << "\n";
