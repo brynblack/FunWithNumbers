@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-namespace fwn {
+namespace fwn
+{
     Options::Option::Option(std::function<void()> &&func) : func(std::move(func)) {}
 
     auto Options::Option::execute() const -> void
