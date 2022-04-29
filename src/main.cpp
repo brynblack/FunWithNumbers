@@ -31,11 +31,13 @@
 
 #include <string>
 
+// Presents the main menu to the user.
 auto mainMenu() -> void
 {
     fwn::Menu menu;
     bool quit = false;
 
+    // Adds the menu features.
     menu.add("Welcome to Fun With Numbers");
     menu.add("Choose from the menu below:");
     menu.add("a", "Check number features", fwn::modes::checkNumberFeatures);
@@ -47,6 +49,7 @@ auto mainMenu() -> void
 
     do
     {
+        // Runs the menu.
         menu.run();
     }
     while (!quit);
