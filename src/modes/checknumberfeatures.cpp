@@ -21,8 +21,8 @@ auto fwn::modes::checkNumberFeatures() -> void
                 number = std::stoll(input, &size);
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
             }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
+            catch (const std::invalid_argument &err) { continue; }
+            catch (const std::out_of_range &err) { continue; }
 
             {
                 // Retrieves relevant statistics into variables.

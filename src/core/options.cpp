@@ -21,6 +21,6 @@ namespace fwn
     {
         std::transform(option.begin(), option.end(), option.begin(), ::tolower);
         try { this->choices.at(option).execute(); }
-        catch (const std::out_of_range &oor) { return; }
+        catch (const std::out_of_range &err) { return; }
     }
 } // namespace fwn

@@ -48,6 +48,13 @@ namespace fwn
     {
         std::cout << str << end;
     }
+
+    // Displays a given value on the screen.
+    template <typename T>
+    auto printNow(const T &str) -> void
+    {
+        std::cout << str << std::endl;
+    }
 } // namespace fwn
 
 #endif // FWN_CORE_IO_HPP

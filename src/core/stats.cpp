@@ -56,7 +56,7 @@ namespace fwn
     auto Stats::stat(const std::string &name) -> Stat &
     {
         try { return this->stats.at(name); }
-        catch (const std::out_of_range &oor)
+        catch (const std::out_of_range &err)
         {
             std::cerr << "ERROR: The stat \"" << name << "\" is not registered. The program will now exit." << "\n";
             exit(-1);
@@ -74,8 +74,8 @@ namespace fwn
                 while (std::getline(statsFile, line))
                 {
                     try { lines.push_back(std::stoll(line)); }
-                    catch (const std::invalid_argument &oor) { continue; }
-                    catch (const std::out_of_range &oor) { continue; }
+                    catch (const std::invalid_argument &err) { continue; }
+                    catch (const std::out_of_range &err) { continue; }
                 }
             }
             statsFile.close();

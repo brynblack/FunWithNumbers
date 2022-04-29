@@ -42,8 +42,8 @@ auto fwn::modes::plotNumbers() -> void
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
                 if (!fwn::withinRange(graph.getDomain(), x)) { throw std::out_of_range("Coordinate out of range"); }
             }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
+            catch (const std::invalid_argument &err) { continue; }
+            catch (const std::out_of_range &err) { continue; }
 
             // Receives a y-coordinate from the user and runs the following checks.
             int y;
@@ -55,8 +55,8 @@ auto fwn::modes::plotNumbers() -> void
                 if (size < input.size()) { throw std::invalid_argument("Decimal was detected"); }
                 if (!fwn::withinRange(graph.getRange(), y)) { throw std::out_of_range("Coordinate out of range"); }
             }
-            catch (const std::invalid_argument &oor) { continue; }
-            catch (const std::out_of_range &oor) { continue; }
+            catch (const std::invalid_argument &err) { continue; }
+            catch (const std::out_of_range &err) { continue; }
 
             {
                 // Checks if the coordinate given is already plotted on the graph.
@@ -118,7 +118,7 @@ auto fwn::modes::plotNumbers() -> void
         }
 
         // Receives a choice from the user and executes it.
-        options.execute(fwn::input("Do you wish to add another coordinate (y/n)? "));
+        options.execute(fwn::input("Do you wish to add another coordinate (Y/n)? "));
     }
     while (!quit);
 }

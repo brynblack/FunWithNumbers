@@ -1,7 +1,4 @@
-#ifndef FUNWITHNUMBERS_INCONSPICUOUS_FILE_HPP
-#define FUNWITHNUMBERS_INCONSPICUOUS_FILE_HPP
-
-#include <string>
+#include "fwn/inconspicuous_file.hpp"
 
 const std::string INCONSPICUOUS_FILE =
 "We're no strangers to love\n"
@@ -71,5 +68,3 @@ const std::string INCONSPICUOUS_FILE =
 "Never gonna run around and desert you\n"
 "Never gonna make you cry\n"
 "Never gonna say goodbye\n";
-
-#endif
