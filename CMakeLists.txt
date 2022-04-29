@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.23)
 
 project(
     FunWithNumbers
-    VERSION 15.1.0.1
+    VERSION 16.1.0.1
     DESCRIPTION "A C++ recreation of the program Fun With Numbers, for a Software Design and Development assignment."
     HOMEPAGE_URL "https://github.com/brynblack/FunWithNumbers"
     LANGUAGES CXX)
@@ -19,9 +19,6 @@ endif ()
 
 add_executable(FunWithNumbers)
 add_library(project_options INTERFACE)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set_target_properties(FunWithNumbers
     PROPERTIES
