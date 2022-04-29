@@ -21,18 +21,8 @@ namespace fwn
             auto add(std::string &&line) -> void;
             auto add(const std::string &line) -> void;
 
-            // Clears the buffer.
-            auto clear() -> void;
-
-            // Removes a line in the buffer.
-            auto remove(const size_t &index) -> void;
-
             // Renders the buffer.
             auto render() const -> void;
-
-            // Replaces a line in the buffer.
-            auto replace(const size_t &index, std::string &&line) -> void;
-            auto replace(const size_t &index, const std::string &line) -> void;
     };
 } // namespace fwn
 

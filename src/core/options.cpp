@@ -1,4 +1,4 @@
-#include "fwn/options.hpp"
+#include "fwn/core/options.hpp"
 
 #include <iostream>
 

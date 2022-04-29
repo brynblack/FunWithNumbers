@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "fwn/graph.hpp"
-#include "fwn/io.hpp"
-#include "fwn/menu.hpp"
-#include "fwn/options.hpp"
-#include "fwn/stats.hpp"
-#include "fwn/util.hpp"
+#include "fwn/core/graph.hpp"
+#include "fwn/core/io.hpp"
+#include "fwn/core/menu.hpp"
+#include "fwn/core/options.hpp"
+#include "fwn/core/stats.hpp"
+#include "fwn/core/util.hpp"
 
 #include <string>
 

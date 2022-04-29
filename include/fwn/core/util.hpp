@@ -29,6 +29,13 @@ namespace fwn
         return oss.str();
     }
 
+    template <typename T>
+    auto toUpper(T str) -> std::string
+    {
+        std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+        return str;
+    }
+
     // Counts the number of characters in a given value.
     template <typename T>
     constexpr auto countChars(const T &s) -> size_t
